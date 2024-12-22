@@ -4,6 +4,7 @@ import Hero from "./components/Hero/Hero";
 import FeaturedProducts from "./components/FeaturedProducts/FeaturedProducts";
 import BrandLogos from "./components/BrandLogos/BrandLogos";
 import { lampProducts } from "./data/data";
+import Articles from "./components/Articles/Articles";
 function App() {
   return (
     <>
@@ -11,6 +12,7 @@ function App() {
       <Hero />
       <FeaturedProducts products={lampProducts} />
       <BrandLogos />
+      <Articles />
     </>
   );
 }
