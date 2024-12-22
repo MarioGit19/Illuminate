@@ -1,0 +1,79 @@
+.brands-container {
+  width: 100%;
+  background: #f8f8f8;
+  padding: 1rem 0;
+  overflow: hidden;
+}
+
+.brands-slider {
+  position: relative;
+  width: 100%;
+}
+
+.slide-track {
+  display: flex;
+  width: calc(250px * 20); /* Adjust based on slide width */
+  animation: scroll 40s linear infinite;
+}
+
+.slide {
+  width: 250px;
+  padding: 0.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8f8f8;
+}
+
+.slide img {
+  max-width: 120px;
+  height: auto;
+  mix-blend-mode: multiply;
+  filter: grayscale(100%) contrast(0.8) brightness(1.2);
+  opacity: 0.7;
+  transition: all 0.3s ease;
+  padding: 5px;
+}
+
+.slide img:hover {
+  filter: grayscale(0%) contrast(1) brightness(1);
+  opacity: 1;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-250px * 10)); /* Half of total width */
+  }
+}
+
+/* Pause animation on hover */
+.brands-slider:hover .slide-track {
+  animation-play-state: paused;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .slide {
+    width: 200px;
+  }
+  
+  .slide img {
+    max-width: 100px;
+  }
+  
+  .slide-track {
+    width: calc(200px * 20);
+  }
+  
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-200px * 10));
+    }
+  }
+}

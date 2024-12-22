@@ -1,31 +1,11 @@
 import React, { useState } from "react";
-import { FaShoppingCart, FaSearch } from "react-icons/fa";
-import { lampProducts } from "../../data/data";
+import { FaShoppingCart } from "react-icons/fa";
+import NavbarSearch from "./NavbarSearch";
 import "../../styles/components/navbar.css";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [cartItemsCount, setCartItemsCount] = useState(0);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState([]);
-  const [showResults, setShowResults] = useState(false);
-
-  const handleSearch = (e) => {
-    const query = e.target.value.toLowerCase();
-    setSearchQuery(query);
-
-    if (query.trim() === "") {
-      setSearchResults([]);
-      setShowResults(false);
-      return;
-    }
-
-    const results = lampProducts.filter((product) =>
-      product.name.toLowerCase().includes(query)
-    );
-    setSearchResults(results);
-    setShowResults(true);
-  };
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -34,32 +14,7 @@ const Navbar = () => {
   return (
     <nav className="navbar">
       <div className="nav-container">
-        <div className="search-container">
-          <div className="search-input-wrapper">
-            <FaSearch className="search-icon" />
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={handleSearch}
-              onBlur={() => setTimeout(() => setShowResults(false), 200)}
-              onFocus={() => searchQuery && setShowResults(true)}
-            />
-          </div>
-          {showResults && searchResults.length > 0 && (
-            <div className="search-results">
-              {searchResults.map((product) => (
-                <div key={product.id} className="search-result-item">
-                  <img src={product.image} alt={product.name} />
-                  <div className="product-info">
-                    <h4>{product.name}</h4>
-                    <p>${product.price}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
+        <NavbarSearch />
 
         <div className="logo">
           <div className="logo-full"></div>

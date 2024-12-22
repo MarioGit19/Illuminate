@@ -1,0 +1,68 @@
+.hero {
+  height: 100vh;
+  width: 100%;
+  background-image: url('https://img.freepik.com/free-photo/ceiling-lamps_1203-791.jpg?t=st=1734877429~exp=1734881029~hmac=d302d63c00f0f27838ddb7e25232e0e008a3f13c82e77e327c1a7a0c83479c30&w=1800');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(1px);
+}
+
+.hero-content {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  color: #fff;
+  z-index: 1;
+}
+
+.animate-text {
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  animation: fadeIn 2s ease-in forwards;
+}
+
+.catalogue-btn {
+  padding: 1rem 2rem;
+  font-size: 1.2rem;
+  background-color: #b87333;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.catalogue-btn:hover {
+  background-color: #a66a2e;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

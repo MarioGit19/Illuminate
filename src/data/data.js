@@ -1,6 +1,6 @@
 //api example data for lamp products in store
 
-const lampProducts = [
+export const lampProducts = [
   {
     id: 1,
     name: "Modern Table Lamp",
