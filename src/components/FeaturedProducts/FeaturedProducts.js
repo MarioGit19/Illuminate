@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
+import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "../../Context/CartContext";
 import "../../styles/components/featuredproducts.css";
 
 const FeaturedProducts = ({ products }) => {
-  console.log("All products:", products); // Debug log
+  const [hoveredProduct, setHoveredProduct] = useState(null);
+  const { addToCart } = useCart();
   const saleProducts = products.filter((product) => product.onSale).slice(0, 4);
-  console.log("Sale products:", saleProducts); // Debug log
 
   return (
     <section className="featured-products">
@@ -12,10 +14,23 @@ const FeaturedProducts = ({ products }) => {
       <div className="featured-products-grid">
         {saleProducts.length > 0 ? (
           saleProducts.map((product) => (
-            <div key={product.id} className="featured-product-card">
+            <div
+              key={product.id}
+              className="featured-product-card"
+              onMouseEnter={() => setHoveredProduct(product.id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+            >
               <div className="product-image">
                 <img src={product.image} alt={product.name} />
                 <span className="sale-badge">Sale</span>
+                {hoveredProduct === product.id && (
+                  <button
+                    className="add-to-cart-button"
+                    onClick={() => addToCart(product)}
+                  >
+                    <FaShoppingCart />
+                  </button>
+                )}
               </div>
               <div className="product-info">
                 <h3>{product.name}</h3>
