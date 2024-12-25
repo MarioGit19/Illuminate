@@ -5,6 +5,7 @@ import { lampCategories } from "../../data/data";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/components/collections.css";
+import { useNavigate } from "react-router-dom";
 
 const Collections = ({ products }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -13,6 +14,7 @@ const Collections = ({ products }) => {
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const { addToCart } = useCart();
   const filterRef = useRef(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -85,6 +87,10 @@ const Collections = ({ products }) => {
     });
   };
 
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <section className="collections">
       <h2>Our Collection</h2>
@@ -125,8 +131,10 @@ const Collections = ({ products }) => {
           <div
             key={product.id}
             className="product-card"
+            onClick={() => handleProductClick(product.id)}
             onMouseEnter={() => setHoveredProduct(product.id)}
             onMouseLeave={() => setHoveredProduct(null)}
+            style={{ cursor: "pointer" }}
           >
             <div className="product-image">
               <img src={product.image} alt={product.name} />

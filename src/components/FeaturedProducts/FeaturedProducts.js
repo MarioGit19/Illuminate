@@ -2,11 +2,17 @@ import React, { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../Context/CartContext";
 import "../../styles/components/featuredproducts.css";
+import { useNavigate } from "react-router-dom";
 
 const FeaturedProducts = ({ products }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const { addToCart } = useCart();
   const saleProducts = products.filter((product) => product.onSale).slice(0, 4);
+  const navigate = useNavigate();
+
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
 
   return (
     <section className="featured-products">
@@ -17,8 +23,10 @@ const FeaturedProducts = ({ products }) => {
             <div
               key={product.id}
               className="featured-product-card"
+              onClick={() => handleProductClick(product.id)}
               onMouseEnter={() => setHoveredProduct(product.id)}
               onMouseLeave={() => setHoveredProduct(null)}
+              style={{ cursor: "pointer" }}
             >
               <div className="product-image">
                 <img src={product.image} alt={product.name} />

@@ -13,6 +13,7 @@ import Cart from "./components/Cart/Cart";
 import Collections from "./components/Collections/Collections";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import ProductPage from "./components/ProductPage/ProductPage";
 
 function App() {
   return (
@@ -37,6 +38,7 @@ function App() {
             element={<Collections products={lampProducts} />}
           />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/product/:id" element={<ProductPage />} />
         </Routes>
         <Footer />
       </Router>
