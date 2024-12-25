@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import NavbarSearch from "./NavbarSearch";
 import "../../styles/components/navbar.css";
@@ -23,19 +24,19 @@ const Navbar = () => {
 
         <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
           <li className="nav-item">
-            <a href="/" className="nav-link">
+            <Link to="/" className="nav-link">
               Home
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a href="/about" className="nav-link">
+            <Link to="/about" className="nav-link">
               About
-            </a>
+            </Link>
           </li>
           <li className="nav-item">
-            <a href="/products" className="nav-link">
+            <Link to="/products" className="nav-link">
               Products
-            </a>
+            </Link>
           </li>
         </ul>
 
