@@ -24,6 +24,14 @@
   border-radius: 8px;
 }
 
+/* .sale-subtitle {
+  color: #e53e3e;
+  font-weight: bold;
+  font-size: 1.0rem;
+  font-style: italic;
+  margin-top:0;
+} */
+
 .product-details {
   display: flex;
   flex-direction: column;

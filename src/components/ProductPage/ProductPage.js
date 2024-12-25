@@ -4,6 +4,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../Context/CartContext";
 import { lampProducts } from "../../data/data";
 import "../../styles/components/productpage.css";
+import { toast } from "react-toastify";
 
 const ProductPage = () => {
   const { id } = useParams();
@@ -34,6 +35,14 @@ const ProductPage = () => {
   const handleAddToCart = (e) => {
     e.preventDefault();
     addToCart(product);
+    toast.success(`${product.name} added to cart!`, {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
   };
 
   return (
@@ -64,6 +73,9 @@ const ProductPage = () => {
 
         <div className="product-details">
           <h1>{product.name}</h1>
+          {/* <h3>
+            {product.onSale && <span className="sale-subtitle">ON SALE</span>}
+          </h3> */}
 
           <div className="price-container">
             {product.onSale ? (
