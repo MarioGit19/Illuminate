@@ -8,7 +8,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2.5rem;
-  color: #333;
+  color: #333333;
 }
 
 .featured-products-grid {
@@ -18,7 +18,7 @@
 }
 
 .featured-product-card {
-  background: #fff;
+  background: #FFFFFF;
   border-radius: 8px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease;
@@ -46,8 +46,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #ff4444;
-  color: white;
+  background: #FDD835;
+  color: #333333;
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: bold;
@@ -60,7 +60,7 @@
 .product-info h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  color: #333;
+  color: #333333;
 }
 
 .price-container {
@@ -71,11 +71,11 @@
 
 .original-price {
   text-decoration: line-through;
-  color: #999;
+  color: #9E9E9E;
 }
 
 .sale-price {
-  color: #ff4444;
+  color: red;
   font-weight: bold;
   font-size: 1.2rem;
 }
