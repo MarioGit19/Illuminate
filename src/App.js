@@ -10,6 +10,9 @@ import Footer from "./components/Footer/Footer";
 import About from "./components/About/About";
 import { CartProvider } from "../src/Context/CartContext";
 import Cart from "./components/Cart/Cart";
+import Collections from "./components/Collections/Collections";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -31,12 +34,24 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route
             path="/products"
-            element={<FeaturedProducts products={lampProducts} />}
+            element={<Collections products={lampProducts} />}
           />
           <Route path="/cart" element={<Cart />} />
         </Routes>
         <Footer />
       </Router>
+      <ToastContainer
+        position="bottom-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
     </CartProvider>
   );
 }

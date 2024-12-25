@@ -67,18 +67,11 @@ const Cart = () => {
                 </div>
                 <div className="summary-row">
                   <div className="icon-text">
-                    <FaTruck />
                     <span>Shipping</span>
                   </div>
                   <span>Free</span>
                 </div>
-                <div className="summary-row">
-                  <div className="icon-text">
-                    <FaUndo />
-                    <span>Returns</span>
-                  </div>
-                  <span>Free</span>
-                </div>
+
                 <div className="summary-total">
                   <span>Total</span>
                   <span>${calculateTotal().toFixed(2)}</span>

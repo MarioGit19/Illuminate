@@ -19,7 +19,22 @@
   display: grid;
   grid-template-columns: 1fr 350px;
   gap: 2rem;
-align-items: start;
+  align-items: start;
+}
+
+@media (max-width: 768px) {
+  .cart-content {
+    grid-template-columns: 1fr;
+  }
+
+  .cart-container {
+    padding: 0 1rem;
+  }
+
+  .cart-page {
+    padding: 1rem;
+    padding-top: 80px;
+  }
 }
 
 .cart-items-section {
@@ -165,9 +180,10 @@ height: fit-content;
 
 .info-card {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 1rem;
   padding: 1rem 0;
+  justify-content: center;
 }
 
 .info-card:not(:last-child) {

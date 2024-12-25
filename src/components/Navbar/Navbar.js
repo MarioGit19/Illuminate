@@ -5,6 +5,7 @@ import NavbarSearch from "./NavbarSearch";
 import "../../styles/components/navbar.css";
 import { useCart } from "../../Context/CartContext";
 import CartDrawer from "../CartDrawer/CartDrawer";
+// import Collections from "../Collections/Collections";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);

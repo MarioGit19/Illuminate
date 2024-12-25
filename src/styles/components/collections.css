@@ -1,0 +1,306 @@
+.collections {
+  padding: 8rem 2rem 2rem;
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.collections h2 {
+  grid-column: 1 / -1;
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.filter-sidebar {
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  height: fit-content;
+  background: white;
+}
+
+.filter-sidebar h3 {
+  margin-bottom: 1rem;
+}
+
+.category-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.product-card {
+  position: relative;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.product-image {
+  position: relative;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #ff4444;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+.add-to-cart-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0;
+  transform: translateY(10px);
+  z-index: 10;
+}
+
+.product-card:hover .add-to-cart-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.add-to-cart-button:hover {
+  background-color: #FFD700;
+  color: #333;
+}
+
+.product-info {
+  padding: 1rem;
+}
+
+.product-info h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.price-container {
+  margin-top: 0.5rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-right: 0.5rem;
+}
+
+.sale-price {
+  color: #ff4444;
+  font-weight: bold;
+}
+
+.regular-price {
+  font-weight: bold;
+}
+
+.pagination {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.page-button {
+  padding: 0.5rem 1rem;
+  border: 1px solid #ddd;
+  background: white;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.page-button:hover {
+  background-color: #FFD700;
+  border-color: #FFD700;
+  color: #333;
+}
+
+.page-button.active {
+  background-color: #FFD700;
+  border-color: #FFD700;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Mobile styles */
+@media (max-width: 768px) {
+  .collections {
+    grid-template-columns: 1fr;
+    padding: 5rem 1rem 1rem;
+  }
+
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .filter-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background: white;
+    z-index: 1001;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 3rem 1rem 1rem;
+  }
+
+  .filter-sidebar.open {
+    left: 0;
+  }
+
+  .filter-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: #FFD700;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    z-index: 998;
+  }
+
+  .close-filter {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    padding: 0.5rem;
+  }
+}
+
+/* Desktop-only styles */
+@media (min-width: 769px) {
+  .filter-button,
+  .close-filter {
+    display: none;
+  }
+
+  .filter-sidebar {
+    position: sticky;
+    top: 100px;
+  }
+}
+
+/* Add these new styles for the overlay */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+.filter-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Add hover overlay */
+.product-image::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.product-card:hover .product-image::after {
+  opacity: 1;
+}
+
+/* Ensure the icon is visible */
+.add-to-cart-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Custom toast styles */
+.Toastify__toast {
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.Toastify__toast--success {
+  background: #FFD700;
+  color: #333;
+}
+
+.Toastify__progress-bar {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Optional: Style the close button */
+.Toastify__close-button {
+  color: #333;
+  opacity: 0.7;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+} 
