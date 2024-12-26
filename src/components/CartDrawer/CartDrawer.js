@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../../Context/CartContext";
 import { FaTimes, FaPlus, FaMinus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import "../../styles/components/cartdrawer.css";
+import CheckoutModal from "../Checkout/CheckoutModal";
 
 const CartDrawer = () => {
   const {
@@ -13,6 +14,12 @@ const CartDrawer = () => {
     removeFromCart,
     calculateTotal,
   } = useCart();
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCheckoutClick = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <>
@@ -78,10 +85,19 @@ const CartDrawer = () => {
             >
               View Cart
             </Link>
-            <button className="checkout-button">Proceed to Checkout</button>
+            <button className="checkout-button" onClick={handleCheckoutClick}>
+              Proceed to Checkout
+            </button>
           </div>
         )}
       </div>
+
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        cartItems={cartItems}
+        total={calculateTotal()}
+      />
     </>
   );
 };

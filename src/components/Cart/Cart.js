@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { useCart } from "../../Context/CartContext";
 import { Link } from "react-router-dom";
 import {
@@ -10,9 +10,15 @@ import {
   FaArrowLeft,
 } from "react-icons/fa";
 import "../../styles/components/cart.css";
+import CheckoutModal from "../Checkout/CheckoutModal";
 
 const Cart = () => {
   const { cartItems, addToCart, removeFromCart, calculateTotal } = useCart();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleCheckoutClick = () => {
+    setIsModalOpen(true);
+  };
 
   return (
     <div className="cart-page">
@@ -80,7 +86,12 @@ const Cart = () => {
                   <span>Total</span>
                   <span>${calculateTotal().toFixed(2)}</span>
                 </div>
-                <button className="checkout-button">Complete Purchase</button>
+                <button
+                  className="checkout-button"
+                  onClick={handleCheckoutClick}
+                >
+                  Complete Purchase
+                </button>
                 <Link to="/products" className="continue-shopping">
                   <FaArrowLeft /> Continue Shopping
                 </Link>
@@ -109,6 +120,13 @@ const Cart = () => {
           </div>
         )}
       </div>
+
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        cartItems={cartItems}
+        total={calculateTotal()}
+      />
     </div>
   );
 };
