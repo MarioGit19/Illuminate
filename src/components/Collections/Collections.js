@@ -15,6 +15,14 @@ const Collections = ({ products }) => {
   const { addToCart } = useCart();
   const filterRef = useRef(null);
   const navigate = useNavigate();
+  const [priceRange, setPriceRange] = useState({
+    min: 0,
+    max: Math.ceil(Math.max(...products.map((p) => p.price))),
+  });
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    min: 0,
+    max: Math.ceil(Math.max(...products.map((p) => p.price))),
+  });
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -44,11 +52,17 @@ const Collections = ({ products }) => {
   };
 
   // Filter products based on selected categories
-  const filteredProducts = products.filter(
-    (product) =>
+  const filteredProducts = products.filter((product) => {
+    const matchesCategories =
       selectedCategories.length === 0 ||
-      selectedCategories.every((cat) => product.categories?.includes(cat))
-  );
+      selectedCategories.every((cat) => product.categories?.includes(cat));
+
+    const price = product.onSale ? product.salePrice : product.price;
+    const matchesPrice =
+      price >= selectedPriceRange.min && price <= selectedPriceRange.max;
+
+    return matchesCategories && matchesPrice;
+  });
 
   // Pagination logic
   const productsPerPage = 6; // Changed to 9 for 3x3 grid
@@ -112,6 +126,26 @@ const Collections = ({ products }) => {
     };
   }, [isFilterOpen]);
 
+  const handlePriceChange = (e) => {
+    const value = parseInt(e.target.value);
+    if (e.target.name === "min") {
+      setSelectedPriceRange((prev) => ({
+        ...prev,
+        min: Math.min(value, prev.max),
+      }));
+    } else {
+      setSelectedPriceRange((prev) => ({
+        ...prev,
+        max: Math.max(value, prev.min),
+      }));
+    }
+  };
+
+  // Calculate the percentage for the background
+  const getBackgroundSize = (value, min, max) => {
+    return ((value - min) * 100) / (max - min) + "% 100%";
+  };
+
   return (
     <section className="collections">
       <h2>Our Collection</h2>
@@ -147,6 +181,44 @@ const Collections = ({ products }) => {
               {category}
             </label>
           ))}
+        </div>
+
+        <h3>
+          Price Range: ${selectedPriceRange.min} - ${selectedPriceRange.max}
+        </h3>
+        <div className="price-filter">
+          <input
+            type="range"
+            name="min"
+            className="price-slider"
+            min={priceRange.min}
+            max={priceRange.max}
+            value={selectedPriceRange.min}
+            onChange={handlePriceChange}
+            style={{
+              background: `linear-gradient(to right, #ddd ${getBackgroundSize(
+                selectedPriceRange.min,
+                priceRange.min,
+                priceRange.max
+              )}, transparent 0%)`,
+            }}
+          />
+          <input
+            type="range"
+            name="max"
+            className="price-slider"
+            min={priceRange.min}
+            max={priceRange.max}
+            value={selectedPriceRange.max}
+            onChange={handlePriceChange}
+            style={{
+              background: `linear-gradient(to right, #FFD700 ${getBackgroundSize(
+                selectedPriceRange.max,
+                priceRange.min,
+                priceRange.max
+              )}, #ddd 0%)`,
+            }}
+          />
         </div>
       </div>
 
