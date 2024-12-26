@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { FaShoppingCart } from "react-icons/fa";
 import { useCart } from "../../Context/CartContext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 import "../../styles/components/featuredproducts.css";
 import { useNavigate } from "react-router-dom";
 
@@ -12,6 +14,20 @@ const FeaturedProducts = ({ products }) => {
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
+  };
+
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation();
+    addToCart(product);
+    toast.success(`${product.name} added to cart!`, {
+      position: "bottom-right",
+      autoClose: 3000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
   };
 
   return (
@@ -33,8 +49,9 @@ const FeaturedProducts = ({ products }) => {
                 <span className="sale-badge">Sale</span>
                 {hoveredProduct === product.id && (
                   <button
-                    className="add-to-cart-button"
-                    onClick={() => addToCart(product)}
+                    className="quick-buy-button"
+                    onClick={(e) => handleAddToCart(e, product)}
+                    title="Quick Add to Cart"
                   >
                     <FaShoppingCart />
                   </button>

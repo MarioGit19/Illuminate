@@ -141,8 +141,9 @@ const Collections = ({ products }) => {
               {product.onSale && <span className="sale-badge">Sale</span>}
               {hoveredProduct === product.id && (
                 <button
-                  className="add-to-cart-button"
+                  className="quick-buy-button"
                   onClick={(e) => handleAddToCart(e, product)}
+                  title="Quick Add to Cart"
                 >
                   <FaShoppingCart />
                 </button>
