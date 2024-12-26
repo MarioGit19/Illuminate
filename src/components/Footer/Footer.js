@@ -10,11 +10,15 @@ const Footer = () => {
           <h3>Contact Us</h3>
           <p>Email: info@example.com</p>
           <p>Phone: (555) 123-4567</p>
+        </div>
+
+        <div className="footer-section">
           <h3>Opening Hours</h3>
           <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
           <p>Saturday: 10:00 AM - 4:00 PM</p>
           <p>Sunday: Closed</p>
         </div>
+
         <div className="footer-section">
           <h3>Quick Links</h3>
           <ul>
@@ -42,6 +46,7 @@ const Footer = () => {
           </ul>
         </div>
       </div>
+
       <div className="footer-bottom">
         <p>
           &copy; {new Date().getFullYear()} Illuminated. All rights reserved.

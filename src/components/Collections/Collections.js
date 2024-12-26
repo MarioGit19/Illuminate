@@ -47,7 +47,7 @@ const Collections = ({ products }) => {
   const filteredProducts = products.filter(
     (product) =>
       selectedCategories.length === 0 ||
-      product.categories?.some((cat) => selectedCategories.includes(cat))
+      selectedCategories.every((cat) => product.categories?.includes(cat))
   );
 
   // Pagination logic
@@ -91,6 +91,27 @@ const Collections = ({ products }) => {
     navigate(`/product/${productId}`);
   };
 
+  const handleFilterToggle = (e) => {
+    // Check if clicking the filter tab (the ::after element)
+    const isFilterTab =
+      e.target === filterRef.current?.querySelector(".filter-sidebar::after");
+    if (isFilterTab) {
+      setIsFilterOpen(!isFilterOpen);
+    }
+  };
+
+  useEffect(() => {
+    const filterSidebar = filterRef.current;
+    if (filterSidebar) {
+      filterSidebar.addEventListener("click", handleFilterToggle);
+    }
+    return () => {
+      if (filterSidebar) {
+        filterSidebar.removeEventListener("click", handleFilterToggle);
+      }
+    };
+  }, [isFilterOpen]);
+
   return (
     <section className="collections">
       <h2>Our Collection</h2>
@@ -111,6 +132,9 @@ const Collections = ({ products }) => {
         <button className="close-filter" onClick={toggleFilter}>
           <FaTimes />
         </button>
+        <div className="filter-tab" onClick={toggleFilter}>
+          <FaFilter />
+        </div>
         <h3>Categories</h3>
         <div className="category-list">
           {lampCategories.map((category) => (
@@ -127,43 +151,52 @@ const Collections = ({ products }) => {
       </div>
 
       <div className="collections-grid">
-        {currentProducts.map((product) => (
-          <div
-            key={product.id}
-            className="product-card"
-            onClick={() => handleProductClick(product.id)}
-            onMouseEnter={() => setHoveredProduct(product.id)}
-            onMouseLeave={() => setHoveredProduct(null)}
-            style={{ cursor: "pointer" }}
-          >
-            <div className="product-image">
-              <img src={product.image} alt={product.name} />
-              {product.onSale && <span className="sale-badge">Sale</span>}
-              {hoveredProduct === product.id && (
-                <button
-                  className="quick-buy-button"
-                  onClick={(e) => handleAddToCart(e, product)}
-                  title="Quick Add to Cart"
-                >
-                  <FaShoppingCart />
-                </button>
-              )}
-            </div>
-            <div className="product-info">
-              <h3>{product.name}</h3>
-              <div className="price-container">
-                {product.onSale ? (
-                  <>
-                    <span className="original-price">${product.price}</span>
-                    <span className="sale-price">${product.salePrice}</span>
-                  </>
-                ) : (
-                  <span className="regular-price">${product.price}</span>
+        {currentProducts.length > 0 ? (
+          currentProducts.map((product) => (
+            <div
+              key={product.id}
+              className="product-card"
+              onClick={() => handleProductClick(product.id)}
+              onMouseEnter={() => setHoveredProduct(product.id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="product-image">
+                <img src={product.image} alt={product.name} />
+                {product.onSale && <span className="sale-badge">Sale</span>}
+                {hoveredProduct === product.id && (
+                  <button
+                    className="quick-buy-button"
+                    onClick={(e) => handleAddToCart(e, product)}
+                    title="Quick Add to Cart"
+                  >
+                    <FaShoppingCart />
+                  </button>
                 )}
               </div>
+              <div className="product-info">
+                <h3>{product.name}</h3>
+                <div className="price-container">
+                  {product.onSale ? (
+                    <>
+                      <span className="original-price">${product.price}</span>
+                      <span className="sale-price">${product.salePrice}</span>
+                    </>
+                  ) : (
+                    <span className="regular-price">${product.price}</span>
+                  )}
+                </div>
+              </div>
             </div>
+          ))
+        ) : (
+          <div className="no-results">
+            <p>
+              Unfortunately it looks like there are no products matching your
+              search results
+            </p>
           </div>
-        ))}
+        )}
       </div>
 
       {/* Pagination */}

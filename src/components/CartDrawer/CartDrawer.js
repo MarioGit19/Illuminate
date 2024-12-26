@@ -34,10 +34,22 @@ const CartDrawer = () => {
           ) : (
             cartItems.map((item) => (
               <div key={item.id} className="cart-item">
-                <img src={item.image} alt={item.name} />
+                <Link
+                  to={`/product/${item.id}`}
+                  className="product-link"
+                  onClick={() => setIsCartOpen(false)}
+                >
+                  <img src={item.image} alt={item.name} />
+                </Link>
                 <div className="item-details">
-                  <h3>{item.name}</h3>
-                  <p className="price">${item.salePrice || item.price}</p>
+                  <Link
+                    to={`/product/${item.id}`}
+                    className="product-link"
+                    onClick={() => setIsCartOpen(false)}
+                  >
+                    <h3>{item.name}</h3>
+                    <p className="price">${item.salePrice || item.price}</p>
+                  </Link>
                   <div className="quantity-controls">
                     <button onClick={() => removeFromCart(item.id)}>
                       <FaMinus />

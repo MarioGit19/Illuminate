@@ -32,12 +32,16 @@ const Cart = () => {
             <div className="cart-items-section">
               {cartItems.map((item) => (
                 <div key={item.id} className="cart-page-item">
-                  <img src={item.image} alt={item.name} />
+                  <Link to={`/product/${item.id}`} className="product-link">
+                    <img src={item.image} alt={item.name} />
+                  </Link>
                   <div className="item-details">
-                    <h3>{item.name}</h3>
-                    <p className="price">
-                      ${(item.salePrice || item.price).toFixed(2)}
-                    </p>
+                    <Link to={`/product/${item.id}`} className="product-link">
+                      <h3>{item.name}</h3>
+                      <p className="price">
+                        ${(item.salePrice || item.price).toFixed(2)}
+                      </p>
+                    </Link>
                     <div className="quantity-controls">
                       <button onClick={() => removeFromCart(item.id)}>
                         <FaMinus />

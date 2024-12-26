@@ -14,7 +14,7 @@
 }
 
 .filter-sidebar {
-  padding: 1rem;
+  padding: 3rem 1rem 1rem;
   border: 1px solid #eee;
   border-radius: 8px;
   height: fit-content;
@@ -175,6 +175,9 @@
     grid-template-columns: 1fr;
     padding: 5rem 1rem 1rem;
   }
+  .filter-tab {
+    display: none;
+  }
 
   .collections-grid {
     grid-template-columns: repeat(2, 1fr);
@@ -217,26 +220,75 @@
 
   .close-filter {
     position: absolute;
-    top: 10px;
-    right: 10px;
+    top: 15px;
+    right: 15px;
     background: none;
     border: none;
-    font-size: 1.5rem;
     cursor: pointer;
-    padding: 0.5rem;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #666;
+    transition: all 0.3s ease;
+    border-radius: 50%;
+  }
+
+  .close-filter:hover {
+    background-color: rgba(0, 0, 0, 0.05);
+    color: #333;
+    transform: rotate(90deg);
   }
 }
 
 /* Desktop-only styles */
 @media (min-width: 769px) {
-  .filter-button,
-  .close-filter {
+  .filter-button {
     display: none;
   }
 
   .filter-sidebar {
-    position: sticky;
-    top: 100px;
+    position: fixed;
+    left: -250px; /* Completely hide the sidebar */
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    background: white;
+    transition: left 0.3s ease;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    border-radius: 0 8px 8px 0;
+    z-index: 1000;
+  }
+
+  .filter-tab {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 100px;
+    background: #FFD700;
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+  }
+
+  .filter-sidebar.open {
+    left: 0;
+  }
+
+  /* Remove the ::after pseudo-element */
+  .filter-sidebar::after {
+    display: none;
+  }
+
+  /* Adjust the main content grid */
+  .collections {
+    grid-template-columns: 1fr;
+    padding-left: 4rem;
   }
 }
 
@@ -305,4 +357,57 @@
 
 .Toastify__close-button:hover {
   opacity: 1;
+}
+
+/* Make the close icon bigger */
+.close-filter svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Close button styles */
+.filter-sidebar .close-filter {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  z-index: 1002; /* Ensure it's above other elements */
+}
+
+.filter-sidebar .close-filter:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* Make the close icon bigger and ensure it's centered */
+.filter-sidebar .close-filter svg {
+  width: 20px;
+  height: 20px;
+  display: block; /* Ensures proper centering */
+}
+
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  border-radius: 8px;
+  color: #666;
+  font-size: 1.1rem;
+  margin: 2rem 0;
+}
+
+.no-results p {
+  margin: 0;
+  line-height: 1.5;
 } 

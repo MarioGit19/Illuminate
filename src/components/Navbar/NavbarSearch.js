@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 import { lampProducts } from "../../data/data";
+import { useNavigate } from "react-router-dom";
 
 const NavbarSearch = () => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
@@ -32,6 +34,11 @@ const NavbarSearch = () => {
     setShowResults(true);
   };
 
+  const handleProductClick = (productId) => {
+    handleClose();
+    navigate(`/product/${productId}`);
+  };
+
   return (
     <div className="search-container">
       <div className="search-input-wrapper">
@@ -48,7 +55,13 @@ const NavbarSearch = () => {
       {showResults && searchResults.length > 0 && (
         <div className={`search-results ${isClosing ? "closing" : ""}`}>
           {searchResults.map((product) => (
-            <div key={product.id} className="search-result-item">
+            <div
+              key={product.id}
+              className="search-result-item"
+              onClick={() => handleProductClick(product.id)}
+              role="button"
+              tabIndex={0}
+            >
               <div className="image-container">
                 <img src={product.image} alt={product.name} />
                 {product.onSale && <div className="sale-ribbon">SALE</div>}
