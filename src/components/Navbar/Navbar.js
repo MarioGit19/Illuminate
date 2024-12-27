@@ -19,11 +19,10 @@ const Navbar = () => {
     <>
       <nav className="navbar">
         <div className="nav-container">
-          <NavbarSearch />
-
           <div className="logo">
-            <div className="logo-full"></div>
-            <div className="logo-initials"></div>
+            <Link to="/">
+              <span className="logo-text">illuminate</span>
+            </Link>
           </div>
 
           <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
@@ -45,6 +44,7 @@ const Navbar = () => {
           </ul>
 
           <div className="nav-right">
+            <NavbarSearch />
             <div
               className="cart-icon-container"
               onClick={() => setIsCartOpen(true)}

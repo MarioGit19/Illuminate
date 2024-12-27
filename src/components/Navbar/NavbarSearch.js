@@ -1,14 +1,36 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import { FaSearch } from "react-icons/fa";
 import { lampProducts } from "../../data/data";
 import { useNavigate } from "react-router-dom";
 
 const NavbarSearch = () => {
   const navigate = useNavigate();
+  const [isExpanded, setIsExpanded] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [searchResults, setSearchResults] = useState([]);
   const [showResults, setShowResults] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const searchRef = useRef(null);
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsExpanded(false);
+        handleClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  const handleExpand = () => {
+    setIsExpanded(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
 
   const handleClose = () => {
     setIsClosing(true);
@@ -40,15 +62,18 @@ const NavbarSearch = () => {
   };
 
   return (
-    <div className="search-container">
+    <div
+      className={`search-container ${isExpanded ? "expanded" : ""}`}
+      ref={searchRef}
+    >
       <div className="search-input-wrapper">
-        <FaSearch className="search-icon" />
+        <FaSearch className="search-icon" onClick={handleExpand} />
         <input
+          ref={inputRef}
           type="text"
           placeholder="Search products..."
           value={searchQuery}
           onChange={handleSearch}
-          onBlur={() => setTimeout(handleClose, 200)}
           onFocus={() => searchQuery && setShowResults(true)}
         />
       </div>

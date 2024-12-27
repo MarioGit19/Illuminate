@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useCart } from "../../Context/CartContext";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   FaPlus,
   FaMinus,
@@ -13,11 +13,27 @@ import "../../styles/components/cart.css";
 import CheckoutModal from "../Checkout/CheckoutModal";
 
 const Cart = () => {
-  const { cartItems, addToCart, removeFromCart, calculateTotal } = useCart();
+  const { cartItems, addToCart, removeFromCart, calculateTotal, clearCart } =
+    useCart();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
 
   const handleCheckoutClick = () => {
     setIsModalOpen(true);
+  };
+
+  const handleOrderSuccess = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      clearCart();
+    }, 1000);
+
+    document.body.classList.add("show-success-animation");
+
+    setTimeout(() => {
+      document.body.classList.remove("show-success-animation");
+      navigate("/thank-you");
+    }, 2000);
   };
 
   return (
@@ -126,7 +142,21 @@ const Cart = () => {
         onClose={() => setIsModalOpen(false)}
         cartItems={cartItems}
         total={calculateTotal()}
+        onOrderSuccess={handleOrderSuccess}
       />
+
+      <div className="success-animation-overlay">
+        <div className="success-animation-container">
+          <div className="success-checkmark">
+            <div className="check-icon">
+              <span className="icon-line line-tip"></span>
+              <span className="icon-line line-long"></span>
+              <div className="icon-circle"></div>
+              <div className="icon-fix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
