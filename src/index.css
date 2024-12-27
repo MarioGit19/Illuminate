@@ -42,7 +42,7 @@
 
   
   /*color pallete 1*/
-  --color-background: #F8F9FA;
+  /* --color-background: #F8F9FA;
   --color-primary-text: #2D2D2D;
   --color-secondary-text: #E5E5E5;
   --color-border: #BCC6CC;
@@ -50,7 +50,7 @@
   --color-accent-silver: #BCC6CC;
    --color-warm-beige: #F5E9DC;
   --color-deep-emerald: #2E5D50;
-  --color-muted-terracotta: #D37F5A; 
+  --color-muted-terracotta: #D37F5A;  */
 
 
 /*color pallete 2*/
@@ -76,11 +76,20 @@
 
       /*color pallete 4*/
       
-          /* --color-background: #242424;
-          --color-primary-text: #CCCCCC;
-          --color-secondary-text: #444444;
+           --color-background: #F5F8FA;
+          --color-primary-text: #181C32;
+          --color-secondary-text: #3F4254;
           --color-border: #444444;
-          --color-accent-gold: #444444;
+          --color-primary-button: #FF9C00;
+          --color-secondary-button: #E4E6EF;
+          --color-card-background: #FFFFFF;
+          --color-primary-button-hover: #E88A00;
+            --color-secondary-button: #D1D3DB;
+
+
+
+          /* //accent colors */
+          /* --color-accent-gold: #444444;
           --color-accent-silver: #444444;
           --color-warm-beige: #FFFFFF;
           --color-deep-emerald: #CCCCCC;

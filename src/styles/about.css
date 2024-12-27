@@ -13,7 +13,7 @@
   text-align: center;
   font-size: 2.5rem;
   margin-bottom: 3rem;
-  color: var(--color-deep-emerald);
+  color: var(--color-primary-text);
 }
 
 .about-grid {
@@ -24,14 +24,14 @@
 
 .about-text {
   padding: 2rem;
-  background-color: var(--color-warm-beige);
+  background-color: var(--color-card-background);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--color-border);
 }
 
 .about-text h2 {
-  color: var(--color-deep-emerald);
+  color: var(--color-primary-text);
   margin-bottom: 1.5rem;
   font-size: 2rem;
 }
@@ -39,7 +39,7 @@
 .about-text p {
   line-height: 1.8;
   font-size: 1.1rem;
-  color: var(--color-primary-text);
+  color: var(--color-secondary-text);
 }
 
 .about-features {
@@ -50,7 +50,7 @@
 
 .feature {
   padding: 1.5rem;
-  background-color: var(--color-background);
+  background-color: var(--color-card-background);
   border-radius: 8px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   border: 1px solid var(--color-border);
@@ -59,18 +59,18 @@
 
 .feature:hover {
   transform: translateY(-5px);
-  border-color: var(--color-accent-gold);
+  border-color: var(--color-primary-button);
 }
 
 .feature h3 {
-  color: var(--color-deep-emerald);
+  color: var(--color-primary-text);
   margin-bottom: 1rem;
   font-size: 1.5rem;
 }
 
 .feature p {
   line-height: 1.6;
-  color: var(--color-primary-text);
+  color: var(--color-secondary-text);
 }
 
 @media (min-width: 768px) {

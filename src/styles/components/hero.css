@@ -1,7 +1,7 @@
 .hero {
   height: 100vh;
   width: 100%;
-  background-image: url('../../assets/images/pngwing.com.png');
+  background-image: url('https://mass-light.ba/assets/photos/product/original/190830-scaled.jpg?v1735316133');
   background-size: cover;
   background-position: top;
   background-repeat: no-repeat;
@@ -16,18 +16,25 @@
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.2);
+  height: 60%;
+  /* background-color: rgba(0, 0, 0, 0.2); */
+  background-color: var(--color-background);
   backdrop-filter: blur(1px);
+  z-index:-1;
 }
 
 .hero-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  padding-bottom: 5rem;
   position: absolute;
-  top: 50%;
+  top: 92%;
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: var(--color-secondary-text);
+  color: var(--color-primary-text);
   z-index: 1;
 }
 
@@ -42,8 +49,8 @@
 .catalogue-btn {
   padding: 1rem 2rem;
   font-size: 1.2rem;
-  background-color: var(--color-deep-emerald);
-  color: var(--color-secondary-text);
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -51,7 +58,7 @@
 }
 
 .catalogue-btn:hover {
-  background-color: var(--color-muted-terracotta);
+  background-color: var(--color-primary-button-hover);
   transform: translateY(-2px);
   box-shadow: var(--shadow-md);
 }
@@ -82,4 +89,15 @@
   ); */
   z-index: 0;
   pointer-events: none;
+}
+
+/* Add media query for mobile devices */
+@media screen and (max-width: 768px) {
+  .hero-content {
+    top: 80%;
+    
+  }
+  .hero {
+    height: 60vh;
+  }
 }

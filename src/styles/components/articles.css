@@ -41,18 +41,18 @@
 .article-title {
   font-size: 2rem;
   margin-bottom: 1rem;
-  color: var(--color-deep-emerald);
+  color: var(--color-primary-text);
 }
 
 .span-text {
-  color: var(--color-accent-silver);
+  color: var(--color-secondary-text);
   font-weight: 800;
   position: relative;
   display: inline-block;
 }
 
 .article-title .emphasis {
-  color: var(--color-accent-gold);
+  color: var(--color-primary-button);
   font-weight: 800;
   position: relative;
   display: inline-block;
@@ -65,18 +65,18 @@
   left: 0;
   width: 100%;
   height: 2px;
-  background-color: var(--color-accent-gold);
+  background-color: var(--color-primary-button);
 }
 
 .article-description {
-  color: var(--color-primary-text);
+  color: var(--color-secondary-text);
   line-height: 1.6;
   margin-bottom: 1rem;
 }
 
 .see-more-btn {
-  background-color: var(--color-deep-emerald);
-  color: var(--color-secondary-text);
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
   border: none;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
@@ -87,7 +87,7 @@
 }
 
 .see-more-btn:hover {
-  background-color: var(--color-muted-terracotta);
+  background-color: var(--color-primary-button-hover);
 }
 
 @keyframes fadeInUp {

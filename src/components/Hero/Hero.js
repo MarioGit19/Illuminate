@@ -1,7 +1,7 @@
 import React from "react";
 import "../../styles/components/hero.css";
 import { useNavigate } from "react-router-dom";
-import heroImage from "../../assets/images/pngwing.com.png";
+// import heroImage from "https://mass-light.ba/assets/photos/product/original/190830-scaled.jpg?v1735316133";
 
 const Hero = () => {
   const navigate = useNavigate();
@@ -11,7 +11,12 @@ const Hero = () => {
   };
 
   return (
-    <section className="hero" style={{ backgroundImage: `url(${heroImage})` }}>
+    <section
+      className="hero"
+      style={{
+        backgroundImage: `url(https://mass-light.ba/assets/photos/product/original/190830-scaled.jpg?v1735316133)`,
+      }}
+    >
       <div className="hero-content">
         <h1 className="animate-text">Step into the light with us</h1>
         <button className="catalogue-btn" onClick={handleCatalogueClick}>

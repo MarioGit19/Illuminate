@@ -8,15 +8,16 @@
 .thank-you-content {
     max-width: 1200px;
     margin: 0 auto;
-    background: var(--color-background);
+    background: var(--color-card-background);
     border-radius: 12px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
     overflow: hidden;
+    border: 1px solid var(--color-border);
 }
 
 .success-header {
-    background: linear-gradient(135deg, #2ecc71, #27ae60);
-    color: var(--color-secondary-text);
+    background: #4CAF50;
+    color: var(--color-card-background);
     padding: 2rem;
     text-align: center;
 }
@@ -24,13 +25,13 @@
 .success-icon {
     width: 60px;
     height: 60px;
-    background: var(--color-background);
+    background: var(--color-card-background);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     margin: 0 auto 1rem;
-    color: var(--color-deep-emerald);
+    color: #4CAF50;
     font-size: 2rem;
     font-weight: bold;
 }
@@ -49,7 +50,7 @@
 }
 
 .info-section {
-    background: var(--color-background);
+    background: var(--color-card-background);
     border-radius: 8px;
     padding: 1.5rem;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
@@ -63,7 +64,7 @@
 }
 
 .info-card {
-    background: #f8f9fa;
+    background: var(--color-background);
     padding: 1.5rem;
     border-radius: 8px;
 }
@@ -72,7 +73,7 @@
     font-size: 1.2rem;
     font-weight: bold;
     margin-bottom: 1rem;
-    color: #2c3e50;
+    color: var(--color-primary-text);
 }
 
 .address-details {
@@ -83,7 +84,7 @@
 .contact-details span,
 .delivery-date span {
     font-weight: 600;
-    color: #666;
+    color: var(--color-secondary-text);
 }
 
 .delivery-date {
@@ -93,7 +94,7 @@
 }
 
 .delivery-date .date {
-    color: #4CAF50;
+    color: var(--color-primary-button);
     font-weight: 600;
 }
 
@@ -146,8 +147,8 @@
 }
 
 .back-button {
-    background: var(--color-deep-emerald);
-    color: var(--color-secondary-text);
+    background: var(--color-primary-button);
+    color: var(--color-card-background);
     border: none;
     padding: 0.8rem 1.5rem;
     border-radius: 4px;
@@ -157,7 +158,7 @@
 }
 
 .back-button:hover {
-    background: var(--color-muted-terracotta);
+    background: var(--color-primary-button-hover);
 }
 
 /* Add responsive design for smaller screens */

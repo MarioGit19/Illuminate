@@ -18,7 +18,7 @@
   border: 1px solid var(--color-border);
   border-radius: 8px;
   height: fit-content;
-  background: var(--color-background);
+  background: var(--color-card-background);
 }
 
 .filter-sidebar h3 {
@@ -52,7 +52,7 @@
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s ease;
-  background: var(--color-background);
+  background: var(--color-card-background);
 }
 
 .product-card:hover {
@@ -76,8 +76,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: var(--color-muted-terracotta);
-  color: var(--color-secondary-text);
+  background-color: red;
+  color: #fff;
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
 }
@@ -86,7 +86,7 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color: var(--color-background);
+  background-color: var(--color-card-background);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -109,8 +109,8 @@
 }
 
 .quick-buy-button:hover {
-  background-color: var(--color-accent-gold);
-  color: var(--color-primary-text);
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
   transform: scale(1.1);
 }
 
@@ -162,15 +162,15 @@
 }
 
 .page-button:hover {
-  background-color: var(--color-accent-gold);
-  border-color: var(--color-accent-gold);
-  color: var(--color-primary-text);
+  background-color: var(--color-primary-button);
+  border-color: var(--color-primary-button);
+  color: var(--color-card-background);
 }
 
 .page-button.active {
-  background-color: var(--color-accent-gold);
-  border-color: var(--color-accent-gold);
-  color: var(--color-primary-text);
+  background-color: var(--color-primary-button);
+  border-color: var(--color-primary-button);
+  color: var(--color-card-background);
   font-weight: bold;
 }
 
@@ -213,7 +213,7 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: var(--color-accent-gold);
+    background: var(--color-primary-button);
     border: none;
     display: flex;
     align-items: center;
@@ -221,7 +221,7 @@
     cursor: pointer;
     box-shadow: var(--shadow-sm);
     z-index: 998;
-    color: var(--color-primary-text);
+    color: var(--color-card-background);
   }
 
   .close-filter {
@@ -273,14 +273,14 @@
     transform: translateY(-50%);
     width: 40px;
     height: 100px;
-    background: var(--color-accent-gold);
+    background: var(--color-primary-button);
     border-radius: 0 8px 8px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 1.2rem;
-    color: var(--color-primary-text);
+    color: var(--color-card-background);
   }
 
   .filter-sidebar.open {
