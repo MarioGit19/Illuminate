@@ -15,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductPage from "./components/ProductPage/ProductPage";
 import ThankYouPage from "./components/ThankYou/ThankYouPage";
+import SuccessAnimation from "./components/SuccessAnimation/SuccessAnimation";
 
 function App() {
   return (
@@ -56,6 +57,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
+      <SuccessAnimation />
     </CartProvider>
   );
 }

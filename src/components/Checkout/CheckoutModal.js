@@ -3,7 +3,13 @@ import { FaTimes } from "react-icons/fa";
 import "./CheckoutModal.css";
 import { useNavigate } from "react-router-dom";
 
-const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
+const CheckoutModal = ({
+  isOpen,
+  onClose,
+  cartItems,
+  total,
+  onOrderSuccess,
+}) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
@@ -29,24 +35,17 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Generate a random order ID
+    // Generate order ID and create order details
     const orderId = Math.random().toString(36).substr(2, 9).toUpperCase();
+    const estimatedDelivery = new Date();
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 10);
 
-    // Create order details object with all required fields
     const orderDetails = {
       orderId,
-      formData: {
-        firstName: formData.firstName,
-        lastName: formData.lastName,
-        email: formData.email,
-        phone: formData.phone,
-        address: formData.address,
-        city: formData.city,
-        zipCode: formData.zipCode,
-      },
+      formData,
       cartItems,
       total,
       estimatedDelivery,
@@ -55,9 +54,8 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
     // Store order details
     localStorage.setItem("lastOrder", JSON.stringify(orderDetails));
 
-    // Close modal and navigate
-    onClose();
-    navigate("/thank-you");
+    // Call success callback
+    onOrderSuccess();
   };
 
   const handleOverlayClick = (e) => {
