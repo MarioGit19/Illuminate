@@ -15,7 +15,7 @@
 }
 
 .success-header {
-    background: linear-gradient(135deg, var(--color-deep-emerald), var(--color-muted-terracotta));
+    background: linear-gradient(135deg, #2ecc71, #27ae60);
     color: var(--color-secondary-text);
     padding: 2rem;
     text-align: center;
