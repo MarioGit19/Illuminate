@@ -28,8 +28,14 @@ const ProductPage = () => {
   const allImages = [product.image, ...product.other_images];
 
   const handleImageClick = (image, index) => {
-    setMainImage(image);
-    setActiveIndex(index);
+    const mainImageElement = document.querySelector(".main-image");
+    mainImageElement.classList.add("transition");
+
+    setTimeout(() => {
+      setMainImage(image);
+      setActiveIndex(index);
+      mainImageElement.classList.remove("transition");
+    }, 500);
   };
 
   const handleAddToCart = (e) => {

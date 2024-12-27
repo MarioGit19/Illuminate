@@ -13,7 +13,12 @@ const FeaturedProducts = ({ products }) => {
   const navigate = useNavigate();
 
   // Duplicate products for seamless loop
-  const duplicatedProducts = [...saleProducts, ...saleProducts];
+  const duplicatedProducts = [
+    ...saleProducts,
+    ...saleProducts,
+    ...saleProducts,
+    ...saleProducts,
+  ];
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);

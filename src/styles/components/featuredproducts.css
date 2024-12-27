@@ -28,7 +28,7 @@
   display: flex;
   gap: 2rem;
   animation: scroll 20s linear infinite;
-  width: max-content;
+  width: calc(200% + 2rem);
   animation-direction: reverse;
 }
 
@@ -157,10 +157,10 @@
 
 @keyframes scroll {
   from {
-    transform: translateX(-100%);
+    transform: translateX(0);
   }
   to {
-    transform: translateX(100%);
+    transform: translateX(-100%);
   }
 }
 

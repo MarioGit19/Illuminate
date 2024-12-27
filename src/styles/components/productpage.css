@@ -137,6 +137,22 @@ background-color: transparent !important;
   height: auto;
   object-fit: cover;
   border-radius: 8px;
+  transition: opacity 0.5s ease-in-out;
+  opacity: 1;
+}
+
+.main-image.transition {
+  opacity: 0;
+}
+
+.main-image.fade-out {
+  opacity: 0;
+  transform: scale(0.95);
+}
+
+.main-image.fade-in {
+  opacity: 1;
+  transform: scale(1);
 }
 
 .image-carousel {

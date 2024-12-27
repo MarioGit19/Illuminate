@@ -215,8 +215,9 @@ nav.navbar {
 }
 
 .cart-icon-container {
+    /* Default styles for larger screens */
     position: relative;
-    cursor: pointer;
+    display: inline-block; /* Ensures it stays in the navbar */
 }
 
 .cart-icon {
@@ -268,7 +269,19 @@ nav.navbar {
     }
 
     .cart-icon-container {
-        order: -1;
+        position: absolute;
+        bottom: -90vh !important; /* Adjust as needed */
+        right: 15px !important; /* Adjust as needed */
+        z-index: 1000 !important; /* Ensure it appears above other elements */
+        background-color: var(--color-primary-button); /* Circle background color */
+        border-radius: 50%; /* Make it circular */
+        padding: 10px; /* Adjust padding to ensure the circle is large enough */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Optional shadow for depth */
+    }
+
+    .cart-icon {
+        color: white; /* Ensure the icon is visible against the background */
+        font-size: 1.5rem; /* Adjust size as needed */
     }
 }
 
@@ -575,4 +588,14 @@ nav.navbar {
   .nav-menu.active {
     max-height: 500px; /* Adjust this value based on your menu's content */
   }
+}
+
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+    .cart-icon-container {
+        position: fixed;
+        bottom: 10px; /* Adjust as needed */
+        right: 10px; /* Adjust as needed */
+        z-index: 1000; /* Ensure it appears above other elements */
+    }
 }
