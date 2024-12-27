@@ -13,6 +13,7 @@ import Cart from "./components/Cart/Cart";
 import Collections from "./components/Collections/Collections";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import "./index.css";
 import ProductPage from "./components/ProductPage/ProductPage";
 import ThankYouPage from "./components/ThankYou/ThankYouPage";
 import SuccessAnimation from "./components/SuccessAnimation/SuccessAnimation";

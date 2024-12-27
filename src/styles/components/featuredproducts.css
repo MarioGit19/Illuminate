@@ -1,7 +1,14 @@
 .featured-products {
-  padding: 4rem 2rem;
-  max-width: 1200px;
+  padding: 4rem 0;
+  max-width: 100%;
   margin: 0 auto;
+  overflow-x: hidden;
+}
+.regular-price {
+        background-color: rgba(211, 127, 90, 0.1);
+}
+.price-stack .sale-price {
+    background-color: rgba(211, 127, 90, 0.1);
 }
 
 .featured-products h2 {
@@ -11,14 +18,27 @@
   color: var(--color-primary-text);
 }
 
-.featured-products-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
+.featured-products-scroll {
+  width: 100%;
+  position: relative;
+  overflow: visible;
+}
+
+.featured-products-track {
+  display: flex;
   gap: 2rem;
-  justify-content: center;
+  animation: scroll 20s linear infinite;
+  width: max-content;
+  animation-direction: reverse;
+}
+
+/* Remove the grid styles since we're using a horizontal scroll */
+.featured-products-grid {
+  display: none;
 }
 
 .featured-product-card {
+  min-width: 280px; /* Set a fixed minimum width for each card */
   background: var(--color-card-background);
   border-radius: 8px;
   box-shadow: var(--shadow-md);
@@ -76,6 +96,7 @@
 .original-price {
   text-decoration: line-through;
   color: var(--color-accent-silver);
+  padding-left: 0.5rem;
 }
 
 .sale-price {
@@ -86,14 +107,14 @@
 
 /* Responsive Design */
 @media (max-width: 1024px) {
-  .featured-products-grid {
-    grid-template-columns: repeat(2, 1fr);
+  .featured-product-card {
+    min-width: 240px;
   }
 }
 
 @media (max-width: 640px) {
-  .featured-products-grid {
-    grid-template-columns: 1fr;
+  .featured-product-card {
+    min-width: 200px;
   }
 }
 
@@ -127,4 +148,18 @@
   background-color: var(--color-primary-button);
   color: var(--color-card-background);
   transform: scale(1.1);
+}
+
+@keyframes scroll {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(100%);
+  }
+}
+
+/* Optional: Pause animation on hover */
+.featured-products-track:hover {
+  animation-play-state: paused;
 }

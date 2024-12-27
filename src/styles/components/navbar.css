@@ -224,6 +224,11 @@ nav.navbar {
     color: var(--color-primary-text);
 }
 
+.cart-icon:hover {
+    color: var(--color-primary-button);
+    transition: color var(--transition-normal);
+}
+
 .cart-counter {
     position: absolute;
     top: -8px;
@@ -271,8 +276,6 @@ nav.navbar {
     position: relative;
     width: 40px;
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    margin-left: 0;
-    order: -1;
 }
 
 .search-container.expanded {
@@ -297,6 +300,10 @@ nav.navbar {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+.search-icon:hover {
+    color: var(--color-primary-button);
+}
+
 .search-input-wrapper input {
     width: 100%;
     padding: 8px 8px 8px 35px;
@@ -317,117 +324,55 @@ nav.navbar {
 
 .search-results {
     position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
+    top: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: 300px;
     background: var(--color-background);
     border: 1px solid var(--color-border);
     border-radius: 4px;
-    margin-top: 4px;
-    max-height: 400px;
+    box-shadow: var(--shadow-lg);
+    overflow: hidden;
+}
+
+.search-results-inner {
+    max-height: 300px;
     overflow-y: auto;
-    z-index: 1000;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 4px;
-    
-    /* Animation properties */
-    opacity: 0;
-    transform: translateY(-10px);
-    animation: slideDown 0.2s ease forwards;
-}
-
-@keyframes slideDown {
-    0% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
-    100% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Add transition for when the container is removed */
-.search-results.closing {
-    animation: slideUp 0.2s ease forwards;
-}
-
-@keyframes slideUp {
-    0% {
-        opacity: 1;
-        transform: translateY(0);
-    }
-    100% {
-        opacity: 0;
-        transform: translateY(-10px);
-    }
+    overflow-x: hidden;
+    padding: 8px;
 }
 
 .search-result-item {
-    display: flex;
-    padding: 12px;
+    display: grid;
+    grid-template-columns: 50px 1fr;
+    gap: 12px;
+    padding: 8px;
+    align-items: center;
     border-bottom: 1px solid var(--color-border);
-    cursor: pointer;
-    align-items: flex-start;
-    transition: all 0.2s ease-in-out;
-    transform-origin: center;
-    background-color: var(--color-background);
+    width: 100%;
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
+}
+
+.search-result-item {
+    transform: scale(0.9)
 }
 
 .search-result-item:hover {
     background-color: var(--color-warm-beige);
-    transform: scale(1.02);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-}
-
-
-
-.search-result-item img {
-    width: 50px;
-    height: 50px;
-    object-fit: cover;
-    margin-right: 10px;
-}
-
-.product-info {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-}
-
-.product-info h4 {
-    margin: 0 0 2px 0;
-    font-size: 14px;
-    color: var(--color-primary-text);
-}
-
-.product-info p {
-    margin: 4px 0 0;
-    font-size: 12px;
-    color: #666;
-}
-
-/* Mobile styles */
-@media screen and (max-width: 768px) {
-    .search-container {
-        width: 100%;
-        max-width: 300px;
-    }
-    
-    .search-results {
-        position: fixed;
-        left: 0;
-        width: 100%;
-        max-height: 60vh;
-    }
+    cursor: pointer;
+    transform: scale(1);
+    transition: transform var(--transition-normal);
 }
 
 .image-container {
-    position: relative;
     width: 50px;
     height: 50px;
-    margin-right: 10px;
+    min-width: 50px;
+    position: relative;
 }
 
 .image-container img {
@@ -437,54 +382,46 @@ nav.navbar {
     border-radius: 4px;
 }
 
-.sale-ribbon {
-    position: absolute;
-    top: 0;
-    right: 0;
-    background-color: #e53e3e;
-    color: white;
-    padding: 2px 6px;
-    font-size: 10px;
-    font-weight: bold;
-    border-radius: 0 4px 0 4px;
+.product-info {
+    width: 100%;
+    min-width: 0;
+}
+
+.product-info h4 {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .price-container {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
+    display: flex;
+    align-items: flex-start;
     margin-top: 4px;
-    background-color: var(--color-background);
-    border-radius: 4px;
-    padding: 4px 8px;
-    border-left: 3px solid var(--color-accent-gold);
-    width: fit-content;
+}
+
+.price-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .sale-price {
-    color: var(--color-muted-terracotta);
-    font-weight: bold;
-    font-size: 14px;
-    padding: 2px 6px;
-    background-color: rgba(211, 127, 90, 0.1);
-    border-radius: 3px;
+    color: var(--color-primary-text);
+    font-weight: 500;
+    font-size: 13px;
 }
 
 .original-price {
+    color: var(--color-primary-text);
     text-decoration: line-through;
-    color: var(--color-accent-silver);
-    font-size: 12px;
-    padding: 2px 6px;
-    background-color: rgba(0, 0, 0, 0.05);
-    border-radius: 3px;
+    font-size: 11px;
+    opacity: 0.6;
 }
 
 .regular-price {
     color: var(--color-primary-text);
-    font-size: 14px;
-    padding: 2px 6px;
-    /* background-color: rgba(0, 0, 0, 0.05); */
-    border-radius: 3px;
+    font-weight: 500;
+    font-size: 13px;
 }
 
 .logo {
@@ -566,9 +503,7 @@ nav.navbar {
     background-color: var(--color-background);
 }
 
-.search-result-item:hover {
-    background-color: var(--color-warm-beige);
-}
+
 
 .product-info h4 {
     color: var(--color-primary-text);
@@ -581,7 +516,7 @@ nav.navbar {
 
 .sale-price {
     color: var(--color-muted-terracotta);
-    background-color: rgba(211, 127, 90, 0.1);
+    /* background-color: rgba(211, 127, 90, 0.1); */
 }
 
 .original-price {
@@ -600,5 +535,23 @@ nav.navbar {
     .nav-link:hover {
         background-color: var(--color-warm-beige);
         border-left: 3px solid var(--color-accent-gold);
+    }
+}
+
+/* Mobile adjustments */
+@media screen and (max-width: 768px) {
+    .search-results {
+        width: 100%;
+        max-height: 250px;
+    }
+
+    .search-result-item {
+        grid-template-columns: 40px 1fr;
+        gap: 6px;
+    }
+
+    .image-container {
+        width: 40px;
+        height: 40px;
     }
 }

@@ -73,6 +73,11 @@
   font-size: 1.8rem;
   font-weight: bold;
   color: var(--color-primary-button);
+  padding-left:0.5rem;
+  /* background-color: transparent !important; */
+}
+.price-container .regular-price {
+background-color: transparent !important;
 }
 
 .description {

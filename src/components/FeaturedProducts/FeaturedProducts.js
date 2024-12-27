@@ -9,8 +9,11 @@ import { useNavigate } from "react-router-dom";
 const FeaturedProducts = ({ products }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
   const { addToCart } = useCart();
-  const saleProducts = products.filter((product) => product.onSale).slice(0, 4);
+  const saleProducts = products.filter((product) => product.onSale);
   const navigate = useNavigate();
+
+  // Duplicate products for seamless loop
+  const duplicatedProducts = [...saleProducts, ...saleProducts];
 
   const handleProductClick = (productId) => {
     navigate(`/product/${productId}`);
@@ -33,42 +36,44 @@ const FeaturedProducts = ({ products }) => {
   return (
     <section className="featured-products">
       <h2>Featured Products</h2>
-      <div className="featured-products-grid">
-        {saleProducts.length > 0 ? (
-          saleProducts.map((product) => (
-            <div
-              key={product.id}
-              className="featured-product-card"
-              onClick={() => handleProductClick(product.id)}
-              onMouseEnter={() => setHoveredProduct(product.id)}
-              onMouseLeave={() => setHoveredProduct(null)}
-              style={{ cursor: "pointer" }}
-            >
-              <div className="product-image">
-                <img src={product.image} alt={product.name} />
-                <span className="sale-badge">Sale</span>
-                {hoveredProduct === product.id && (
-                  <button
-                    className="quick-buy-button"
-                    onClick={(e) => handleAddToCart(e, product)}
-                    title="Quick Add to Cart"
-                  >
-                    <FaShoppingCart />
-                  </button>
-                )}
-              </div>
-              <div className="product-info">
-                <h3>{product.name}</h3>
-                <div className="price-container">
-                  <span className="original-price">${product.price}</span>
-                  <span className="sale-price">${product.salePrice}</span>
+      <div className="featured-products-scroll">
+        <div className="featured-products-track">
+          {duplicatedProducts.length > 0 ? (
+            duplicatedProducts.map((product, index) => (
+              <div
+                key={`${product.id}-${index}`}
+                className="featured-product-card"
+                onClick={() => handleProductClick(product.id)}
+                onMouseEnter={() => setHoveredProduct(`${product.id}-${index}`)}
+                onMouseLeave={() => setHoveredProduct(null)}
+                style={{ cursor: "pointer" }}
+              >
+                <div className="product-image">
+                  <img src={product.image} alt={product.name} />
+                  <span className="sale-badge">Sale</span>
+                  {hoveredProduct === `${product.id}-${index}` && (
+                    <button
+                      className="quick-buy-button"
+                      onClick={(e) => handleAddToCart(e, product)}
+                      title="Quick Add to Cart"
+                    >
+                      <FaShoppingCart />
+                    </button>
+                  )}
+                </div>
+                <div className="product-info">
+                  <h3>{product.name}</h3>
+                  <div className="price-container">
+                    <span className="original-price">${product.price}</span>
+                    <span className="sale-price">${product.salePrice}</span>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))
-        ) : (
-          <p>No featured products available</p>
-        )}
+            ))
+          ) : (
+            <p>No featured products available</p>
+          )}
+        </div>
       </div>
     </section>
   );

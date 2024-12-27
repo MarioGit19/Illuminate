@@ -243,9 +243,9 @@
   color: inherit;
   cursor: pointer;
 }
-
 .product-link:hover h3 {
-  color: #FDD835;
+  color: var(--color-primary-button);
+  transition: color var(--transition-normal);
 }
 
 .product-link img:hover {

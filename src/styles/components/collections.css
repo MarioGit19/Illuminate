@@ -348,8 +348,11 @@
 }
 
 .Toastify__toast--success {
-  background: var(--color-accent-gold);
-  color: var(--color-primary-text);
+  background: #4CAF50;
+  color: var(--color-card-background);
+}
+.Toastify__toast-icon svg {
+    fill: var(--color-card-background);
 }
 
 .Toastify__progress-bar {
@@ -358,7 +361,7 @@
 
 /* Optional: Style the close button */
 .Toastify__close-button {
-  color: #333;
+  color: var(--color-primary-text);
   opacity: 0.7;
 }
 
@@ -432,7 +435,7 @@
   position: absolute;
   width: 100%;
   height: 2px;
-  background: var(--color-border);
+  background: var(--color-primary-button);
   pointer-events: none;
   -webkit-appearance: none;
   top: 50%;
@@ -444,7 +447,7 @@
   pointer-events: auto;
   width: 16px;
   height: 16px;
-  background: var(--color-accent-gold);
+  background: var(--color-primary-button);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;

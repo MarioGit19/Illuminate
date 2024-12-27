@@ -15,6 +15,10 @@ const About = () => {
               in 2004, and since then, we've maintained our commitment to
               excellence.
             </p>
+            <img
+              src="https://img.freepik.com/premium-vector/money-back-guarantee-free-shipping-trust-badges-trust-badges-secure-ordering-easy-returns_526569-803.jpg?w=2000"
+              alt="Trust badges and guarantees"
+            />
           </div>
           <div className="about-features">
             <div className="feature">
