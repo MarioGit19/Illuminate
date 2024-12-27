@@ -1,0 +1,152 @@
+.intro-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.98);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.footstep-trail {
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  fill: #ffffff;
+  opacity: 0.8;
+  transform-origin: center;
+}
+
+.footstep-trail:not(.completed) {
+  animation: fadeOut 2s forwards;
+}
+
+.footstep-trail.left {
+  transform: rotate(-15deg) scaleX(-1);
+}
+
+.footstep-trail.right {
+  transform: rotate(15deg);
+}
+
+@keyframes fadeOut {
+  0% { opacity: 0.8; }
+  100% { opacity: 0; }
+}
+
+.light-switch-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  opacity: 0.05;
+  transition: all 0.5s ease;
+  transform-style: preserve-3d;
+  perspective: 1000px;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.light-switch-container:hover {
+  opacity: 0.7;
+}
+
+.switch-image {
+  width: 40px;
+  height: 40px;
+  display: block;
+  transform-origin: center;
+  transition: transform 0.8s ease;
+  transform-style: preserve-3d;
+  color: #ffffff;
+  opacity: 0.8;
+}
+
+.switch-text {
+  position: absolute;
+  bottom: -25px;
+  font-size: 14px;
+  font-weight: bold;
+  color: #ffffff;
+  transition: opacity 0.5s ease;
+  opacity: 0.6;
+}
+
+.switch-text.on {
+  opacity: 0;
+}
+
+.switch-text.off {
+  opacity: 1;
+}
+
+.light-switch-container.toggled .switch-text.on {
+  opacity: 1;
+}
+
+.light-switch-container.toggled .switch-text.off {
+  opacity: 0;
+}
+
+/* .light-switch-container.toggled .switch-image {
+  transform: rotateY(180deg);
+} */
+
+.intro-overlay.fade-out {
+  animation: fadeOverlay 1s ease 0.5s forwards;
+}
+
+@keyframes fadeOverlay {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.cursor-light {
+  position: absolute;
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.15) 50%,
+    transparent 70%
+  );
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 10000;
+}
+
+.footstep-trail.completed {
+  opacity: 0.8;
+  animation: none;
+}
+
+.light-switch-container:hover:not(.toggled) {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.light-switch-container:active {
+  transform: translate(-50%, -50%) scale(0.95);
+  transition: all 0.1s ease;
+}
+
+/* @keyframes switchFlip {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(180deg); }
+} */
+
+/* .light-switch-container.toggled .switch-image {
+  animation: switchFlip 0.5s ease forwards;
+}  */
+
+.switch-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}

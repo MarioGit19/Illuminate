@@ -1,3 +1,4 @@
+import React, { useState } from "react";
 import "./App.css";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar/Navbar";
@@ -17,11 +18,19 @@ import "./index.css";
 import ProductPage from "./components/ProductPage/ProductPage";
 import ThankYouPage from "./components/ThankYou/ThankYouPage";
 import SuccessAnimation from "./components/SuccessAnimation/SuccessAnimation";
+import IntroOverlay from "./components/IntroOverlay/IntroOverlay";
 
 function App() {
+  const [showOverlay, setShowOverlay] = useState(true);
+
+  const handleOverlayComplete = () => {
+    setShowOverlay(false);
+  };
+
   return (
     <CartProvider>
       <Router>
+        {showOverlay && <IntroOverlay onComplete={handleOverlayComplete} />}
         <Navbar />
         <Routes>
           <Route

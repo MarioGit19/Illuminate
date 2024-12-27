@@ -15,29 +15,33 @@ const Navbar = () => {
     setIsOpen(!isOpen);
   };
 
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
   return (
     <>
       <nav className="navbar">
         <div className="nav-container">
           <div className="logo">
-            <Link to="/">
+            <Link to="/" onClick={closeMenu}>
               <span className="logo-text">illuminate</span>
             </Link>
           </div>
 
           <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
             <li className="nav-item">
-              <Link to="/" className="nav-link">
+              <Link to="/" className="nav-link" onClick={closeMenu}>
                 Home
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/about" className="nav-link">
+              <Link to="/about" className="nav-link" onClick={closeMenu}>
                 About
               </Link>
             </li>
             <li className="nav-item">
-              <Link to="/products" className="nav-link">
+              <Link to="/products" className="nav-link" onClick={closeMenu}>
                 Products
               </Link>
             </li>
