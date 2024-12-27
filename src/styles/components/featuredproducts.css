@@ -32,6 +32,13 @@
   animation-direction: reverse;
 }
 
+@media screen and (max-width: 768px) {
+  .featured-products-track {
+    animation: scroll 40s linear infinite;
+    animation-direction:reverse;
+  }
+}
+
 /* Remove the grid styles since we're using a horizontal scroll */
 .featured-products-grid {
   display: none;
@@ -89,8 +96,6 @@
 
 .price-container {
   display: flex;
-  gap: 1rem;
-  align-items: center;
 }
 
 .original-price {

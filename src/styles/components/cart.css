@@ -25,15 +25,155 @@
 @media (max-width: 768px) {
   .cart-content {
     grid-template-columns: 1fr;
+    gap: 0.5rem;
   }
-
+.cart-page-item {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 1rem !important;
+    padding: 1rem 0 !important;
+}
   .cart-container {
-    padding: 0 1rem;
+    padding: 0 0.5rem;
   }
 
   .cart-page {
     padding: 1rem;
     padding-top: 80px;
+  }
+
+  .cart-items-section,
+  .order-summary {
+    padding: 1rem;
+  }
+
+  .cart-page-item {
+    grid-template-columns: 70px 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .cart-page-item img {
+    width: 70px;
+    height: 70px;
+  }
+
+  .item-details h3 {
+    font-size: 0.9rem;
+  }
+
+  .item-details .price {
+    font-size: 0.9rem;
+  }
+
+  .quantity-controls button {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  .item-total {
+    font-size: 1rem;
+  }
+
+  .checkout-button,
+  .continue-shopping {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  .order-summary h2 {
+    font-size: 1rem;
+  }
+
+  .summary-row,
+  .summary-total {
+    font-size: 0.9rem;
+  }
+
+  .shipping-info .info-card h3 {
+    font-size: 0.9rem;
+  }
+
+  .shipping-info .info-card p {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 426px) {
+  .cart-content {
+    grid-template-columns: 1fr;
+    gap: 0.25rem;
+  }
+
+  .cart-container {
+    padding: 0 0.3rem;
+  }
+
+  .cart-page {
+    padding: 0.5rem;
+    padding-top: 80px;
+  }
+
+  .cart-items-section,
+  .order-summary {
+    padding: 0.5rem;
+  }
+
+  .cart-page-item {
+    grid-template-columns: 50px 1fr auto;
+    gap: 0.25rem;
+  }
+
+  .cart-page-item img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .item-details h3 {
+    font-size: 0.8rem;
+  }
+
+  .item-details .price {
+    font-size: 0.8rem;
+  }
+
+  .quantity-controls button {
+    padding: 0.2rem;
+    font-size: 0.7rem;
+  }
+
+  .item-total {
+    font-size: 0.9rem;
+  }
+
+  .checkout-button,
+  .continue-shopping {
+    padding: 0.4rem;
+    font-size: 0.7rem;
+  }
+
+  .order-summary h2 {
+    font-size: 0.9rem;
+  }
+
+  .summary-row,
+  .summary-total {
+    font-size: 0.8rem;
+  }
+
+  .shipping-info .info-card h3 {
+    font-size: 0.8rem;
+  }
+
+  .shipping-info .info-card p {
+    font-size: 0.7rem;
+  }
+
+  .empty-cart-message {
+    text-align: center;
+  }
+
+  .success-animation-overlay {
+    justify-content: center;
+    align-items: center;
   }
 }
 

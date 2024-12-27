@@ -121,15 +121,19 @@ const IntroOverlay = ({ onComplete }) => {
     }, 1000); // Wait for text animation before starting the additional delay
   };
 
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
   return (
     <div className={`intro-overlay ${isToggled ? "fade-out" : ""}`}>
-      <div
-        className="cursor-light"
-        style={{
-          left: mousePosition.x,
-          top: mousePosition.y,
-        }}
-      />
+      {!isMobile && (
+        <div
+          className="cursor-light"
+          style={{
+            left: mousePosition.x,
+            top: mousePosition.y,
+          }}
+        />
+      )}
       {footstepTrail.map((step) => (
         <Footstep
           key={step.id}

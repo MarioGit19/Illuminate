@@ -46,6 +46,13 @@
   animation: fadeIn 2s ease-in forwards;
 }
 
+@media screen and (max-width: 768px) {
+    .animate-text{
+        font-size:2rem;
+    }
+}
+
+
 .catalogue-btn {
   padding: 1rem 2rem;
   font-size: 1.2rem;

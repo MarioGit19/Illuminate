@@ -184,6 +184,10 @@
     display: none;
   }
 
+  .price-container .regular-price{
+    font-size:0.8rem !important;
+  }
+
   .collections-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
@@ -244,6 +248,49 @@
     background-color: var(--color-warm-beige);
     color: var(--color-deep-emerald);
     transform: rotate(90deg);
+  }
+
+  .product-card {
+    padding: 0.5rem;
+  }
+
+  .product-image {
+    aspect-ratio: 3/2;
+  }
+
+  .product-info h3 {
+    font-size: 0.9rem;
+  }
+.product-info .price-container .original-price{
+    font-size:0.7rem !important;
+}
+.product-info .price-container .sale-price {
+    font-size: 0.9rem !important;
+}
+  .price-container {
+    font-size: 0.8rem;
+  }
+
+  .quick-buy-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .collections-grid .product-card {
+    height: auto !important;
+    min-height: 250px !important;
+  }
+  .product-info .price-container{
+    display: flex;
+    flex-direction: column-reverse;
+
+  }
+  .price-container .sale-price {
+    padding-left: 0.5rem;
+  }
+
+  .collections-grid .product-image {
+    aspect-ratio: 3/2 !important;
   }
 }
 
