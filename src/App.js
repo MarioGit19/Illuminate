@@ -14,6 +14,7 @@ import Collections from "./components/Collections/Collections";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProductPage from "./components/ProductPage/ProductPage";
+import ThankYouPage from "./components/ThankYou/ThankYouPage";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           />
           <Route path="/cart" element={<Cart />} />
           <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/thank-you" element={<ThankYouPage />} />
         </Routes>
         <Footer />
       </Router>

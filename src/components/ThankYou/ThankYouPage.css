@@ -1,0 +1,211 @@
+.thank-you-container {
+  min-height: 100vh;
+  background-color: #f7f9fc;
+  padding: 2rem;
+  padding-top: calc(80px + 2rem);
+}
+
+.thank-you-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  /* margin-top: 80px; */
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+.success-header {
+  background: linear-gradient(135deg, #4CAF50, #45a049);
+  color: white;
+  padding: 2rem;
+  text-align: center;
+}
+
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1rem;
+  color: #4CAF50;
+  font-size: 2rem;
+  font-weight: bold;
+}
+
+.order-confirmation {
+  font-size: 1.2rem;
+  opacity: 0.9;
+  margin-top: 0.5rem;
+}
+
+.confirmation-details {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr;
+  gap: 2rem;
+}
+
+.info-section {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.info-section h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+.info-card {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.customer-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2c3e50;
+}
+
+.address-details {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.contact-details span,
+.delivery-date span {
+  font-weight: 600;
+  color: #666;
+}
+
+.delivery-date {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+}
+
+.delivery-date .date {
+  color: #4CAF50;
+  font-weight: 600;
+}
+
+.ordered-items {
+  margin-bottom: 2rem;
+}
+
+.ordered-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee;
+}
+
+.ordered-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.item-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+.item-info .price {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.order-summary {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.summary-row.total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eee;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.back-button {
+  background: #4CAF50;
+  color: white;
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+.back-button:hover {
+  background: #45a049;
+}
+
+/* Add responsive design for smaller screens */
+@media (max-width: 768px) {
+  .confirmation-details {
+    grid-template-columns: 1fr;
+  }
+  
+  .thank-you-container {
+    padding: 1rem;
+  }
+} 
+
+.shipping-details {
+  margin-bottom: 1.5rem;
+}
+
+.shipping-details .customer-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+}
+
+.shipping-details .address {
+  color: #4a4a4a;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.shipping-details .city-zip {
+  color: #4a4a4a;
+  margin-bottom: 1rem;
+}
+
+.contact-details {
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  margin-bottom: 1rem;
+}
+
+.contact-details p {
+  margin-bottom: 0.5rem;
+  color: #4a4a4a;
+}
+
+.contact-details span {
+  font-weight: 600;
+  color: #666;
+  margin-right: 0.5rem;
+} 

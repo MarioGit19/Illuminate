@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import "./CheckoutModal.css";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -13,8 +15,12 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
     zipCode: "",
   });
 
-  const estimatedDelivery = new Date();
-  estimatedDelivery.setDate(estimatedDelivery.getDate() + 10);
+  // Add this state for estimated delivery
+  const [estimatedDelivery] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 10);
+    return date;
+  });
 
   const handleChange = (e) => {
     setFormData({
@@ -25,8 +31,33 @@ const CheckoutModal = ({ isOpen, onClose, cartItems, total }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle form submission logic here
-    console.log("Form submitted:", formData);
+
+    // Generate a random order ID
+    const orderId = Math.random().toString(36).substr(2, 9).toUpperCase();
+
+    // Create order details object with all required fields
+    const orderDetails = {
+      orderId,
+      formData: {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        city: formData.city,
+        zipCode: formData.zipCode,
+      },
+      cartItems,
+      total,
+      estimatedDelivery,
+    };
+
+    // Store order details
+    localStorage.setItem("lastOrder", JSON.stringify(orderDetails));
+
+    // Close modal and navigate
+    onClose();
+    navigate("/thank-you");
   };
 
   const handleOverlayClick = (e) => {
