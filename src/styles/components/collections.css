@@ -15,10 +15,10 @@
 
 .filter-sidebar {
   padding: 3rem 1rem 1rem;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   height: fit-content;
-  background: white;
+  background: var(--color-background);
 }
 
 .filter-sidebar h3 {
@@ -36,6 +36,7 @@
   align-items: center;
   gap: 0.5rem;
   cursor: pointer;
+  color: var(--color-primary-text);
 }
 
 .collections-grid {
@@ -47,10 +48,11 @@
 
 .product-card {
   position: relative;
-  border: 1px solid #eee;
+  border: 1px solid var(--color-border);
   border-radius: 8px;
   overflow: hidden;
   transition: transform 0.3s ease;
+  background: var(--color-background);
 }
 
 .product-card:hover {
@@ -74,8 +76,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background-color: #ff4444;
-  color: white;
+  background-color: var(--color-muted-terracotta);
+  color: var(--color-secondary-text);
   padding: 0.25rem 0.75rem;
   border-radius: 4px;
 }
@@ -84,7 +86,7 @@
   position: absolute;
   bottom: 10px;
   right: 10px;
-  background-color: white;
+  background-color: var(--color-background);
   border: none;
   border-radius: 50%;
   width: 40px;
@@ -98,6 +100,7 @@
   transform: translateY(10px);
   z-index: 10;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: var(--color-primary-text);
 }
 
 .product-card:hover .quick-buy-button {
@@ -106,8 +109,8 @@
 }
 
 .quick-buy-button:hover {
-  background-color: #FFD700;
-  color: #333;
+  background-color: var(--color-accent-gold);
+  color: var(--color-primary-text);
   transform: scale(1.1);
 }
 
@@ -126,17 +129,18 @@
 
 .original-price {
   text-decoration: line-through;
-  color: #999;
+  color: var(--color-accent-silver);
   margin-right: 0.5rem;
 }
 
 .sale-price {
-  color: #ff4444;
+  color: var(--color-muted-terracotta);
   font-weight: bold;
 }
 
 .regular-price {
   font-weight: bold;
+  color: var(--color-primary-text);
 }
 
 .pagination {
@@ -149,23 +153,24 @@
 
 .page-button {
   padding: 0.5rem 1rem;
-  border: 1px solid #ddd;
-  background: white;
+  border: 1px solid var(--color-border);
+  background: var(--color-background);
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s ease;
+  color: var(--color-primary-text);
 }
 
 .page-button:hover {
-  background-color: #FFD700;
-  border-color: #FFD700;
-  color: #333;
+  background-color: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  color: var(--color-primary-text);
 }
 
 .page-button.active {
-  background-color: #FFD700;
-  border-color: #FFD700;
-  color: #333;
+  background-color: var(--color-accent-gold);
+  border-color: var(--color-accent-gold);
+  color: var(--color-primary-text);
   font-weight: bold;
 }
 
@@ -190,10 +195,10 @@
     left: -100%;
     width: 80%;
     height: 100vh;
-    background: white;
+    background: var(--color-background);
     z-index: 1001;
     transition: left 0.3s ease;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     padding: 3rem 1rem 1rem;
   }
 
@@ -208,14 +213,15 @@
     width: 50px;
     height: 50px;
     border-radius: 50%;
-    background: #FFD700;
+    background: var(--color-accent-gold);
     border: none;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    box-shadow: var(--shadow-sm);
     z-index: 998;
+    color: var(--color-primary-text);
   }
 
   .close-filter {
@@ -229,14 +235,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #666;
+    color: var(--color-primary-text);
     transition: all 0.3s ease;
     border-radius: 50%;
   }
 
   .close-filter:hover {
-    background-color: rgba(0, 0, 0, 0.05);
-    color: #333;
+    background-color: var(--color-warm-beige);
+    color: var(--color-deep-emerald);
     transform: rotate(90deg);
   }
 }
@@ -253,9 +259,9 @@
     top: 50%;
     transform: translateY(-50%);
     width: 250px;
-    background: white;
+    background: var(--color-background);
     transition: left 0.3s ease;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: var(--shadow-lg);
     border-radius: 0 8px 8px 0;
     z-index: 1000;
   }
@@ -267,13 +273,14 @@
     transform: translateY(-50%);
     width: 40px;
     height: 100px;
-    background: #FFD700;
+    background: var(--color-accent-gold);
     border-radius: 0 8px 8px 0;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     font-size: 1.2rem;
+    color: var(--color-primary-text);
   }
 
   .filter-sidebar.open {
@@ -341,8 +348,8 @@
 }
 
 .Toastify__toast--success {
-  background: #FFD700;
-  color: #333;
+  background: var(--color-accent-gold);
+  color: var(--color-primary-text);
 }
 
 .Toastify__progress-bar {
@@ -402,9 +409,10 @@
   text-align: center;
   padding: 3rem;
   border-radius: 8px;
-  color: #666;
+  color: var(--color-primary-text);
   font-size: 1.1rem;
   margin: 2rem 0;
+  background: var(--color-warm-beige);
 }
 
 .no-results p {
@@ -424,7 +432,7 @@
   position: absolute;
   width: 100%;
   height: 2px;
-  background: none;
+  background: var(--color-border);
   pointer-events: none;
   -webkit-appearance: none;
   top: 50%;
@@ -436,24 +444,26 @@
   pointer-events: auto;
   width: 16px;
   height: 16px;
-  background: #FFD700;
+  background: var(--color-accent-gold);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
   margin-top: -7px;
   z-index: 3;
+  box-shadow: var(--shadow-sm);
 }
 
 .price-slider::-moz-range-thumb {
   width: 16px;
   height: 16px;
-  background: #FFD700;
+  background: var(--color-accent-gold);
   border-radius: 50%;
   cursor: pointer;
   transition: all 0.3s ease;
   border: none;
   z-index: 3;
+  box-shadow: var(--shadow-sm);
 }
 
 .price-slider::-webkit-slider-runnable-track {
@@ -475,7 +485,7 @@
 
 .price-slider:nth-child(2) {
   z-index: 2;
-  background: #FFD700;
+  background: var(--color-accent-gold);
 }
 
 .price-slider::-webkit-slider-thumb:hover {
@@ -509,4 +519,8 @@
 
 .filter-sidebar h3:first-of-type {
   margin-top: 0;
+}
+
+.category-item input[type="checkbox"] {
+  accent-color: var(--color-accent-gold);
 } 

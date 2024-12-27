@@ -34,6 +34,17 @@
   --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+
+  /* New color variables */
+  --color-background: #F8F9FA;
+  --color-primary-text: #2D2D2D;
+  --color-secondary-text: #E5E5E5;
+  --color-border: #BCC6CC;
+  --color-accent-gold: #D4AF37;
+  --color-accent-silver: #BCC6CC;
+  --color-warm-beige: #F5E9DC;
+  --color-deep-emerald: #2E5D50;
+  --color-muted-terracotta: #D37F5A;
 }
 
 body {

@@ -14,14 +14,14 @@ nav.navbar {
         padding: var(--spacing-sm) var(--spacing-xl) !important;
         height: 60px !important;
         box-shadow: var(--shadow-lg) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.4) !important;
+        border-bottom: 1px solid var(--color-border) !important;
         width: 100% !important;
         position: fixed !important;
         top: 0 !important;
         display: flex;
         left: 0 !important;
         z-index: var(--z-fixed) !important;
-    background-color: #FFFFFF;
+    background-color: var(--color-background);
     border-bottom: 1px solid #A69F94;
 }
 
@@ -101,7 +101,7 @@ nav.navbar {
 
 .nav-link {
     font-family: var(--font-body);
-    color: #4A4A4A;
+    color: var(--color-primary-text);
     text-decoration: none;
     padding: 0.5rem 1rem;
     position: relative;
@@ -111,11 +111,11 @@ nav.navbar {
 }
 
 .nav-link:hover {
-    color: #FDD835;
+    color: var(--color-accent-gold);
 }
 
 .nav-link.active {
-    color: #AEE4FF;
+    color: var(--color-accent-silver);
 }
 
 /* Logo styles */
@@ -134,7 +134,7 @@ nav.navbar {
     font-family: 'Playfair Display', serif;
     font-weight: bold;
     font-size: 2rem;
-    color: #000;
+    color: var(--color-primary-text);
 }
 
 /* Hamburger menu styles */
@@ -150,7 +150,7 @@ nav.navbar {
     display: block;
     width: 25px;
     height: 3px;
-    background: #333333;
+    background: var(--color-primary-text);
     margin: 5px 0;
     transition: all 0.3s ease;
 }
@@ -289,7 +289,7 @@ nav.navbar {
     left: 8px;
     top: 50%;
     transform: translateY(-50%);
-    color: #666;
+    color: var(--color-primary-text);
     cursor: pointer;
     z-index: 2;
     font-size: 1.2rem;
@@ -299,7 +299,7 @@ nav.navbar {
 .search-input-wrapper input {
     width: 100%;
     padding: 8px 8px 8px 35px;
-    border: 1px solid #ddd;
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     font-size: 14px;
     opacity: 0;
@@ -319,8 +319,8 @@ nav.navbar {
     top: 100%;
     left: 0;
     right: 0;
-    background: white;
-    border: 1px solid #ddd;
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
     border-radius: 4px;
     margin-top: 4px;
     max-height: 400px;
@@ -365,16 +365,16 @@ nav.navbar {
 .search-result-item {
     display: flex;
     padding: 12px;
-    border-bottom: 1px solid #eee;
+    border-bottom: 1px solid var(--color-border);
     cursor: pointer;
     align-items: flex-start;
     transition: all 0.2s ease-in-out;
     transform-origin: center;
-    background-color: white;
+    background-color: var(--color-background);
 }
 
 .search-result-item:hover {
-    background-color: #F9F5E7;
+    background-color: var(--color-warm-beige);
     transform: scale(1.02);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
 }
@@ -398,7 +398,7 @@ nav.navbar {
 .product-info h4 {
     margin: 0 0 2px 0;
     font-size: 14px;
-    color: var(--color-dark-gray);
+    color: var(--color-primary-text);
 }
 
 .product-info p {
@@ -453,25 +453,25 @@ nav.navbar {
     align-items: center;
     gap: 8px;
     margin-top: 4px;
-    background-color: #f5f5f5;
+    background-color: var(--color-background);
     border-radius: 4px;
     padding: 4px 8px;
-    border-left: 3px solid #FDD835;
+    border-left: 3px solid var(--color-accent-gold);
     width: fit-content;
 }
 
 .sale-price {
-    color: #e53e3e;
+    color: var(--color-muted-terracotta);
     font-weight: bold;
     font-size: 14px;
     padding: 2px 6px;
-    background-color: rgba(229, 62, 62, 0.1);
+    background-color: rgba(211, 127, 90, 0.1);
     border-radius: 3px;
 }
 
 .original-price {
     text-decoration: line-through;
-    color: #999;
+    color: var(--color-accent-silver);
     font-size: 12px;
     padding: 2px 6px;
     background-color: rgba(0, 0, 0, 0.05);
@@ -479,7 +479,7 @@ nav.navbar {
 }
 
 .regular-price {
-    color: var(--color-dark-gray);
+    color: var(--color-primary-text);
     font-size: 14px;
     padding: 2px 6px;
     background-color: rgba(0, 0, 0, 0.05);
@@ -535,9 +535,68 @@ nav.navbar {
   font-family: 'Playfair Display', serif;
   font-weight: bold;
   font-size: 2rem;
-  color: #000; /* Adjust color as needed */
+  color: var(--color-primary-text);
   text-decoration: none;
 }
 .logo a {
     text-decoration: none;
+}
+
+.nav-menu {
+    background-color: var(--color-background);
+}
+
+.search-icon {
+    color: var(--color-primary-text);
+}
+
+.search-input-wrapper input {
+    border: 1px solid var(--color-border);
+}
+
+.search-results {
+    background: var(--color-background);
+    border: 1px solid var(--color-border);
+}
+
+.search-result-item {
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-background);
+}
+
+.search-result-item:hover {
+    background-color: var(--color-warm-beige);
+}
+
+.product-info h4 {
+    color: var(--color-primary-text);
+}
+
+.price-container {
+    background-color: var(--color-background);
+    border-left: 3px solid var(--color-accent-gold);
+}
+
+.sale-price {
+    color: var(--color-muted-terracotta);
+    background-color: rgba(211, 127, 90, 0.1);
+}
+
+.original-price {
+    color: var(--color-accent-silver);
+}
+
+.regular-price {
+    color: var(--color-primary-text);
+}
+
+@media screen and (max-width: 768px) {
+    .nav-menu {
+        background-color: rgba(248, 249, 250, 0.8);
+    }
+
+    .nav-link:hover {
+        background-color: var(--color-warm-beige);
+        border-left: 3px solid var(--color-accent-gold);
+    }
 }

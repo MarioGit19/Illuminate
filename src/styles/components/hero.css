@@ -27,7 +27,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
   text-align: center;
-  color: #fff;
+  color: var(--color-secondary-text);
   z-index: 1;
 }
 
@@ -42,8 +42,8 @@
 .catalogue-btn {
   padding: 1rem 2rem;
   font-size: 1.2rem;
-  background-color: #b87333;
-  color: white;
+  background-color: var(--color-deep-emerald);
+  color: var(--color-secondary-text);
   border: none;
   border-radius: 5px;
   cursor: pointer;
@@ -51,9 +51,9 @@
 }
 
 .catalogue-btn:hover {
-  background-color: #a66a2e;
+  background-color: var(--color-muted-terracotta);
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-md);
 }
 
 @keyframes fadeIn {

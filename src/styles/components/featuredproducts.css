@@ -8,7 +8,7 @@
   text-align: center;
   margin-bottom: 2rem;
   font-size: 2.5rem;
-  color: #333333;
+  color: var(--color-primary-text);
 }
 
 .featured-products-grid {
@@ -18,15 +18,17 @@
 }
 
 .featured-product-card {
-  background: #FFFFFF;
+  background: var(--color-background);
   border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-md);
   transition: transform 0.3s ease;
   position: relative;
+  border: 1px solid var(--color-border);
 }
 
 .featured-product-card:hover {
   transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
 }
 
 .product-image {
@@ -47,8 +49,8 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #FDD835;
-  color: #333333;
+  background: var(--color-accent-gold);
+  color: var(--color-primary-text);
   padding: 0.5rem 1rem;
   border-radius: 4px;
   font-weight: bold;
@@ -61,7 +63,7 @@
 .product-info h3 {
   margin: 0 0 0.5rem 0;
   font-size: 1.1rem;
-  color: #333333;
+  color: var(--color-primary-text);
 }
 
 .price-container {
@@ -72,11 +74,11 @@
 
 .original-price {
   text-decoration: line-through;
-  color: #9E9E9E;
+  color: var(--color-accent-silver);
 }
 
 .sale-price {
-  color: red;
+  color: var(--color-muted-terracotta);
   font-weight: bold;
   font-size: 1.2rem;
 }
@@ -101,17 +103,18 @@
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: white;
-  border: none;
+  background-color: var(--color-background);
+  border: 1px solid var(--color-border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-sm);
   transition: all 0.3s ease;
   opacity: 0;
   transform: translateY(10px);
   z-index: 10;
+  color: var(--color-primary-text);
 }
 
 .featured-product-card:hover .quick-buy-button {
@@ -120,7 +123,7 @@
 }
 
 .quick-buy-button:hover {
-  background-color: #FFD700;
-  color: #333;
+  background-color: var(--color-accent-gold);
+  color: var(--color-primary-text);
   transform: scale(1.1);
 }

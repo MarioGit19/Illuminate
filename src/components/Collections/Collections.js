@@ -196,7 +196,7 @@ const Collections = ({ products }) => {
             value={selectedPriceRange.min}
             onChange={handlePriceChange}
             style={{
-              background: `linear-gradient(to right, #ddd ${getBackgroundSize(
+              background: `linear-gradient(to right, var(--color-border) ${getBackgroundSize(
                 selectedPriceRange.min,
                 priceRange.min,
                 priceRange.max
@@ -212,11 +212,11 @@ const Collections = ({ products }) => {
             value={selectedPriceRange.max}
             onChange={handlePriceChange}
             style={{
-              background: `linear-gradient(to right, #FFD700 ${getBackgroundSize(
+              background: `linear-gradient(to right, var(--color-accent-gold) ${getBackgroundSize(
                 selectedPriceRange.max,
                 priceRange.min,
                 priceRange.max
-              )}, #ddd 0%)`,
+              )}, var(--color-border) 0%)`,
             }}
           />
         </div>

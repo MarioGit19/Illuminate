@@ -1,6 +1,6 @@
 .thank-you-container {
   min-height: 100vh;
-  background-color: #f7f9fc;
+  background-color: var(--color-background);
   padding: 2rem;
   padding-top: calc(80px + 2rem);
 }
@@ -8,16 +8,15 @@
 .thank-you-content {
   max-width: 1200px;
   margin: 0 auto;
-  /* margin-top: 80px; */
-  background: white;
+  background: var(--color-background);
   border-radius: 12px;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
   overflow: hidden;
 }
 
 .success-header {
-  background: linear-gradient(135deg, #4CAF50, #45a049);
-  color: white;
+  background: linear-gradient(135deg, var(--color-deep-emerald), var(--color-muted-terracotta));
+  color: var(--color-secondary-text);
   padding: 2rem;
   text-align: center;
 }
@@ -25,13 +24,13 @@
 .success-icon {
   width: 60px;
   height: 60px;
-  background: white;
+  background: var(--color-background);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 auto 1rem;
-  color: #4CAF50;
+  color: var(--color-deep-emerald);
   font-size: 2rem;
   font-weight: bold;
 }
@@ -50,14 +49,15 @@
 }
 
 .info-section {
-  background: #ffffff;
+  background: var(--color-background);
   border-radius: 8px;
   padding: 1.5rem;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  border: 1px solid var(--color-border);
 }
 
 .info-section h2 {
-  color: #333;
+  color: var(--color-primary-text);
   margin-bottom: 1.5rem;
   font-size: 1.5rem;
 }
@@ -146,8 +146,8 @@
 }
 
 .back-button {
-  background: #4CAF50;
-  color: white;
+  background: var(--color-deep-emerald);
+  color: var(--color-secondary-text);
   border: none;
   padding: 0.8rem 1.5rem;
   border-radius: 4px;
@@ -157,7 +157,7 @@
 }
 
 .back-button:hover {
-  background: #45a049;
+  background: var(--color-muted-terracotta);
 }
 
 /* Add responsive design for smaller screens */
