@@ -106,6 +106,8 @@
   box-shadow: var(--shadow-md);
 }
 
+
+
 .Toastify__toast--success {
   background: var(--color-primary-button);
   color: var(--color-card-background);
@@ -125,4 +127,15 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+@media (max-width: 768px) {
+  .Toastify__toast {
+    width: 90% !important; /* Make the toast smaller */
+    margin: 0 auto !important; /* Center the toast horizontally */
+    top: 10px !important; /* Position the toast at the top */
+    left: 0 !important;
+    right: 0 !important;
+    border-radius: 5px !important; /* Optional: adjust border radius for smaller screens */
+  }
 }

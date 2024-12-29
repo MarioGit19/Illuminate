@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FaTimes } from "react-icons/fa";
 import "./CheckoutModal.css";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const CheckoutModal = ({
   isOpen,
@@ -10,7 +10,7 @@ const CheckoutModal = ({
   total,
   onOrderSuccess,
 }) => {
-  const navigate = useNavigate();
+  //   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",

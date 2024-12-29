@@ -15,10 +15,6 @@ const Collections = ({ products }) => {
   const { addToCart } = useCart();
   const filterRef = useRef(null);
   const navigate = useNavigate();
-  const [priceRange, setPriceRange] = useState({
-    min: 0,
-    max: Math.ceil(Math.max(...products.map((p) => p.price))),
-  });
   const [selectedPriceRange, setSelectedPriceRange] = useState({
     min: 0,
     max: Math.ceil(Math.max(...products.map((p) => p.price))),
@@ -41,10 +37,6 @@ const Collections = ({ products }) => {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [isFilterOpen]);
-
-  //   useEffect(() => {
-  //     console.log("Hovered product:", hoveredProduct);
-  //   }, [hoveredProduct]);
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
@@ -191,15 +183,15 @@ const Collections = ({ products }) => {
             type="range"
             name="min"
             className="price-slider"
-            min={priceRange.min}
-            max={priceRange.max}
+            min={0}
+            max={selectedPriceRange.max}
             value={selectedPriceRange.min}
             onChange={handlePriceChange}
             style={{
               background: `linear-gradient(to right, var(--color-border) ${getBackgroundSize(
                 selectedPriceRange.min,
-                priceRange.min,
-                priceRange.max
+                0,
+                selectedPriceRange.max
               )}, transparent 0%)`,
             }}
           />
@@ -207,15 +199,15 @@ const Collections = ({ products }) => {
             type="range"
             name="max"
             className="price-slider"
-            min={priceRange.min}
-            max={priceRange.max}
+            min={0}
+            max={selectedPriceRange.max}
             value={selectedPriceRange.max}
             onChange={handlePriceChange}
             style={{
               background: `linear-gradient(to right, var(--color-accent-gold) ${getBackgroundSize(
                 selectedPriceRange.max,
-                priceRange.min,
-                priceRange.max
+                0,
+                selectedPriceRange.max
               )}, var(--color-border) 0%)`,
             }}
           />
