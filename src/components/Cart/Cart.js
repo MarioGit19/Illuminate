@@ -38,7 +38,7 @@ const Cart = () => {
 
   return (
     <div className="cart-page">
-      <div className="cart-container">
+      <div className="cart-container" id="shopping-cart">
         <h1>Shopping Cart</h1>
 
         {cartItems.length === 0 ? (
@@ -50,21 +50,25 @@ const Cart = () => {
             </Link>
           </div>
         ) : (
-          <div className="cart-content">
-            <div className="cart-items-section">
+          <div className="cart-content" id="cart-content">
+            <div className="cart-items-section" id="cart-items-section">
               {cartItems.map((item) => (
-                <div key={item.id} className="cart-page-item">
+                <div
+                  key={item.id}
+                  className="cart-page-item"
+                  id="cart-page-item"
+                >
                   <Link to={`/product/${item.id}`} className="product-link">
                     <img src={item.image} alt={item.name} />
                   </Link>
-                  <div className="item-details">
+                  <div className="item-details" id="item-details">
                     <Link to={`/product/${item.id}`} className="product-link">
                       <h3>{item.name}</h3>
                       <p className="price">
                         ${(item.salePrice || item.price).toFixed(2)}
                       </p>
                     </Link>
-                    <div className="quantity-controls">
+                    <div className="quantity-controls" id="quantity-controls">
                       <button onClick={() => removeFromCart(item.id)}>
                         <FaMinus />
                       </button>
@@ -74,7 +78,7 @@ const Cart = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="item-total">
+                  <div className="item-total" id="item-total">
                     $
                     {((item.salePrice || item.price) * item.quantity).toFixed(
                       2

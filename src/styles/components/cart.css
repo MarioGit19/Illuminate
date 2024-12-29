@@ -21,7 +21,11 @@
   gap: 2rem;
   align-items: start;
 }
-
+@media (max-width: 280px) {
+    #item-total {
+        font-size: 0.7rem;
+    }
+}
 @media (max-width: 768px) {
   .cart-content {
     grid-template-columns: 1fr;
@@ -98,77 +102,74 @@
 }
 
 @media (max-width: 426px) {
-  .cart-content {
+  #shopping-cart {
+    overflow-x: hidden;
+    padding: 0 clamp(0.2rem, 1vw, 0.3rem);
+  }
+
+  #cart-content {
+    display: grid;
     grid-template-columns: 1fr;
-    gap: 0.25rem;
+    gap: clamp(0.1rem, 0.5vw, 0.2rem);
+    width: 100%;
   }
 
-  .cart-container {
-    padding: 0 0.3rem;
+  #cart-page-item {
+    display: grid;
+    grid-template-columns: clamp(50px, 15vw, 60px) 1fr auto;
+    gap: clamp(0.1rem, 0.5vw, 0.2rem);
+    width: 100%;
   }
 
-  .cart-page {
-    padding: 0.5rem;
-    padding-top: 80px;
+  #cart-page-item img {
+    width: clamp(50px, 15vw, 60px);
+    height: clamp(50px, 15vw, 60px);
   }
 
-  .cart-items-section,
-  .order-summary {
-    padding: 0.5rem;
+  #item-details h3 {
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
   }
 
-  .cart-page-item {
-    grid-template-columns: 50px 1fr auto;
-    gap: 0.25rem;
+  #item-details .price {
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
   }
 
-  .cart-page-item img {
-    width: 50px;
-    height: 50px;
+  #quantity-controls button {
+    padding: clamp(0.1rem, 0.5vw, 0.15rem);
+    font-size: clamp(0.6rem, 1.5vw, 0.65rem);
   }
 
-  .item-details h3 {
-    font-size: 0.8rem;
-  }
-
-  .item-details .price {
-    font-size: 0.8rem;
-  }
-
-  .quantity-controls button {
-    padding: 0.2rem;
-    font-size: 0.7rem;
-  }
-
-  .item-total {
-    font-size: 0.9rem;
+  #item-total {
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
   }
 
   .checkout-button,
   .continue-shopping {
-    padding: 0.4rem;
-    font-size: 0.7rem;
+    padding: clamp(0.2rem, 1vw, 0.3rem);
+    font-size: clamp(0.65rem, 1.5vw, 0.7rem);
+    width: 100%;
+  }
+
+  .order-summary {
+    width: 100%;
   }
 
   .order-summary h2 {
-    font-size: 0.9rem;
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
   }
 
   .summary-row,
   .summary-total {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
   }
 
   .shipping-info .info-card h3 {
-    font-size: 0.8rem;
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
   }
-
-  /* .shipping-info .info-card p {
-    font-size: 0.7rem;
-  } */
 
   .empty-cart-message {
     text-align: center;
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
   }
 
   .success-animation-overlay {

@@ -278,7 +278,7 @@ nav.navbar {
     }
 
     .cart-icon-container {
-        position: absolute;
+        position: fixed;
         bottom: -90vh !important; /* Adjust as needed */
         right: 15px !important; /* Adjust as needed */
         z-index: 1000 !important; /* Ensure it appears above other elements */

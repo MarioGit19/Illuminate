@@ -13,6 +13,16 @@ const IntroOverlay = ({ onComplete }) => {
   const animationRef = useRef(null);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  // Skip animation for mobile devices
+  useEffect(() => {
+    if (isMobile) {
+      setIsAnimationComplete(true);
+      onComplete();
+      return;
+    }
+  }, [isMobile, onComplete]);
 
   const calculateNextPosition = (targetX, targetY, progress) => {
     const stepSize = 60;
@@ -49,7 +59,7 @@ const IntroOverlay = ({ onComplete }) => {
   };
 
   useEffect(() => {
-    if (isAnimationComplete) return;
+    if (isAnimationComplete || isMobile) return;
 
     const targetX = window.innerWidth / 2;
     const targetY = window.innerHeight / 2;
@@ -106,30 +116,31 @@ const IntroOverlay = ({ onComplete }) => {
     isAnimationComplete,
     calculateNextPosition,
     onComplete,
+    isMobile,
   ]);
 
   useEffect(() => {
+    if (isMobile) return;
+
     const handleMouseMove = (e) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
     window.addEventListener("mousemove", handleMouseMove);
     return () => window.removeEventListener("mousemove", handleMouseMove);
-  }, []);
+  }, [isMobile]);
 
-  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile) return null;
 
   return (
     <div className={`intro-overlay ${isAnimationComplete ? "fade-out" : ""}`}>
-      {!isMobile && (
-        <div
-          className="cursor-light"
-          style={{
-            left: mousePosition.x,
-            top: mousePosition.y,
-          }}
-        />
-      )}
+      <div
+        className="cursor-light"
+        style={{
+          left: mousePosition.x,
+          top: mousePosition.y,
+        }}
+      />
       {footstepTrail.map((step) => (
         <Footstep
           key={step.id}
