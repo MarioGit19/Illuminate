@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import "./App.css";
 import {
   BrowserRouter as Router,
@@ -26,11 +26,14 @@ import ThankYouPage from "./components/ThankYou/ThankYouPage";
 import SuccessAnimation from "./components/SuccessAnimation/SuccessAnimation";
 import IntroOverlay from "./components/IntroOverlay/IntroOverlay";
 import ScrollToTop from "./components/ScrollToTop";
+
 function App() {
   const [showOverlay, setShowOverlay] = useState(true);
+  const isFirstLoad = useRef(true);
 
   const handleOverlayComplete = () => {
     setShowOverlay(false);
+    isFirstLoad.current = false; // Mark that the initial load is complete
   };
 
   return (
@@ -39,6 +42,7 @@ function App() {
         <AppContent
           showOverlay={showOverlay}
           handleOverlayComplete={handleOverlayComplete}
+          isFirstLoad={isFirstLoad.current}
         />
         <ScrollToTop />
       </Router>
@@ -46,7 +50,7 @@ function App() {
   );
 }
 
-function AppContent({ showOverlay, handleOverlayComplete }) {
+function AppContent({ showOverlay, handleOverlayComplete, isFirstLoad }) {
   const location = useLocation();
 
   return (
@@ -64,7 +68,7 @@ function AppContent({ showOverlay, handleOverlayComplete }) {
                 exit={{ opacity: 0, y: -50 }}
                 transition={{ duration: 0.5 }}
               >
-                <Hero />
+                <Hero startAnimation={!showOverlay || !isFirstLoad} />
                 <FeaturedProducts products={lampProducts} />
                 <BrandLogos />
                 <Articles />

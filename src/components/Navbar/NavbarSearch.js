@@ -58,8 +58,9 @@ const NavbarSearch = () => {
   };
 
   const handleProductClick = (productId) => {
-    handleClose();
     navigate(`/product/${productId}`);
+    setIsExpanded(false);
+    handleClose();
   };
 
   return (

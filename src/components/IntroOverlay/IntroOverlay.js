@@ -87,6 +87,7 @@ const IntroOverlay = ({ onComplete }) => {
         if (distance < 50) {
           setIsAnimationComplete(true);
           cancelAnimationFrame(animationRef.current);
+          onComplete();
           return;
         }
       }
