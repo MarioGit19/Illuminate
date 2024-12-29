@@ -369,6 +369,14 @@
   flex-shrink: 0;
 }
 
+.info-card {
+    margin-bottom:10px;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    gap:1rem;
+}
+
 .info-card .text-content {
   flex: 1;
 }

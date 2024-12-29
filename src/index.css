@@ -99,6 +99,7 @@
 
 /* Toastify Custom Styles */
 .Toastify__toast {
+  width: 90%;
   background: var(--color-card-background);
   color: var(--color-primary-text);
   border: 1px solid var(--color-border);
@@ -109,6 +110,7 @@
 
 
 .Toastify__toast--success {
+  width: 90%;
   background: var(--color-primary-button);
   color: var(--color-card-background);
 }
@@ -129,13 +131,11 @@ code {
     monospace;
 }
 
-@media (max-width: 768px) {
-  .Toastify__toast {
-    width: 90% !important; /* Make the toast smaller */
-    margin: 0 auto !important; /* Center the toast horizontally */
-    top: 10px !important; /* Position the toast at the top */
-    left: 0 !important;
-    right: 0 !important;
-    border-radius: 5px !important; /* Optional: adjust border radius for smaller screens */
+@media (max-width: 768px) { /* Adjust the max-width as needed for your mobile breakpoint */
+  .Toastify__toast-container,
+  .Toastify__toast-container--bottom-right {
+    width: 80% !important;
+    margin: 0 auto !important;
   }
 }
+

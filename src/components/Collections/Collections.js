@@ -123,12 +123,12 @@ const Collections = ({ products }) => {
     if (e.target.name === "min") {
       setSelectedPriceRange((prev) => ({
         ...prev,
-        min: Math.min(value, prev.max),
+        min: Math.min(value, prev.max - 1),
       }));
     } else {
       setSelectedPriceRange((prev) => ({
         ...prev,
-        max: Math.max(value, prev.min),
+        max: Math.max(value, prev.min + 1),
       }));
     }
   };
@@ -199,8 +199,8 @@ const Collections = ({ products }) => {
             type="range"
             name="max"
             className="price-slider"
-            min={0}
-            max={selectedPriceRange.max}
+            min={selectedPriceRange.min}
+            max={Math.ceil(Math.max(...products.map((p) => p.price)))}
             value={selectedPriceRange.max}
             onChange={handlePriceChange}
             style={{

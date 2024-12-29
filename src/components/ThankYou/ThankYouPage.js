@@ -41,13 +41,13 @@ const ThankYouPage = () => {
         <div className="confirmation-details">
           <div className="info-section shipping-info">
             <h2>Shipping Information</h2>
-            <div className="info-card">
+            <div className="shipping-info-card">
               <div className="shipping-details">
-                <p className="customer-name">
+                <p className="shipping-name">
                   {formData.firstName} {formData.lastName}
                 </p>
-                <p className="address">{formData.address}</p>
-                <p className="city-zip">
+                <p className="shipping-address">{formData.address}</p>
+                <p className="shipping-city-zip">
                   {formData.city}, {formData.zipCode}
                 </p>
               </div>
