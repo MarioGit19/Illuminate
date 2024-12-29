@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import NavbarSearch from "./NavbarSearch";
@@ -10,6 +10,11 @@ import CartDrawer from "../CartDrawer/CartDrawer";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { cartItemsCount, setIsCartOpen } = useCart();
+
+  useEffect(() => {
+    // Scroll to the top of the page on component mount
+    window.scrollTo(0, 0);
+  }, []);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

@@ -185,3 +185,21 @@ background-color: transparent !important;
   box-shadow: var(--shadow-sm);
   z-index: 1;
 } 
+
+
+.product-card .product-info .price-container .sale-price {
+  font-size: 14px;
+  padding-left:0.5rem;
+}
+
+.product-card .product-info .price-container .original-price {
+  font-size: 10px;
+}   
+
+.product-card .product-info .price-container .regular-price {
+  font-size: 14px;
+  padding-left:0.5rem;
+}
+.product-card .product-info .price-container {
+    align-items: center;
+}

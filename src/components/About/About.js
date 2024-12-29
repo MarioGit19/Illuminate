@@ -1,7 +1,27 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "../../styles/about.css";
 
 const About = () => {
+  useEffect(() => {
+    const countElement = document.querySelector(".count");
+    const target = parseInt(countElement.dataset.target);
+    const duration = 2000; // 2 seconds
+    const step = target / (duration / 16);
+    let current = 0;
+
+    const updateCount = () => {
+      current += step;
+      if (current < target) {
+        countElement.textContent = Math.floor(current).toLocaleString();
+        requestAnimationFrame(updateCount);
+      } else {
+        countElement.textContent = target.toLocaleString();
+      }
+    };
+
+    updateCount(); // Start the count animation on load
+  }, []);
+
   return (
     <div className="about-container">
       <div className="about-content">
@@ -40,6 +60,65 @@ const About = () => {
                 Your satisfaction is our top priority, with dedicated support at
                 every step.
               </p>
+            </div>
+            <div className="customers">
+              <h3>Satisfied Customers</h3>
+              <div className="counter">
+                <span className="count" data-target="100000">
+                  0
+                </span>
+                +
+              </div>
+              <style jsx>{`
+                .counter {
+                  font-size: 2rem;
+                  font-weight: bold;
+                  color: var(--color-primary-text);
+                }
+
+                .count {
+                  animation: countUp 2s ease-out forwards;
+                }
+
+                @keyframes countUp {
+                  from {
+                    content: "0";
+                  }
+                  to {
+                    content: "100000";
+                  }
+                }
+              `}</style>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                  const countElement = document.querySelector('.count');
+                  const target = parseInt(countElement.dataset.target);
+                  const duration = 2000;
+                  const step = target / (duration / 16);
+                  let current = 0;
+                  
+                  const updateCount = () => {
+                    current += step;
+                    if(current < target) {
+                      countElement.textContent = Math.floor(current).toLocaleString();
+                      requestAnimationFrame(updateCount);
+                    } else {
+                      countElement.textContent = target.toLocaleString();
+                    }
+                  };
+                  
+                  const observer = new IntersectionObserver((entries) => {
+                    if(entries[0].isIntersecting) {
+                      updateCount();
+                      observer.disconnect();
+                    }
+                  });
+                  
+                  observer.observe(countElement);
+                `,
+                }}
+              />
             </div>
           </div>
         </div>

@@ -48,11 +48,12 @@
 
 .product-card {
   position: relative;
-  border: 1px solid var(--color-border);
+  border: 1px solid #E4E6EF;
   border-radius: 8px;
   overflow: hidden;
-  transition: transform 0.3s ease;
+  transition: all 0.3s ease;
   background: var(--color-card-background);
+  box-shadow: var(--shadow-sm);
 }
 
 .product-card:hover {
@@ -116,6 +117,9 @@
 
 .product-info {
   padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .product-info h3 {
@@ -153,8 +157,10 @@
 
 .page-button {
   padding: 0.5rem 1rem;
-  border: 1px solid var(--color-border);
+  /* border: 1px solid var(--color-border); */
+  border:none;
   background: var(--color-background);
+  box-shadow: var(--shadow-lg);
   cursor: pointer;
   border-radius: 4px;
   transition: all 0.3s ease;
@@ -212,8 +218,8 @@
 
   .filter-button {
     position: fixed;
-    bottom: 20px;
-    right: 20px;
+    bottom: 80px;
+    right: 10px;
     width: 50px;
     height: 50px;
     border-radius: 50%;

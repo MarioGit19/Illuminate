@@ -182,7 +182,8 @@
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
+  /* border: 1px solid var(--color-border); */
+  border: 1px solid #E4E6EF;
   height: fit-content;
 }
 
@@ -207,11 +208,13 @@
 
 .item-details h3 {
   margin: 0 0 0.5rem 0;
-  color: var(--color-primary-text);
+  /* color: var(--color-primary-text); */
+  color: #3F4254;
 }
 
 .item-details .price {
-  color: var(--color-primary-text);
+  /* color: var(--color-primary-text); */
+  color: #A1A5BE;
   font-size: 1.1rem;
   margin-bottom: 1rem;
 }
@@ -255,7 +258,8 @@
   padding: 1.5rem;
   border-radius: 8px;
   box-shadow: var(--shadow-md);
-  border: 1px solid var(--color-border);
+  /* border: 1px solid var(--color-border); */
+  border: 1px solid #E4E6EF;
 }
 
 .order-summary h2 {
@@ -345,11 +349,14 @@
 }
 
 .info-card {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  padding: 1rem 0;
-  justify-content: center;
+  /* display: flex; */
+  /* align-items: center; */
+  display: grid;
+  align-items: start;
+  justify-content: start;
+  /* gap: 1rem; */
+  padding: 0.5rem 0;
+  /* justify-content: center; */
 }
 
 .info-card:not(:last-child) {
