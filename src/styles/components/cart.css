@@ -92,9 +92,9 @@
     font-size: 0.9rem;
   }
 
-  .shipping-info .info-card p {
+  /* .shipping-info .info-card p {
     font-size: 0.8rem;
-  }
+  } */
 }
 
 @media (max-width: 426px) {
@@ -163,9 +163,9 @@
     font-size: 0.8rem;
   }
 
-  .shipping-info .info-card p {
+  /* .shipping-info .info-card p {
     font-size: 0.7rem;
-  }
+  } */
 
   .empty-cart-message {
     text-align: center;

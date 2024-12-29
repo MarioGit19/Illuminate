@@ -191,7 +191,7 @@
   }
 
   .price-container .regular-price{
-    font-size:0.8rem !important;
+    font-size:1rem ;
   }
 
   .collections-grid {
@@ -218,7 +218,7 @@
 
   .filter-button {
     position: fixed;
-    bottom: 80px;
+    bottom: 85px;
     right: 10px;
     width: 50px;
     height: 50px;
@@ -233,6 +233,21 @@
     z-index: 998;
     color: var(--color-card-background);
   }
+
+.product-card .product-info {
+    display:grid;
+}
+
+.product-card .product-info h3 {
+font-size: 0.9rem;
+}
+
+.product-card .product-info .price-container{
+    font-size: 0.8rem;
+align-items: start !important;
+justify-content: start !important;
+padding-left:0.1rem;
+}
 
   .close-filter {
     position: absolute;

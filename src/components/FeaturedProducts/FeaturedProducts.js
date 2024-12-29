@@ -29,7 +29,7 @@ const FeaturedProducts = ({ products }) => {
     addToCart(product);
     toast.success(`${product.name} added to cart!`, {
       position: "bottom-right",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,

@@ -121,6 +121,9 @@ background-color: transparent !important;
   .product-container {
     grid-template-columns: 1fr;
   }
+  .price-container-product .regular-price {
+    font-size: 1.8rem !important;
+  }
   
   .product-page {
     padding: 1rem;
@@ -202,4 +205,11 @@ background-color: transparent !important;
 }
 .product-card .product-info .price-container {
     align-items: center;
+}
+.product-page{
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+.product-page .product-container .product-image-container .sale-badge{
+    display: none;
 }

@@ -43,7 +43,7 @@ const ProductPage = () => {
     addToCart(product);
     toast.success(`${product.name} added to cart!`, {
       position: "bottom-right",
-      autoClose: 3000,
+      autoClose: 2000,
       hideProgressBar: false,
       closeOnClick: true,
       pauseOnHover: true,
@@ -83,7 +83,7 @@ const ProductPage = () => {
             {product.onSale && <span className="sale-subtitle">ON SALE</span>}
           </h3> */}
 
-          <div className="price-container">
+          <div className="price-container price-container-product">
             {product.onSale ? (
               <>
                 <span className="original-price">${product.price}</span>

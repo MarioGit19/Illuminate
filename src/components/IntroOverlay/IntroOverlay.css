@@ -35,68 +35,22 @@
   100% { opacity: 0; }
 }
 
-.light-switch-container {
+.pulsating-light {
   position: absolute;
   top: 50%;
   left: 50%;
+  width: 1px;
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
   transform: translate(-50%, -50%);
-  cursor: pointer;
-  opacity: 0.05;
-  transition: all 0.5s ease;
-  transform-style: preserve-3d;
-  perspective: 1000px;
-  background: rgba(0, 0, 0, 0.3);
-  padding: 10px;
-  border-radius: 5px;
+  pointer-events: none;
+  filter: drop-shadow(0 0 150px rgba(255, 255, 255, 0.5));
 }
-
-.light-switch-container:hover {
-  opacity: 0.9;
-}
-
-.switch-image {
-  width: 40px;
-  height: 40px;
-  display: block;
-  transform-origin: center;
-  transition: transform 0.8s ease;
-  transform-style: preserve-3d;
-  color: #ffffff;
-  opacity: 0.8;
-}
-
-.switch-text {
-  position: absolute;
-  bottom: -25px;
-  font-size: 14px;
-  font-weight: bold;
-  color: #ffffff;
-  transition: opacity 0.5s ease;
-  opacity: 0.6;
-}
-
-.switch-text.on {
-  opacity: 0;
-}
-
-.switch-text.off {
-  opacity: 1;
-}
-
-.light-switch-container.toggled .switch-text.on {
-  opacity: 1;
-}
-
-.light-switch-container.toggled .switch-text.off {
-  opacity: 0;
-}
-
-/* .light-switch-container.toggled .switch-image {
-  transform: rotateY(180deg);
-} */
 
 .intro-overlay.fade-out {
   animation: fadeOverlay 1s ease 0.5s forwards;
+  pointer-events: none;
 }
 
 @keyframes fadeOverlay {
@@ -104,55 +58,16 @@
   to { opacity: 0; }
 }
 
-.cursor-light {
-  position: absolute;
-  width: 150px;
-  height: 150px;
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(255, 255, 255, 0.4) 0%,
-    rgba(255, 255, 255, 0.15) 50%,
-    transparent 70%
-  );
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  z-index: 10000;
-}
+
 
 .footstep-trail.completed {
   opacity: 0.8;
   animation: none;
 }
 
-.light-switch-container:hover:not(.toggled) {
-  opacity: 1;
-  transform: translate(-50%, -50%) scale(1.1);
-}
-
-.light-switch-container:active {
-  transform: translate(-50%, -50%) scale(0.95);
-  transition: all 0.1s ease;
-}
-
-/* @keyframes switchFlip {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(180deg); }
-} */
-
-/* .light-switch-container.toggled .switch-image {
-  animation: switchFlip 0.5s ease forwards;
-}  */
-
-.switch-content {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
 @media only screen and (max-width: 768px) {
-  .light-switch-container {
-    opacity: 0.4 !important;
+  .pulsating-dot {
+    width: 15px;
+    height: 15px;
   }
 }

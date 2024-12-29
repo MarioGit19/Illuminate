@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
+import { motion } from "framer-motion";
 import { ReactComponent as Footstep } from "../IntroOverlay/footsteps-silhouette-variant-svgrepo-com (1).svg";
-import { ReactComponent as SwitchOff } from "./switch-on-svgrepo-com.svg";
-import { ReactComponent as SwitchOn } from "./switch-turned-on.svg";
 import "./IntroOverlay.css";
 
 const IntroOverlay = ({ onComplete }) => {
@@ -13,7 +12,6 @@ const IntroOverlay = ({ onComplete }) => {
   });
   const animationRef = useRef(null);
   const [isAnimationComplete, setIsAnimationComplete] = useState(false);
-  const [isToggled, setIsToggled] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
 
   const calculateNextPosition = (targetX, targetY, progress) => {
@@ -112,19 +110,10 @@ const IntroOverlay = ({ onComplete }) => {
     return () => window.removeEventListener("mousemove", handleMouseMove);
   }, []);
 
-  const handleToggleClick = () => {
-    setIsToggled(true);
-    setTimeout(() => {
-      setTimeout(() => {
-        onComplete();
-      }, 1000); // Additional 1s delay after the switch animation
-    }, 1000); // Wait for text animation before starting the additional delay
-  };
-
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   return (
-    <div className={`intro-overlay ${isToggled ? "fade-out" : ""}`}>
+    <div className={`intro-overlay ${isAnimationComplete ? "fade-out" : ""}`}>
       {!isMobile && (
         <div
           className="cursor-light"
@@ -146,20 +135,33 @@ const IntroOverlay = ({ onComplete }) => {
           }}
         />
       ))}
-      <div
-        className={`light-switch-container ${isToggled ? "toggled" : ""}`}
-        onClick={handleToggleClick}
-      >
-        <div className="switch-content">
-          {isToggled ? (
-            <SwitchOn className="switch-image" />
-          ) : (
-            <SwitchOff className="switch-image" />
-          )}
-          <span className="switch-text off">OFF</span>
-          <span className="switch-text on">ON</span>
-        </div>
-      </div>
+      <motion.div
+        className="pulsating-light"
+        initial={{ scale: 1, opacity: 0.5 }}
+        animate={{
+          scale: [1, 1.2, 1, 1.4, 1.2, 1.6, 1.4, 1.8, 1.6, 2],
+          opacity: [0.5, 0.55, 0.5, 0.6, 0.55, 0.65, 0.6, 0.7, 0.65, 0.8],
+          boxShadow: [
+            "0 0 300px 150px rgba(255, 255, 255, 0.5)",
+            "0 0 320px 160px rgba(255, 255, 255, 0.55)",
+            "0 0 300px 150px rgba(255, 255, 255, 0.5)",
+            "0 0 340px 170px rgba(255, 255, 255, 0.6)",
+            "0 0 320px 160px rgba(255, 255, 255, 0.55)",
+            "0 0 360px 180px rgba(255, 255, 255, 0.65)",
+            "0 0 340px 170px rgba(255, 255, 255, 0.6)",
+            "0 0 380px 190px rgba(255, 255, 255, 0.7)",
+            "0 0 360px 180px rgba(255, 255, 255, 0.65)",
+            "0 0 500px 250px rgba(255, 255, 255, 0.9)",
+          ],
+        }}
+        transition={{
+          duration: 9,
+          ease: "easeInOut",
+          repeat: Infinity,
+          repeatType: "mirror",
+        }}
+        onAnimationComplete={() => setIsAnimationComplete(true)}
+      />
     </div>
   );
 };

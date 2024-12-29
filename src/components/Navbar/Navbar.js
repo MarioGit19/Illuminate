@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { FaShoppingCart } from "react-icons/fa";
 import NavbarSearch from "./NavbarSearch";
@@ -10,10 +10,22 @@ import CartDrawer from "../CartDrawer/CartDrawer";
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const { cartItemsCount, setIsCartOpen } = useCart();
+  const navRef = useRef(null);
 
   useEffect(() => {
     // Scroll to the top of the page on component mount
     window.scrollTo(0, 0);
+
+    const handleClickOutside = (event) => {
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
   }, []);
 
   const toggleMenu = () => {
@@ -26,7 +38,7 @@ const Navbar = () => {
 
   return (
     <>
-      <nav className="navbar">
+      <nav className="navbar" ref={navRef}>
         <div className="nav-container">
           <div className="logo">
             <Link to="/" onClick={closeMenu}>
