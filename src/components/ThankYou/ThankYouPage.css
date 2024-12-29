@@ -222,6 +222,7 @@
     font-weight: bold;
     margin-bottom: 0.5rem;
     color: var(--color-primary-text);
+    text-transform:capitalize;
 }
 
 .shipping-address {

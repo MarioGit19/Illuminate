@@ -116,7 +116,7 @@ const Collections = ({ products }) => {
         filterSidebar.removeEventListener("click", handleFilterToggle);
       }
     };
-  }, [isFilterOpen]);
+  }, [isFilterOpen, handleFilterToggle]);
 
   const handlePriceChange = (e) => {
     const value = parseInt(e.target.value);

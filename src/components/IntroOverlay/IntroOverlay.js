@@ -100,7 +100,13 @@ const IntroOverlay = ({ onComplete }) => {
     return () => {
       cancelAnimationFrame(animationRef.current);
     };
-  }, [footstepsPosition, currentStep, isAnimationComplete]);
+  }, [
+    footstepsPosition,
+    currentStep,
+    isAnimationComplete,
+    calculateNextPosition,
+    onComplete,
+  ]);
 
   useEffect(() => {
     const handleMouseMove = (e) => {
