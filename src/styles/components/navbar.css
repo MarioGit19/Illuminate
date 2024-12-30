@@ -226,6 +226,7 @@ nav.navbar {
     /* Default styles for larger screens */
     position: relative;
     display: inline-block; /* Ensures it stays in the navbar */
+    cursor: pointer;
 }
 
 .cart-icon {
@@ -291,6 +292,7 @@ nav.navbar {
     .cart-icon {
         color: white; /* Ensure the icon is visible against the background */
         font-size: 1.5rem; /* Adjust size as needed */
+        cursor: pointer;
     }
 }
 
@@ -626,4 +628,10 @@ nav.navbar {
 
 .search-result-item .product-info .price-container .original-price {
     font-size: 10px;
+}
+
+@media screen and (max-width: 440px) {
+    .search-container {
+        display: none;
+    }
 }

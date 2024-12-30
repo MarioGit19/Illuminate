@@ -93,7 +93,7 @@ const CheckoutModal = ({
                   <div className="item-details">
                     <h4>{item.name}</h4>
                     <p>Quantity: {item.quantity}</p>
-                    <p>${item.price}</p>
+                    <p>${item.salePrice ? item.salePrice : item.price}</p>
                   </div>
                 </div>
               ))}

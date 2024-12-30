@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import { FaShoppingCart, FaFilter, FaTimes } from "react-icons/fa";
 import { useCart } from "../../Context/CartContext";
 import { lampCategories } from "../../data/data";
@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import "../../styles/components/collections.css";
 import { useNavigate } from "react-router-dom";
+import Slider from "@mui/material/Slider";
 
 const Collections = ({ products }) => {
   const [hoveredProduct, setHoveredProduct] = useState(null);
@@ -97,14 +98,17 @@ const Collections = ({ products }) => {
     navigate(`/product/${productId}`);
   };
 
-  const handleFilterToggle = (e) => {
-    // Check if clicking the filter tab (the ::after element)
-    const isFilterTab =
-      e.target === filterRef.current?.querySelector(".filter-sidebar::after");
-    if (isFilterTab) {
-      setIsFilterOpen(!isFilterOpen);
-    }
-  };
+  const handleFilterToggle = useCallback(
+    (e) => {
+      // Check if clicking the filter tab (the ::after element)
+      const isFilterTab =
+        e.target === filterRef.current?.querySelector(".filter-sidebar::after");
+      if (isFilterTab) {
+        setIsFilterOpen(!isFilterOpen);
+      }
+    },
+    [isFilterOpen]
+  );
 
   useEffect(() => {
     const filterSidebar = filterRef.current;
@@ -118,24 +122,11 @@ const Collections = ({ products }) => {
     };
   }, [isFilterOpen, handleFilterToggle]);
 
-  const handlePriceChange = (e) => {
-    const value = parseInt(e.target.value);
-    if (e.target.name === "min") {
-      setSelectedPriceRange((prev) => ({
-        ...prev,
-        min: Math.min(value, prev.max - 1),
-      }));
-    } else {
-      setSelectedPriceRange((prev) => ({
-        ...prev,
-        max: Math.max(value, prev.min + 1),
-      }));
-    }
-  };
-
-  // Calculate the percentage for the background
-  const getBackgroundSize = (value, min, max) => {
-    return ((value - min) * 100) / (max - min) + "% 100%";
+  const handleSliderChange = (event, newValue) => {
+    setSelectedPriceRange({
+      min: newValue[0],
+      max: newValue[1],
+    });
   };
 
   return (
@@ -179,36 +170,26 @@ const Collections = ({ products }) => {
           Price Range: ${selectedPriceRange.min} - ${selectedPriceRange.max}
         </h3>
         <div className="price-filter">
-          <input
-            type="range"
-            name="min"
-            className="price-slider"
+          <Slider
+            value={[selectedPriceRange.min, selectedPriceRange.max]}
+            onChange={handleSliderChange}
+            valueLabelDisplay="auto"
             min={0}
-            max={selectedPriceRange.max}
-            value={selectedPriceRange.min}
-            onChange={handlePriceChange}
-            style={{
-              background: `linear-gradient(to right, var(--color-border) ${getBackgroundSize(
-                selectedPriceRange.min,
-                0,
-                selectedPriceRange.max
-              )}, transparent 0%)`,
-            }}
-          />
-          <input
-            type="range"
-            name="max"
-            className="price-slider"
-            min={selectedPriceRange.min}
             max={Math.ceil(Math.max(...products.map((p) => p.price)))}
-            value={selectedPriceRange.max}
-            onChange={handlePriceChange}
-            style={{
-              background: `linear-gradient(to right, var(--color-accent-gold) ${getBackgroundSize(
-                selectedPriceRange.max,
-                0,
-                selectedPriceRange.max
-              )}, var(--color-border) 0%)`,
+            minDistance={1}
+            disableSwap
+            sx={{
+              color: "var(--color-accent-gold)",
+              "& .MuiSlider-thumb": {
+                borderRadius: "50%",
+                backgroundColor: "var(--color-primary-button)",
+              },
+              "& .MuiSlider-track": {
+                backgroundColor: "var(--color-primary-button)",
+              },
+              "& .MuiSlider-rail": {
+                backgroundColor: "var(--color-primary-button)",
+              },
             }}
           />
         </div>
