@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { motion } from "framer-motion";
 import { ReactComponent as Footstep } from "../IntroOverlay/footsteps-silhouette-variant-svgrepo-com (1).svg";
 import "./IntroOverlay.css";
@@ -17,46 +17,49 @@ const IntroOverlay = ({ onComplete }) => {
 
   // Skip animation for mobile devices
   useEffect(() => {
-    if (isMobile) {
+    if (isMobile || !isMobile) {
       setIsAnimationComplete(true);
       onComplete();
       return;
     }
   }, [isMobile, onComplete]);
 
-  const calculateNextPosition = (targetX, targetY, progress) => {
-    const stepSize = 60;
-    const currentX = footstepsPosition.x;
-    const currentY = footstepsPosition.y;
+  const calculateNextPosition = useCallback(
+    (targetX, targetY, progress) => {
+      const stepSize = 60;
+      const currentX = footstepsPosition.x;
+      const currentY = footstepsPosition.y;
 
-    const dx = targetX - currentX;
-    const dy = targetY - currentY;
-    const distance = Math.sqrt(dx * dx + dy * dy);
+      const dx = targetX - currentX;
+      const dy = targetY - currentY;
+      const distance = Math.sqrt(dx * dx + dy * dy);
 
-    if (distance < stepSize) return { x: targetX, y: targetY };
+      if (distance < stepSize) return { x: targetX, y: targetY };
 
-    const ratio = stepSize / distance;
-    const newX = currentX + dx * ratio;
-    const newY = currentY + dy * ratio;
+      const ratio = stepSize / distance;
+      const newX = currentX + dx * ratio;
+      const newY = currentY + dy * ratio;
 
-    // Apply the S-curve transformation
-    const curveAmplitude = 50; // Adjust this value to change the curve's amplitude
-    const curveFrequency = 0.1; // Adjust this value to change the curve's frequency
+      // Apply the S-curve transformation
+      const curveAmplitude = 50; // Adjust this value to change the curve's amplitude
+      const curveFrequency = 0.1; // Adjust this value to change the curve's frequency
 
-    // Calculate the perpendicular direction to the direct path
-    const perpendicularX = -dy / distance;
-    const perpendicularY = dx / distance;
+      // Calculate the perpendicular direction to the direct path
+      const perpendicularX = -dy / distance;
+      const perpendicularY = dx / distance;
 
-    // Apply the curve offset in the perpendicular direction
-    const curveOffset = curveAmplitude * Math.sin(curveFrequency * progress);
-    const offsetX = curveOffset * perpendicularX;
-    const offsetY = curveOffset * perpendicularY;
+      // Apply the curve offset in the perpendicular direction
+      const curveOffset = curveAmplitude * Math.sin(curveFrequency * progress);
+      const offsetX = curveOffset * perpendicularX;
+      const offsetY = curveOffset * perpendicularY;
 
-    return {
-      x: newX + offsetX,
-      y: newY + offsetY,
-    };
-  };
+      return {
+        x: newX + offsetX,
+        y: newY + offsetY,
+      };
+    },
+    [footstepsPosition]
+  );
 
   useEffect(() => {
     if (isAnimationComplete || isMobile) return;
