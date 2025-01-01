@@ -595,3 +595,7 @@ padding-left:0.1rem;
 .category-item input[type="checkbox"] {
   accent-color: var(--color-accent-gold);
 } 
+
+.MuiSlider-track{
+  border:none !important;
+}
