@@ -478,3 +478,727 @@ export default FeaturedProducts;
   padding-left: 0.5rem;
 }
 ```
+
+### Navbar component
+
+```jsx
+import React, { useState, useEffect, useRef } from "react";
+import { Link } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import NavbarSearch from "./NavbarSearch";
+import "../../styles/components/navbar.css";
+import { useCart } from "../../Context/CartContext";
+import CartDrawer from "../CartDrawer/CartDrawer";
+// import Collections from "../Collections/Collections";
+
+const Navbar = () => {
+  ### state for the navbar menu and setting it to false
+  const [isOpen, setIsOpen] = useState(false);
+  ### useCart hook for the cart items count and setting the cart drawer open state
+  const { cartItemsCount, setIsCartOpen } = useCart();
+  ### useRef hook for the navbar reference
+  const navRef = useRef(null);
+
+  useEffect(() => {
+    // Scroll to the top of the page on component mount
+    window.scrollTo(0, 0);
+
+    const handleClickOutside = (event) => {
+      ### checking if the navbar reference contains the event target and if it does, set the navbar menu state to false
+      if (navRef.current && !navRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, []);
+
+  ### click handler for the navbar menu and toggling the menu state
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
+
+  ### click handler for the navbar menu and closing the menu
+  const closeMenu = () => {
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <nav className="navbar" ref={navRef}>
+        <div className="nav-container">
+          <div className="logo">
+            <Link to="/" onClick={closeMenu}>
+              <span className="logo-text">illuminate</span>
+            </Link>
+          </div>
+
+          <ul className={`nav-menu ${isOpen ? "active" : ""}`}>
+            <li className="nav-item">
+              <Link to="/" className="nav-link" onClick={closeMenu}>
+                Home
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/about" className="nav-link" onClick={closeMenu}>
+                About
+              </Link>
+            </li>
+            <li className="nav-item">
+              <Link to="/products" className="nav-link" onClick={closeMenu}>
+                Products
+              </Link>
+            </li>
+          </ul>
+
+          <div className="nav-right">
+
+            <NavbarSearch />
+            <div
+              className="cart-icon-container"
+              onClick={() => setIsCartOpen(true)}
+            >
+              <FaShoppingCart className="cart-icon" />
+              {cartItemsCount > 0 && (
+                <span className="cart-counter">{cartItemsCount}</span>
+              )}
+            </div>
+
+            <button
+              className={`hamburger ${isOpen ? "active" : ""}`}
+              onClick={toggleMenu}
+            >
+              <span></span>
+              <span></span>
+              <span></span>
+            </button>
+          </div>
+        </div>
+      </nav>
+      <CartDrawer />
+    </>
+  );
+};
+
+### NavbarSearch component
+
+import React, { useState, useRef, useEffect } from "react";
+import { FaSearch } from "react-icons/fa";
+import { lampProducts } from "../../data/data";
+import { useNavigate } from "react-router-dom";
+
+const NavbarSearch = () => {
+  ### useNavigate hook for navigation
+  const navigate = useNavigate();
+  ### state for the search container expanded and setting it to false
+  const [isExpanded, setIsExpanded] = useState(false);
+  ### state for the search query and setting it to an empty string
+  const [searchQuery, setSearchQuery] = useState("");
+  ### state for the search results and setting it to an empty array
+  const [searchResults, setSearchResults] = useState([]);
+  ### state for the search results visibility and setting it to false
+  const [showResults, setShowResults] = useState(false);
+  ### state for the search results closing animation and setting it to false
+  const [isClosing, setIsClosing] = useState(false);
+  ### useRef hook for the search container reference
+  const searchRef = useRef(null);
+  ### useRef hook for the search input reference
+  const inputRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      ### checking if the search container reference contains the event target and if it does, set the search container expanded state to false and call the handleClose function
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsExpanded(false);
+        handleClose();
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
+
+  ### click handler for the search icon and expanding the search container
+  const handleExpand = () => {
+    setIsExpanded(true);
+    setTimeout(() => {
+      inputRef.current?.focus();
+    }, 100);
+  };
+
+  ### click handler for the search results closing animation and setting the search results visibility to false
+  const handleClose = () => {
+    setIsClosing(true);
+    setTimeout(() => {
+      setShowResults(false);
+      setIsClosing(false);
+      setSearchQuery("");
+    }, 200);
+  };
+
+  ### click handler for the search input and setting the search query to the input value
+  const handleSearch = (e) => {
+    const query = e.target.value.toLowerCase();
+    setSearchQuery(query);
+
+    if (query.trim() === "") {
+      handleClose();
+      return;
+    }
+
+    const results = lampProducts.filter((product) =>
+      product.name.toLowerCase().includes(query)
+    );
+    setSearchResults(results.slice(0, 5));
+    setShowResults(true);
+  };
+
+  ### click handler for the search results and navigating to the product page
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+    setIsExpanded(false);
+    handleClose();
+  };
+
+  return (
+    <div
+      className={`search-container ${isExpanded ? "expanded" : ""}`}
+      ref={searchRef}
+    >
+      <div className="search-input-wrapper">
+        <FaSearch className="search-icon" onClick={handleExpand} />
+        <input
+          ref={inputRef}
+          type="text"
+          placeholder="Search products..."
+          value={searchQuery}
+          onChange={handleSearch}
+          onFocus={() => searchQuery && setShowResults(true)}
+        />
+      </div>
+      {showResults && searchResults.length > 0 && (
+        <div className={`search-results ${isClosing ? "closing" : ""}`}>
+          <div className="search-results-inner">
+            {searchResults.map((product) => (
+              <div
+                key={product.id}
+                className="search-result-item"
+                onClick={() => handleProductClick(product.id)}
+                role="button"
+                tabIndex={0}
+              >
+                <div className="image-container">
+                  <img src={product.image} alt={product.name} loading="lazy" />
+                </div>
+                <div className="product-info">
+                  <h4>{product.name}</h4>
+                  <div className="price-container">
+                    {product.onSale ? (
+                      <div className="price-stack">
+                        <span className="sale-price">${product.salePrice}</span>
+                        <span className="original-price">${product.price}</span>
+                      </div>
+                    ) : (
+                      <span className="regular-price">${product.price}</span>
+                    )}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+
+```
+
+### NavbarSearch css
+
+```css
+/* .navbar {
+    background-color: #FFFFFF;
+    padding: 0.5rem 2rem;
+    height: 60px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+} */
+
+@import url("https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&display=swap");
+
+nav.navbar {
+  /* setting the navbar to background color background, backdrop filter blur 10px, webkit backdrop filter blur 10px, padding spacing sm spacing xl, height 60px, box shadow lg, width 100%, position fixed, top 0, display flex, left 0, z index fixed */
+  backdrop-filter: blur(10px) !important;
+  -webkit-backdrop-filter: blur(10px) !important;
+  padding: var(--spacing-sm) var(--spacing-xl) !important;
+  height: 60px !important;
+  box-shadow: var(--shadow-lg) !important;
+  width: 100% !important;
+  position: fixed !important;
+  top: 0 !important;
+  display: flex;
+  left: 0 !important;
+  z-index: var(--z-fixed) !important;
+  background-color: var(--color-background);
+}
+
+.nav-container {
+  /* setting the nav container to display flex, justify content space between, align items center, max width 1200px, margin 0 auto, position relative */
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  position: relative;
+}
+
+.nav-menu {
+  /* setting the nav menu to display flex, list style none, margin 0, padding 0, position relative, color primary text */
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  position: relative;
+  color: var(--color-primary-text);
+}
+
+.nav-item {
+  /* setting the nav item to margin left 2rem */
+  margin-left: 2rem;
+}
+
+.nav-link {
+  /* setting the nav link to font family body, color primary text, text decoration none, padding spacing sm spacing xl, position relative, display flex, align items center, transition normal */
+  font-family: var(--font-body);
+  color: var(--color-primary-text);
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  position: relative;
+  display: flex;
+  align-items: center;
+  transition: var(--transition-normal);
+}
+
+.nav-link:hover {
+  /* setting the nav link hover to color primary button */
+  color: var(--color-primary-button);
+}
+
+.nav-link.active {
+  /* setting the nav link active to color primary button hover */
+  color: var(--color-primary-button-hover);
+}
+
+/* Logo styles */
+.logo {
+  /* setting the logo to display flex, align items center, margin top -10px */
+  display: flex;
+  align-items: center;
+  margin-top: -10px;
+}
+
+.logo a {
+  /* setting the logo a to text decoration none */
+  text-decoration: none;
+}
+
+.logo-text {
+  /* setting the logo text to font family playfair display, serif, font weight bold, font size 2rem, color primary text, text decoration none */
+  font-family: "Playfair Display", serif;
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--color-primary-text);
+  text-decoration: none;
+}
+
+/* Hamburger menu styles */
+.hamburger {
+  /* setting the hamburger to display none */
+  display: none;
+  cursor: pointer;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+.hamburger span {
+  /* setting the hamburger span to display block, width 25px, height 3px, background primary text, margin 5px 0, transition normal */
+  display: block;
+  width: 25px;
+  height: 3px;
+  background: var(--color-primary-text);
+  margin: 5px 0;
+  transition: all 0.3s ease;
+}
+
+/* Mobile styles */
+@media screen and (max-width: 768px) {
+  .nav-container {
+    /* setting the nav container to display grid, grid template columns auto 1fr auto, gap 0.5rem */
+    grid-template-columns: auto 1fr auto;
+    gap: 0.5rem;
+  }
+
+  .nav-menu {
+    /* setting the nav menu to position fixed, top 60px, right -100%, background color rgba 245 245 245 0.8, backdrop filter blur 8px, webkit backdrop filter blur 8px, width 250px, flex direction column, gap 0, padding spacing md 0 */
+    position: fixed;
+    top: 60px;
+    right: -100%;
+    background-color: rgba(245, 245, 245, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    width: 250px;
+    flex-direction: column;
+    gap: 0;
+    padding: var(--spacing-md) 0;
+    box-shadow: var(--shadow-lg);
+    transition: right var(--transition-normal);
+  }
+
+  .nav-menu.active {
+    /* setting the nav menu active to right 0 */
+    right: 0;
+  }
+
+  .nav-item {
+    /* setting the nav item to margin 0 */
+    margin: 0;
+  }
+
+  .nav-link {
+    /* setting the nav link to padding spacing sm spacing xl, border left 3px solid transparent */
+    padding: 0.75rem 1.5rem;
+    border-left: 3px solid transparent;
+  }
+
+  .nav-link:hover {
+    /* setting the nav link hover to background color beige, border left 3px solid yellow */
+    background-color: var(--color-beige);
+    border-left: 3px solid var(--color-yellow);
+  }
+
+  .hamburger {
+    /* setting the hamburger to display block */
+    display: block;
+  }
+
+  .hamburger.active span:nth-child(1) {
+    /* setting the hamburger active span to rotate 45deg translate 5px 5px */
+    transform: rotate(45deg) translate(5px, 5px);
+  }
+
+  .hamburger.active span:nth-child(2) {
+    /* setting the hamburger active span to opacity 0 */
+    opacity: 0;
+  }
+
+  .hamburger.active span:nth-child(3) {
+    /* setting the hamburger active span to rotate -45deg translate 7px -6px */
+    transform: rotate(-45deg) translate(7px, -6px);
+  }
+
+  .nav-right {
+    /* setting the nav right to gap spacing sm */
+    gap: var(--spacing-sm);
+  }
+
+  .cart-icon-container {
+    /* setting the cart icon container to position fixed, bottom 10px, right 10px, z index 1000, background color primary button, border radius 50%, padding 10px, box shadow 0 4px 8px rgba 0 0 0 0.2 */
+    position: fixed;
+    bottom: 10px;
+    right: 10px;
+    z-index: 1000;
+    background-color: var(--color-primary-button);
+    border-radius: 50%;
+    padding: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+
+  .cart-icon {
+    /* setting the cart icon to color white, font size 1.5rem, cursor pointer */
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .search-container {
+    /* setting the search container to margin left 0.25rem */
+    margin-left: 0.25rem;
+  }
+
+  .search-container.expanded {
+    /* setting the search container expanded to width 200px, margin left 0.5rem */
+    width: 200px;
+    margin-left: 0.5rem;
+  }
+
+  .search-results {
+    /* setting the search results to width 100%, max height 250px */
+    width: 100%;
+    max-height: 250px;
+  }
+
+  .search-result-item {
+    /* setting the search result item to grid template columns 40px 1fr, gap 6px */
+    grid-template-columns: 40px 1fr;
+    gap: 6px;
+  }
+
+  .image-container {
+    /* setting the image container to width 40px, height 40px */
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.nav-right {
+  /* setting the nav right to grid column 3, justify self end, display flex, align items center, gap spacing md, margin left auto */
+  grid-column: 3;
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  margin-left: auto;
+}
+
+.cart-icon-container {
+  /* setting the cart icon container to position relative, display inline block, cursor pointer */
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.cart-icon {
+  /* setting the cart icon to font size 1.5rem, color primary text */
+  font-size: 1.5rem;
+  color: var(--color-primary-text);
+}
+
+.cart-icon:hover {
+  /* setting the cart icon hover to color primary button, transition normal */
+  color: var(--color-primary-button);
+  transition: color var(--transition-normal);
+}
+
+.cart-counter {
+  /* setting the cart counter to position absolute, top -8px, right -5px, background color primary button, color white, border radius 50%, border solid, padding 2px 6px, font size 0.75rem, min width 18px, text align center */
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  background-color: var(--color-primary-button);
+  color: white;
+  border-radius: 50%;
+  border: solid;
+  padding: 2px 6px;
+  font-size: 0.75rem;
+  min-width: 18px;
+  text-align: center;
+}
+
+.search-container {
+  /* setting the search container to position relative, width 40px, transition all 0.3s cubic bezier 0.4 0 0.2 1 */
+  position: relative;
+  width: 40px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-container.expanded {
+  /* setting the search container expanded to width 300px */
+  width: 300px;
+}
+
+.search-input-wrapper {
+  /* setting the search input wrapper to position relative, width 100%, overflow hidden */
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.search-icon {
+  /* setting the search icon to position absolute, left 8px, top 50%, transform translateY -50%, color primary text, cursor pointer, z index 2, font size 1.2rem, transition all 0.3s cubic bezier 0.4 0 0.2 1 */
+  position: absolute;
+  left: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-primary-text);
+  cursor: pointer;
+  z-index: 2;
+  font-size: 1.2rem;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.search-icon:hover {
+  /* setting the search icon hover to color primary button */
+  color: var(--color-primary-button);
+}
+
+.search-input-wrapper input {
+  /* setting the search input wrapper input to width 100%, padding 8px 8px 8px 35px, border 1px solid border, border radius 4px, font size 14px, opacity 0, transform translateX 20px, transition all 0.3s cubic bezier 0.4 0 0.2 1, visibility hidden */
+  width: 100%;
+  padding: 8px 8px 8px 35px;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  font-size: 14px;
+  opacity: 0;
+  transform: translateX(20px);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  visibility: hidden;
+}
+
+.search-container.expanded .search-input-wrapper input {
+  /* setting the search input wrapper input expanded to opacity 1, transform translateX 0, visibility visible */
+  opacity: 1;
+  transform: translateX(0);
+  visibility: visible;
+}
+
+.search-results {
+  /* setting the search results to position absolute, top calc 100% 8px, left 50%, transform translateX -50%, width 100%, max width 300px, background color background, border 1px solid border, border radius 4px, box shadow lg, overflow hidden */
+  position: absolute;
+  top: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 300px;
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+}
+
+.search-results-inner {
+  /* setting the search results inner to max height 300px, overflow y auto, overflow x hidden, padding 8px */
+  max-height: 300px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 8px;
+}
+
+.search-result-item {
+  /* setting the search result item to display grid, grid template columns 50px 1fr, gap 12px, padding 8px, align items center, border bottom 1px solid border, width 100%, transform scale 0.9 */
+  display: grid;
+  grid-template-columns: 50px 1fr;
+  gap: 12px;
+  padding: 8px;
+  align-items: center;
+  border-bottom: 1px solid var(--color-border);
+  width: 100%;
+  transform: scale(0.9);
+}
+
+.search-result-item:last-child {
+  /* setting the search result item last child to border bottom none */
+  border-bottom: none;
+}
+
+.search-result-item:hover {
+  /* setting the search result item hover to background color warm beige, cursor pointer, transform scale 1, transition transform normal */
+  background-color: var(--color-warm-beige);
+  cursor: pointer;
+  transform: scale(1);
+  transition: transform var(--transition-normal);
+}
+
+.image-container {
+  /* setting the image container to width 50px, height 50px, min width 50px, position relative */
+  width: 50px;
+  height: 50px;
+  min-width: 50px;
+  position: relative;
+}
+
+.image-container img {
+  /* setting the image container img to width 100%, height 100%, object fit cover, border radius 4px */
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.product-info {
+  /* setting the product info to width 100%, min width 0 */
+  width: 100%;
+  min-width: 0;
+}
+
+.product-info h4 {
+  /* setting the product info h4 to white space nowrap, overflow hidden, text overflow ellipsis, color primary text */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: var(--color-primary-text);
+}
+
+.price-container {
+  /* setting the price container to display flex, align items flex start, margin top 4px, background color background, border left 3px solid primary button */
+  display: flex;
+  align-items: flex-start;
+  margin-top: 4px;
+  background-color: var(--color-background);
+  border-left: 3px solid var(--color-primary-button);
+}
+
+.price-stack {
+  /* setting the price stack to display flex, flex direction column, gap 2px */
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sale-price {
+  /* setting the sale price to color muted terracotta, font weight 500, font size 13px */
+  color: var(--color-muted-terracotta);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+.original-price {
+  /* setting the original price to color accent silver, text decoration line through, font size 11px, opacity 0.6 */
+  color: var(--color-accent-silver);
+  text-decoration: line-through;
+  font-size: 11px;
+  opacity: 0.6;
+}
+
+.regular-price {
+  /* setting the regular price to color primary text, font weight 500, font size 13px */
+  color: var(--color-primary-text);
+  font-weight: 500;
+  font-size: 13px;
+}
+
+@media screen and (max-width: 440px) {
+  /* setting the search container to display none */
+  .search-container {
+    display: none;
+  }
+}
+
+.search-result-item .product-info {
+  /* setting the product info to display flex, flex direction column, align items flex start */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.search-result-item .product-info .regular-price {
+  /* setting the regular price to font size 14px */
+  font-size: 14px;
+}
+
+.search-result-item .product-info .price-container .sale-price {
+  /* setting the sale price to font size 14px, padding left 0.5rem */
+  font-size: 14px;
+  padding-left: 0.5rem;
+}
+
+.search-result-item .product-info .price-container .original-price {
+  /* setting the original price to font size 10px */
+  font-size: 10px;
+}
+```
