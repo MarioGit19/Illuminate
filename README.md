@@ -1423,3 +1423,322 @@ export default Articles;
   }
 }
 ```
+
+### About.js
+
+```js
+import React, { useEffect } from "react";
+import "../../styles/about.css";
+
+const About = () => {
+  /* setting the count element to the document query selector for the count class */
+  useEffect(() => {
+    const countElement = document.querySelector(".count");
+    /* setting the target to the data target attribute of the count element parsed as an integer */
+    const target = parseInt(countElement.dataset.target);
+    /* setting the duration to 2000 milliseconds */
+    const duration = 2000; // 2 seconds
+    /* setting the step to the target divided by the duration divided by 16 */
+    const step = target / (duration / 16);
+    /* setting the current to 0 */
+    let current = 0;
+
+    const updateCount = () => {
+      /* incrementing the current by the step */
+      current += step;
+      /* if the current is less than the target, set the text content to the current floor value and request animation frame the update count */
+      if (current < target) {
+        countElement.textContent = Math.floor(current).toLocaleString();
+        requestAnimationFrame(updateCount);
+      } else {
+        countElement.textContent = target.toLocaleString();
+      }
+    };
+
+    /* starting the count animation on load */
+    updateCount();
+  }, []);
+
+  return (
+    /* setting the about container to display flex, flex direction column, align items center, gap spacing md, padding spacing md 0 */
+    <div className="about-container">
+      <div className="about-content">
+        <h1>About Us</h1>
+        <div className="about-grid">
+          <div className="about-text">
+            <h2>20 Years of Excellence</h2>
+            <p>
+              For two decades, we've been committed to delivering exceptional
+              quality and service to our customers worldwide. Our journey began
+              in 2004, and since then, we've maintained our commitment to
+              excellence.
+            </p>
+            <img
+              src="https://img.freepik.com/premium-vector/money-back-guarantee-free-shipping-trust-badges-trust-badges-secure-ordering-easy-returns_526569-803.jpg?w=2000"
+              alt="Trust badges and guarantees"
+            />
+          </div>
+          <div className="about-features">
+            <div className="feature">
+              <h3>Lifetime Guarantee</h3>
+              <p>
+                We stand behind our products with a comprehensive lifetime
+                guarantee.
+              </p>
+            </div>
+            <div className="feature">
+              <h3>Global Shipping</h3>
+              <p>
+                We deliver our premium products to customers around the world.
+              </p>
+            </div>
+            <div className="feature">
+              <h3>Customer First</h3>
+              <p>
+                Your satisfaction is our top priority, with dedicated support at
+                every step.
+              </p>
+            </div>
+            <div className="customers">
+              <h3>Satisfied Customers</h3>
+              <div className="counter">
+                <span className="count" data-target="100000">
+                  0
+                </span>
+                +
+              </div>
+              <style jsx>{`
+                .counter {
+                  font-size: 2rem;
+                  font-weight: bold;
+                  color: var(--color-primary-text);
+                }
+
+                .count {
+                  animation: countUp 2s ease-out forwards;
+                }
+
+                @keyframes countUp {
+                  from {
+                    content: "0";
+                  }
+                  to {
+                    content: "100000";
+                  }
+                }
+              `}</style>
+              <script
+                dangerouslySetInnerHTML={{
+                  __html: `
+                  const countElement = document.querySelector('.count');
+                  const target = parseInt(countElement.dataset.target);
+                  const duration = 2000;
+                  const step = target / (duration / 16);
+                  let current = 0;
+                  
+                  const updateCount = () => {
+                    current += step;
+                    if(current < target) {
+                      countElement.textContent = Math.floor(current).toLocaleString();
+                      requestAnimationFrame(updateCount);
+                    } else {
+                      countElement.textContent = target.toLocaleString();
+                    }
+                  };
+                  
+                  const observer = new IntersectionObserver((entries) => {
+                    if(entries[0].isIntersecting) {
+                      updateCount();
+                      observer.disconnect();
+                    }
+                  });
+                  
+                  observer.observe(countElement);
+                `,
+                }}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default About;
+```
+
+### About.css
+
+```css
+.about-container {
+  /* setting the about container to padding 4rem 2rem, background color background, color primary text */
+  padding: 4rem 2rem;
+  background-color: var(--color-background);
+  color: var(--color-primary-text);
+}
+
+.about-content {
+  /* setting the about content to max width 1200px, margin 0 auto */
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.about-content h1 {
+  /* setting the about content h1 to text align center, font size 2.5rem, margin bottom 3rem, color primary text */
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+  color: var(--color-primary-text);
+}
+
+.about-grid {
+  /* setting the about grid to display grid, grid template columns 1fr, gap 3rem */
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 3rem;
+}
+
+.about-text {
+  /* setting the about text to padding 2rem, background color card background, border radius 8px, box shadow 0 4px 6px rgba 0 0 0 0.1, border 1px solid border, display flex, flex direction column, align items center */
+  padding: 2rem;
+  background-color: var(--color-card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e4e6ef;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.about-text h2 {
+  /* setting the about text h2 to color primary text, margin bottom 1.5rem, font size 2rem */
+  color: var(--color-primary-text);
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+}
+
+.about-text p {
+  /* setting the about text p to line height 1.8, font size 1.1rem, color secondary text */
+  line-height: 1.8;
+  font-size: 1.1rem;
+  color: var(--color-secondary-text);
+}
+
+.about-text img {
+  /* setting the about text img to max width 100%, height auto, margin top 1.5rem, border radius 4px, width 300px, object fit contain */
+  max-width: 100%;
+  height: auto;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+  width: 300px;
+  object-fit: contain;
+}
+
+.about-features {
+  /* setting the about features to display grid, grid template columns repeat auto fit, minmax 250px, 1fr, gap 2rem */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+.feature {
+  /* setting the feature to padding 1.5rem, background color card background, border radius 8px, box shadow 0 4px 6px rgba 0 0 0 0.1, border none, transition transform 0.3s ease, background color 0.3s ease */
+  padding: 1.5rem;
+  background-color: var(--color-card-background);
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.feature:hover {
+  /* setting the feature hover to transform translateY -5px, background color color mix of primary button 15% and card background, border color primary button, box shadow shadow lg */
+  transform: translateY(-5px);
+  background-color: color-mix(
+    in srgb,
+    var(--color-primary-button) 15%,
+    var(--color-card-background)
+  );
+  border-color: var(--color-primary-button);
+  box-shadow: var(--shadow-lg);
+}
+
+.feature h3 {
+  /* setting the feature h3 to color primary text, margin bottom 1rem, font size 1.5rem */
+  color: var(--color-primary-text);
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.feature p {
+  /* setting the feature p to line height 1.6, color secondary text */
+  line-height: 1.6;
+  color: var(--color-secondary-text);
+}
+
+@media (min-width: 768px) {
+  /* setting the about grid to grid template columns 1fr 1fr */
+  .about-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 768px) {
+  .about-container {
+    padding: 2rem 1rem;
+  }
+  /* setting the about content to padding top 40px */
+  .about-content {
+    padding-top: 40px;
+  }
+  /* setting the about content h1 to font size 2rem */
+  .about-content h1 {
+    font-size: 2rem;
+  }
+  /* setting the about text h2 to font size 1.75rem */
+  .about-text h2 {
+    font-size: 1.75rem;
+  }
+}
+
+.about-box {
+  /* setting the about box to padding 2rem, border radius 8px, background color card background, box shadow 0 2px 4px rgba 0 0 0 0.1, display flex, flex direction column, align items center, text align center */
+  padding: 2rem;
+  border-radius: 8px;
+  background-color: var(--color-card-background);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.about-box img {
+  /* setting the about box img to max width 100%, height auto, margin top 1.5rem, border radius 4px */
+  max-width: 100%;
+  height: auto;
+  margin-top: 1.5rem;
+  border-radius: 4px;
+}
+
+.counter {
+  /* setting the counter to font size 2rem, font weight bold, color primary */
+  font-size: 2rem;
+  font-weight: bold;
+  color: var(--color-primary);
+}
+
+.customers {
+  /* setting the customers to display flex, flex direction column, align items center, gap 1rem */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.count {
+  /* setting the count to animation countUp 2s ease-out forwards */
+  animation: countUp 2s ease-out forwards;
+}
+```
