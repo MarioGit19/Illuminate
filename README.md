@@ -1202,3 +1202,224 @@ nav.navbar {
   font-size: 10px;
 }
 ```
+
+### Articles.js
+
+```js
+import { useState, useEffect } from "react";
+import { articles } from "../../data/data";
+import "../../styles/components/articles.css";
+
+const Articles = () => {
+  /* setting the expanded articles to an empty object */
+  const [expandedArticles, setExpandedArticles] = useState({});
+
+  useEffect(() => {
+    /* setting the handle scroll to a function that adds the fade in class to the article container if the article is visible */
+    const handleScroll = () => {
+      const articleElements = document.querySelectorAll(".article-container");
+
+      articleElements.forEach((element) => {
+        /* setting the rect to the element's bounding client rect */
+        const rect = element.getBoundingClientRect();
+        /* setting the is visible to true if the rect's top is less than or equal to the window's inner height times 0.75 */
+        const isVisible = rect.top <= window.innerHeight * 0.75;
+
+        if (isVisible) {
+          /* adding the fade in class to the article container */
+          element.classList.add("fade-in");
+        }
+      });
+    };
+
+    window.addEventListener("scroll", handleScroll);
+    handleScroll(); // Check initial state
+
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const toggleDescription = (articleId) => {
+    /* setting the expanded articles to the previous state with the article id toggled */
+    setExpandedArticles((prev) => ({
+      ...prev,
+      [articleId]: !prev[articleId],
+    }));
+  };
+
+  const truncateText = (text, wordCount) => {
+    /* setting the words to the text split by spaces */
+    const words = text.split(" ");
+    /* if the words length is less than or equal to the word count, return the text */
+    if (words.length <= wordCount) return text;
+    /* return the words sliced to the word count and joined with a space and an ellipsis */
+    return words.slice(0, wordCount).join(" ") + "...";
+  };
+
+  return (
+    /* setting the articles section to display flex, flex direction column, align items center, gap spacing md, padding spacing md 0 */
+    <section className="articles-section">
+      {articles.map((article) => (
+        /* setting the article container to display flex, flex direction column, align items center, gap spacing md, padding spacing md 0 */
+        <div key={article.article_id} className="article-container">
+          <div className="article-image">
+            <img src={article.article_image} alt={article.article_title} />
+          </div>
+          <div className="article-content">
+            <h2 className="article-title">
+              {article.article_title}{" "}
+              <span className="emphasis">{article.article_emphasis}</span>
+            </h2>
+            <p className="article-description">
+              {expandedArticles[article.article_id]
+                ? article.description
+                : truncateText(article.description, 60)}
+            </p>
+            <button
+              className="see-more-btn"
+              onClick={() => toggleDescription(article.article_id)}
+            >
+              {expandedArticles[article.article_id] ? "See Less" : "See More"}
+            </button>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+};
+
+export default Articles;
+```
+
+### Articles.css
+
+```css
+.articles-section {
+  /* setting the articles section to max width 1200px, margin 0 auto, padding 2rem */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.article-container {
+  /* setting the article container to display flex, align items center, gap 3rem, margin bottom 4rem, opacity 0, transform translateY 50px */
+  display: flex;
+  align-items: center;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  opacity: 0;
+  transform: translateY(50px);
+}
+
+.article-container.fade-in {
+  /* setting the article container fade in to animation fadeInUp 0.8s ease forwards */
+  animation: fadeInUp 0.8s ease forwards;
+}
+
+.article-container:nth-child(even) {
+  /* setting the article container even to flex direction row reverse */
+  flex-direction: row-reverse;
+}
+
+.article-image {
+  /* setting the article image to flex 1, max width 400px */
+  flex: 1;
+  max-width: 400px;
+}
+
+.article-image img {
+  /* setting the article image img to width 100%, height auto, border radius 8px, box shadow 0 4px 12px rgba 0 0 0 0.1, border 1px solid border */
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--color-border);
+}
+
+.article-content {
+  /* setting the article content to flex 1 */
+  flex: 1;
+}
+
+.article-title {
+  /* setting the article title to font size 2rem, margin bottom 1rem, color primary text */
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: var(--color-primary-text);
+}
+
+.span-text {
+  /* setting the span text to color secondary text, font weight 800, position relative, display inline block */
+  color: var(--color-secondary-text);
+  font-weight: 800;
+  position: relative;
+  display: inline-block;
+}
+
+.article-title .emphasis {
+  /* setting the emphasis to color primary button, font weight 800, position relative, display inline block */
+  color: var(--color-primary-button);
+  font-weight: 800;
+  position: relative;
+  display: inline-block;
+}
+
+.article-title .emphasis::after {
+  /* setting the emphasis after to content empty, position absolute, bottom -2px, left 0, width 100%, height 2px, background color primary button */
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-primary-button);
+}
+
+.article-description {
+  /* setting the article description to color secondary text, line height 1.6, margin bottom 1rem */
+  color: var(--color-secondary-text);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.see-more-btn {
+  /* setting the see more button to background color primary button, color card background, border none, padding 0.5rem 1.5rem, border radius 4px, font size 1rem, cursor pointer, text decoration none, transition background color 0.3s ease */
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
+  border: none;
+  padding: 0.5rem 1.5rem;
+  border-radius: 4px;
+  font-size: 1rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.see-more-btn:hover {
+  /* setting the see more button hover to background color primary button hover */
+  background-color: var(--color-primary-button-hover);
+}
+
+@keyframes fadeInUp {
+  /* setting the fade in up to from opacity 0, transform translateY 50px */
+  from {
+    opacity: 0;
+    transform: translateY(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  /* setting the article container to flex direction column, text align center */
+  .article-container {
+    flex-direction: column !important;
+    text-align: center;
+  }
+
+  .article-image {
+    max-width: 100%;
+  }
+}
+```
