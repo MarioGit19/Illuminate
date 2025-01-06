@@ -1742,3 +1742,180 @@ export default About;
   animation: countUp 2s ease-out forwards;
 }
 ```
+
+### BrandLogos.js
+
+```js
+import React, { useState } from "react";
+import "./brandlogos.css";
+
+const BrandLogos = () => {
+  /* setting the loaded images to a new set */
+  const [loadedImages, setLoadedImages] = useState(new Set());
+  /* setting the brands to an array of objects with name, logo, and fallback */
+  const brands = [
+    {
+      name: "Artemide",
+      logo: "/images/brands/artemide-logo.png",
+      fallback: "https://placehold.co/120x60?text=Artemide",
+    },
+    {
+      name: "Flos",
+      logo: "/images/brands/flos-logo.png",
+      fallback: "https://placehold.co/120x60?text=Flos",
+    },
+    {
+      name: "Baccarat",
+      logo: "/images/brands/baccarat-logo.png",
+      fallback: "https://placehold.co/120x60?text=Baccarat",
+    },
+    {
+      name: "Louis Poulsen",
+      logo: "/images/brands/louis-poulsen-logo.png",
+      fallback: "https://placehold.co/120x60?text=Louis+Poulsen",
+    },
+    {
+      name: "Tom Dixon",
+      logo: "/images/brands/tom-dixon-logo.png",
+      fallback: "https://placehold.co/120x60?text=Tom+Dixon",
+    },
+    {
+      name: "Moooi",
+      logo: "/images/brands/moooi-logo.png",
+      fallback: "https://placehold.co/120x60?text=Moooi",
+    },
+    {
+      name: "Vibia",
+      logo: "/images/brands/vibia-logo.png",
+      fallback: "https://placehold.co/120x60?text=Vibia",
+    },
+  ];
+
+  /* setting the handle image error to the event target src and fallback */
+  const handleImageError = (e, fallback) => {
+    /* if the loaded images set does not have the event target src, set the event target src to the fallback and add the event target src to the loaded images set */
+    if (!loadedImages.has(e.target.src)) {
+      e.target.src = fallback;
+      setLoadedImages((prev) => new Set([...prev, e.target.src]));
+    }
+  };
+
+  const handleImageLoad = (e) => {
+    /* adding the loaded class to the event target */
+    e.target.classList.add("loaded");
+  };
+
+  return (
+    <div className="brands-container">
+      <div className="brands-slider">
+        <div className="slide-track">
+          {/* mapping over the brands array twice to create a sliding effect */}
+          {[...brands, ...brands].map((brand, index) => (
+            <div className="slide" key={index}>
+              <img
+                src={brand.logo}
+                alt={brand.name}
+                onError={(e) => handleImageError(e, brand.fallback)}
+                onLoad={handleImageLoad}
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default BrandLogos;
+```
+
+### BrandLogos.css
+
+```css
+.brands-container {
+  width: 100%;
+  background: var(--color-card-background);
+  overflow: hidden;
+  border-top: 1px solid var(--color-border);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.brands-slider {
+  position: relative;
+  width: 100%;
+  padding: 1rem 0;
+}
+
+.slide-track {
+  display: flex;
+  width: calc(250px * 20);
+  animation: scroll 40s linear infinite;
+}
+
+.slide {
+  width: 250px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-card-background);
+}
+
+.slide img {
+  max-width: 120px;
+  height: auto;
+  mix-blend-mode: multiply;
+  filter: grayscale(100%) contrast(0.8) brightness(1.2);
+  opacity: 0;
+  transition: all 0.5s ease;
+  padding: 10px;
+}
+
+.slide img.loaded {
+  opacity: 0.7;
+}
+
+.slide img:hover {
+  filter: grayscale(0%) contrast(1) brightness(1);
+  opacity: 1;
+  transform: scale(1.05);
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(calc(-250px * 10));
+  }
+}
+
+.brands-slider:hover .slide-track {
+  animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+  .slide {
+    width: 200px;
+    padding: 0.75rem;
+  }
+
+  .slide img {
+    max-width: 100px;
+  }
+
+  .slide-track {
+    width: calc(200px * 20);
+  }
+
+  @keyframes scroll {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      transform: translateX(calc(-200px * 10));
+    }
+  }
+}
+```
