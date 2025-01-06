@@ -3599,3 +3599,409 @@ body.show-success-animation .success-checkmark {
   }
 }
 ```
+
+### ThankYouPage.js
+
+```js
+import React from "react";
+import "./ThankYouPage.css";
+import { useNavigate } from "react-router-dom";
+
+// ThankYouPage component handles displaying order confirmation details after a successful purchase
+const ThankYouPage = () => {
+  // Get navigation function from react-router
+  const navigate = useNavigate();
+
+  // Retrieve the last order details from localStorage
+  const rawOrderDetails = localStorage.getItem("lastOrder");
+
+  // Parse the order details, converting the estimatedDelivery string back to a Date object
+  const orderDetails = rawOrderDetails
+    ? JSON.parse(rawOrderDetails, (key, value) => {
+        if (key === "estimatedDelivery") return new Date(value);
+        return value;
+      })
+    : null;
+
+  // If no order details found, display error message and return home button
+  if (!orderDetails) {
+    return (
+      <div className="thank-you-container">
+        <div className="thank-you-content">
+          <h1>No Order Found</h1>
+          <p>Sorry, we couldn't find any order details.</p>
+          <button className="back-button" onClick={() => navigate("/")}>
+            Return to Home
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // Destructure the order details into individual variables
+  const { formData, cartItems, total, estimatedDelivery, orderId } =
+    orderDetails;
+
+  // Main thank you page layout
+  return (
+    <div className="thank-you-container">
+      <div className="thank-you-content">
+        {/* Header section with success icon and order number */}
+        <div className="success-header">
+          <div className="success-icon">✓</div>
+          <h1>Thank You for Your Order!</h1>
+          <p className="order-confirmation">Order #{orderId}</p>
+        </div>
+
+        <div className="confirmation-details">
+          {/* Shipping information section */}
+          <div className="info-section shipping-info">
+            <h2>Shipping Information</h2>
+            <div className="shipping-info-card">
+              {/* Customer name and address details */}
+              <div className="shipping-details">
+                <p className="shipping-name">
+                  {formData.firstName} {formData.lastName}
+                </p>
+                <p className="shipping-address">{formData.address}</p>
+                <p className="shipping-city-zip">
+                  {formData.city}, {formData.zipCode}
+                </p>
+              </div>
+              {/* Contact information */}
+              <div className="contact-details">
+                <p>
+                  <span>Email:</span> {formData.email}
+                </p>
+                <p>
+                  <span>Phone:</span> {formData.phone}
+                </p>
+              </div>
+              {/* Estimated delivery date */}
+              <div className="delivery-date">
+                <p>
+                  <span>Estimated Delivery:</span>
+                </p>
+                <p className="date">{estimatedDelivery.toLocaleDateString()}</p>
+              </div>
+            </div>
+          </div>
+
+          {/* Order details section */}
+          <div className="info-section order-details">
+            <h2>Order Details</h2>
+            {/* List of ordered items */}
+            <div className="ordered-items">
+              {cartItems.map((item) => (
+                <div key={item.id} className="ordered-item">
+                  <img src={item.image} alt={item.name} />
+                  <div className="item-info">
+                    <h3>{item.name}</h3>
+                    <p>Quantity: {item.quantity}</p>
+                    <p className="price">${item.price}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Order total summary */}
+            <div className="order-summary">
+              <div className="summary-row">
+                <span>Subtotal:</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+              <div className="summary-row">
+                <span>Shipping:</span>
+                <span>Free</span>
+              </div>
+              <div className="summary-row total">
+                <span>Total:</span>
+                <span>${total.toFixed(2)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ThankYouPage;
+```
+
+### ThankYouPage.css
+
+```css
+/* Main container that takes up full viewport height and adds padding */
+.thank-you-container {
+  min-height: 100vh; /* Full viewport height */
+  background-color: var(--color-background); /* Background color from theme */
+  padding: 2rem; /* Padding around content */
+  padding-top: calc(80px + 2rem); /* Extra top padding to account for header */
+}
+
+/* Content wrapper with max width and card styling */
+.thank-you-content {
+  max-width: 1200px; /* Limit maximum width */
+  margin: 0 auto; /* Center horizontally */
+  background: var(--color-card-background); /* Card background from theme */
+  border-radius: 12px; /* Rounded corners */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+  overflow: hidden; /* Clip content to border radius */
+  border: 1px solid #e4e6ef; /* Light border */
+}
+
+/* Green success header section */
+.success-header {
+  background: #4caf50; /* Green background */
+  color: var(--color-card-background); /* White text */
+  padding: 2rem; /* Padding around content */
+  text-align: center; /* Center text */
+}
+
+/* Container for order details */
+.confirmation-details {
+  background-color: var(--color-background); /* Background color from theme */
+}
+
+/* Circular checkmark icon container */
+.success-icon {
+  width: 60px;
+  height: 60px;
+  background: var(--color-card-background); /* White background */
+  border-radius: 50%; /* Circular shape */
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Center checkmark */
+  margin: 0 auto 1rem; /* Center horizontally with bottom margin */
+  color: #4caf50; /* Green checkmark */
+  font-size: 2rem; /* Large checkmark */
+  font-weight: bold;
+}
+
+/* Order confirmation number text */
+.order-confirmation {
+  font-size: 1.2rem; /* Larger text */
+  opacity: 0.9; /* Slightly transparent */
+  margin-top: 0.5rem; /* Space above */
+}
+
+/* Grid layout for shipping and order details */
+.confirmation-details {
+  padding: 2rem;
+  display: grid;
+  grid-template-columns: 1fr 1.5fr; /* Order details section is wider */
+  gap: 2rem; /* Space between columns */
+}
+
+/* Shared styles for info sections */
+.info-section {
+  background: var(--color-card-background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Drop shadow */
+}
+
+/* Section headings */
+.info-section h2 {
+  color: var(--color-primary-text);
+  margin-bottom: 1.5rem;
+  font-size: 1.5rem;
+}
+
+/* Card style for info content */
+.info-card {
+  background: var(--color-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+/* Customer name styling */
+.customer-name {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: var(--color-primary-text);
+}
+
+/* Address text styling */
+.address-details {
+  margin-bottom: 1rem;
+  line-height: 1.6; /* Increased line height for readability */
+}
+
+/* Contact and delivery date label styling */
+.contact-details span,
+.delivery-date span {
+  font-weight: 600;
+  color: var(--color-secondary-text);
+}
+
+/* Delivery date section */
+.delivery-date {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #eee; /* Separator line */
+}
+
+/* Delivery date text */
+.delivery-date .date {
+  color: var(--color-primary-button);
+  font-weight: 600;
+}
+
+/* Container for ordered items list */
+.ordered-items {
+  margin-bottom: 2rem;
+}
+
+/* Individual ordered item row */
+.ordered-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #eee; /* Separator between items */
+}
+
+/* Product image in order list */
+.ordered-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover; /* Maintain aspect ratio */
+  border-radius: 8px;
+}
+
+/* Product name in order list */
+.item-info h3 {
+  font-size: 1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Price text in order list */
+.item-info .price {
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+/* Order total summary section */
+.order-summary {
+  background: #f8f9fa;
+  padding: 1.5rem;
+  border-radius: 8px;
+}
+
+/* Row in order summary */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Total row in order summary */
+.summary-row.total {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 2px solid #eee; /* Thicker separator */
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+/* Return to home button */
+.back-button {
+  background: var(--color-primary-button);
+  color: var(--color-card-background);
+  border: none;
+  padding: 0.8rem 1.5rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  margin-top: 1rem;
+}
+
+/* Button hover state */
+.back-button:hover {
+  background: var(--color-primary-button-hover);
+}
+
+/* Responsive layout for mobile */
+@media (max-width: 768px) {
+  .confirmation-details {
+    grid-template-columns: 1fr; /* Stack sections vertically */
+  }
+
+  .thank-you-container {
+    padding: 1rem;
+    padding-top: calc(80px + 1rem); /* Adjust top padding */
+  }
+}
+
+/* Shipping details section styling */
+.shipping-details .customer-name {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin-bottom: 0.75rem;
+}
+
+.shipping-details .address {
+  color: #4a4a4a;
+  margin-bottom: 0.5rem;
+  line-height: 1.4;
+}
+
+.shipping-details .city-zip {
+  color: #4a4a4a;
+  margin-bottom: 1rem;
+}
+
+/* Contact details section */
+.contact-details {
+  padding-top: 1rem;
+  border-top: 1px solid #eee;
+  margin-bottom: 1rem;
+}
+
+.contact-details p {
+  margin-bottom: 0.5rem;
+  color: #4a4a4a;
+}
+
+.contact-details span {
+  font-weight: 600;
+  color: #666;
+  margin-right: 0.5rem;
+}
+
+/* Shipping name styling */
+.shipping-name {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  color: var(--color-primary-text);
+  text-transform: capitalize; /* Capitalize first letter */
+}
+
+/* Shipping address styling */
+.shipping-address {
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
+  color: #4a4a4a;
+}
+
+/* City and zip code styling */
+.shipping-city-zip {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+  color: #4a4a4a;
+}
+
+/* Card container for shipping info */
+.shipping-info-card {
+  background: var(--color-card-background);
+  border-radius: 8px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 1.5rem;
+  border: 1px solid #e4e6ef;
+}
+```
