@@ -1919,3 +1919,943 @@ export default BrandLogos;
   }
 }
 ```
+
+### Collections.js
+
+```js
+import React, { useState, useRef, useEffect, useCallback } from "react";
+import { FaShoppingCart, FaFilter, FaTimes } from "react-icons/fa";
+import { useCart } from "../../Context/CartContext";
+import { lampCategories } from "../../data/data";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import "../../styles/components/collections.css";
+import { useNavigate } from "react-router-dom";
+import Slider from "@mui/material/Slider";
+// Collections component handles displaying and filtering product listings
+const Collections = ({ products }) => {
+  // State for tracking UI interactions and filters
+  const [hoveredProduct, setHoveredProduct] = useState(null); // Tracks which product is being hovered
+  const [currentPage, setCurrentPage] = useState(1); // Current page number for pagination
+  const [selectedCategories, setSelectedCategories] = useState([]); // Selected category filters
+  const [isFilterOpen, setIsFilterOpen] = useState(false); // Controls filter sidebar visibility
+  const { addToCart } = useCart(); // Cart context for adding items
+  const filterRef = useRef(null); // Ref for filter sidebar DOM element
+  const navigate = useNavigate(); // Router navigation
+
+  // Price range filter state, initialized with min of 0 and max based on highest product price
+  const [selectedPriceRange, setSelectedPriceRange] = useState({
+    min: 0,
+    max: Math.ceil(Math.max(...products.map((p) => p.price))),
+  });
+
+  // Close filter sidebar when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (
+        isFilterOpen &&
+        filterRef.current &&
+        !filterRef.current.contains(event.target) &&
+        !event.target.classList.contains("filter-button")
+      ) {
+        setIsFilterOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isFilterOpen]);
+
+  // Handle pagination page changes
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+    window.scrollTo(0, 0); // Scroll to top when changing pages
+  };
+
+  // Filter products based on selected categories and price range
+  const filteredProducts = products.filter((product) => {
+    // Check if product matches selected categories
+    const matchesCategories =
+      selectedCategories.length === 0 ||
+      selectedCategories.every((cat) => product.categories?.includes(cat));
+
+    // Get effective price (sale price if on sale)
+    const price = product.onSale ? product.salePrice : product.price;
+
+    // Check if price is within selected range
+    const matchesPrice =
+      price >= selectedPriceRange.min && price <= selectedPriceRange.max;
+
+    return matchesCategories && matchesPrice;
+  });
+
+  // Pagination calculations
+  const productsPerPage = 6;
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = filteredProducts.slice(
+    indexOfFirstProduct,
+    indexOfLastProduct
+  );
+  const totalPages = Math.ceil(filteredProducts.length / productsPerPage);
+
+  // Toggle category selection in filters
+  const toggleCategory = (category) => {
+    setSelectedCategories((prev) =>
+      prev.includes(category)
+        ? prev.filter((c) => c !== category)
+        : [...prev, category]
+    );
+    setCurrentPage(1); // Reset to first page when changing filters
+  };
+
+  // Toggle filter sidebar visibility
+  const toggleFilter = () => {
+    setIsFilterOpen(!isFilterOpen);
+  };
+
+  // Handle adding product to cart
+  const handleAddToCart = (e, product) => {
+    e.stopPropagation(); // Prevent triggering product click
+    addToCart(product);
+    // Show success toast notification
+    toast.success(`${product.name} added to cart!`, {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined,
+    });
+  };
+
+  // Navigate to product detail page
+  const handleProductClick = (productId) => {
+    navigate(`/product/${productId}`);
+  };
+
+  // Handle filter tab clicks
+  const handleFilterToggle = useCallback(
+    (e) => {
+      // Check if clicking the filter tab element
+      const isFilterTab =
+        e.target === filterRef.current?.querySelector(".filter-sidebar::after");
+      if (isFilterTab) {
+        setIsFilterOpen(!isFilterOpen);
+      }
+    },
+    [isFilterOpen]
+  );
+
+  // Add/remove filter tab click handler
+  useEffect(() => {
+    const filterSidebar = filterRef.current;
+    if (filterSidebar) {
+      filterSidebar.addEventListener("click", handleFilterToggle);
+    }
+    return () => {
+      if (filterSidebar) {
+        filterSidebar.removeEventListener("click", handleFilterToggle);
+      }
+    };
+  }, [isFilterOpen, handleFilterToggle]);
+
+  // Handle price range slider changes
+  const handleSliderChange = (event, newValue) => {
+    setSelectedPriceRange({
+      min: newValue[0],
+      max: newValue[1],
+    });
+  };
+
+  return (
+    <section className="collections">
+      <h2>Our Collection</h2>
+
+      {/* Mobile filter toggle button */}
+      <button className="filter-button" onClick={toggleFilter}>
+        <FaFilter />
+      </button>
+
+      {/* Overlay for mobile filter */}
+      <div className={`filter-overlay ${isFilterOpen ? "open" : ""}`} />
+
+      {/* Filter sidebar */}
+      <div
+        ref={filterRef}
+        className={`filter-sidebar ${isFilterOpen ? "open" : ""}`}
+      >
+        <button className="close-filter" onClick={toggleFilter}>
+          <FaTimes />
+        </button>
+        <div className="filter-tab" onClick={toggleFilter}>
+          <FaFilter />
+        </div>
+        <h3>Categories</h3>
+        <div className="category-list">
+          {lampCategories.map((category) => (
+            <label key={category} className="category-item">
+              <input
+                type="checkbox"
+                checked={selectedCategories.includes(category)}
+                onChange={() => toggleCategory(category)}
+              />
+              {category}
+            </label>
+          ))}
+        </div>
+
+        <h3>
+          Price Range: ${selectedPriceRange.min} - ${selectedPriceRange.max}
+        </h3>
+        <div className="price-filter">
+          <Slider
+            value={[selectedPriceRange.min, selectedPriceRange.max]}
+            onChange={handleSliderChange}
+            valueLabelDisplay="auto"
+            min={0}
+            max={Math.ceil(Math.max(...products.map((p) => p.price)))}
+            minDistance={1}
+            disableSwap
+            sx={{
+              color: "var(--color-accent-gold)",
+              "& .MuiSlider-thumb": {
+                borderRadius: "50%",
+                backgroundColor: "var(--color-primary-button)",
+              },
+              "& .MuiSlider-track": {
+                backgroundColor: "var(--color-primary-button)",
+              },
+              "& .MuiSlider-rail": {
+                backgroundColor: "var(--color-primary-button)",
+              },
+            }}
+          />
+        </div>
+      </div>
+
+      {/* Product grid */}
+      <div className="collections-grid">
+        {currentProducts.length > 0 ? (
+          currentProducts.map((product) => (
+            <div
+              key={product.id}
+              className="product-card"
+              onClick={() => handleProductClick(product.id)}
+              onMouseEnter={() => setHoveredProduct(product.id)}
+              onMouseLeave={() => setHoveredProduct(null)}
+              style={{ cursor: "pointer" }}
+            >
+              <div className="product-image">
+                <img src={product.image} alt={product.name} />
+                {product.onSale && <span className="sale-badge">Sale</span>}
+                {hoveredProduct === product.id && (
+                  <button
+                    className="quick-buy-button"
+                    onClick={(e) => handleAddToCart(e, product)}
+                    title="Quick Add to Cart"
+                  >
+                    <FaShoppingCart />
+                  </button>
+                )}
+              </div>
+              <div className="product-info">
+                <h3>{product.name}</h3>
+                <div className="price-container">
+                  {product.onSale ? (
+                    <>
+                      <span className="original-price">${product.price}</span>
+                      <span className="sale-price">${product.salePrice}</span>
+                    </>
+                  ) : (
+                    <span className="regular-price">${product.price}</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className="no-results">
+            <p>
+              Unfortunately it looks like there are no products matching your
+              search results
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* Pagination controls */}
+      <div className="pagination">
+        {Array.from({ length: totalPages }, (_, index) => (
+          <button
+            key={index + 1}
+            onClick={() => handlePageChange(index + 1)}
+            className={`page-button ${
+              currentPage === index + 1 ? "active" : ""
+            }`}
+          >
+            {index + 1}
+          </button>
+        ))}
+      </div>
+    </section>
+  );
+};
+
+export default Collections;
+```
+
+### Collections.css
+
+```css
+/* Main collections container layout */
+.collections {
+  padding: 8rem 2rem 2rem; /* Adds padding around the collections section */
+  display: grid; /* Uses CSS Grid layout */
+  grid-template-columns: 250px 1fr; /* Creates 2 columns - 250px sidebar and flexible main content */
+  gap: 2rem; /* Spacing between grid items */
+  max-width: 1400px; /* Maximum width of the container */
+  margin: 0 auto; /* Centers the container */
+}
+
+/* Collections heading styles */
+.collections h2 {
+  grid-column: 1 / -1; /* Makes heading span full width across all columns */
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+/* Sidebar filter styles */
+.filter-sidebar {
+  padding: 3rem 1rem 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  height: fit-content; /* Makes sidebar height match content */
+  background: var(--color-card-background);
+}
+
+.filter-sidebar h3 {
+  margin-bottom: 1rem;
+}
+
+/* Category filter list styles */
+.category-list {
+  display: flex;
+  flex-direction: column; /* Stacks categories vertically */
+  gap: 0.5rem;
+}
+
+.category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  color: var(--color-primary-text);
+}
+
+/* Product grid layout */
+.collections-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Creates 3 equal columns */
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* Individual product card styles */
+.product-card {
+  position: relative;
+  border: 1px solid #e4e6ef;
+  border-radius: 8px;
+  overflow: hidden;
+  transition: all 0.3s ease; /* Smooth transition for hover effects */
+  background: var(--color-card-background);
+  box-shadow: var(--shadow-sm);
+}
+
+/* Hover effect for product cards */
+.product-card:hover {
+  transform: translateY(-5px); /* Lifts card slightly on hover */
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* Product image container */
+.product-image {
+  position: relative;
+  aspect-ratio: 4/3; /* Maintains consistent image proportions */
+  overflow: hidden;
+}
+
+.product-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* Ensures image fills container while maintaining aspect ratio */
+}
+
+/* Sale badge styling */
+.sale-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: red;
+  color: #fff;
+  padding: 0.25rem 0.75rem;
+  border-radius: 4px;
+}
+
+/* Quick buy button styling */
+.quick-buy-button {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background-color: var(--color-card-background);
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  opacity: 0; /* Hidden by default */
+  transform: translateY(10px);
+  z-index: 10;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  color: var(--color-primary-text);
+}
+
+/* Shows quick buy button on product card hover */
+.product-card:hover .quick-buy-button {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Quick buy button hover effect */
+.quick-buy-button:hover {
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
+  transform: scale(1.1);
+}
+
+/* Product information section */
+.product-info {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.product-info h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+/* Price display styles */
+.price-container {
+  margin-top: 0.5rem;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: var(--color-accent-silver);
+  margin-right: 0.5rem;
+}
+
+.sale-price {
+  color: var(--color-muted-terracotta);
+  font-weight: bold;
+}
+
+.regular-price {
+  font-weight: bold;
+  color: var(--color-primary-text);
+}
+
+/* Pagination controls */
+.pagination {
+  grid-column: 1 / -1; /* Spans full width */
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 2rem;
+}
+
+.page-button {
+  padding: 0.5rem 1rem;
+  border: none;
+  background: var(--color-background);
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+  color: var(--color-primary-text);
+}
+
+/* Pagination button hover and active states */
+.page-button:hover {
+  background-color: var(--color-primary-button);
+  border-color: var(--color-primary-button);
+  color: var(--color-card-background);
+}
+
+.page-button.active {
+  background-color: var(--color-primary-button);
+  border-color: var(--color-primary-button);
+  color: var(--color-card-background);
+  font-weight: bold;
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  /* Adjusts layout for mobile devices */
+  .collections {
+    grid-template-columns: 1fr; /* Single column layout */
+    padding: 5rem 1rem 1rem;
+  }
+
+  /* Hides filter tab on mobile */
+  .filter-tab {
+    display: none;
+  }
+
+  /* Adjusts price text size */
+  .price-container .regular-price {
+    font-size: 1rem;
+  }
+
+  /* Changes product grid to 2 columns */
+  .collections-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  /* Mobile filter sidebar styling */
+  .filter-sidebar {
+    position: fixed;
+    top: 0;
+    left: -100%;
+    width: 80%;
+    height: 100vh;
+    background: var(--color-background);
+    z-index: 1001;
+    transition: left 0.3s ease;
+    box-shadow: var(--shadow-lg);
+    padding: 3rem 1rem 1rem;
+  }
+
+  /* Shows filter sidebar when open */
+  .filter-sidebar.open {
+    left: 0;
+  }
+
+  /* Mobile filter button */
+  .filter-button {
+    position: fixed;
+    bottom: 85px;
+    right: 10px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--color-primary-button);
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    box-shadow: var(--shadow-sm);
+    z-index: 998;
+    color: var(--color-card-background);
+  }
+
+  /* Mobile product card adjustments */
+  .product-card .product-info {
+    display: grid;
+  }
+
+  .product-card .product-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .product-card .product-info .price-container {
+    font-size: 0.8rem;
+    align-items: start !important;
+    justify-content: start !important;
+    padding-left: 0.1rem;
+  }
+
+  /* Close filter button styling */
+  .close-filter {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-primary-text);
+    transition: all 0.3s ease;
+    border-radius: 50%;
+  }
+
+  /* Close filter button hover effect */
+  .close-filter:hover {
+    background-color: var(--color-warm-beige);
+    color: var(--color-deep-emerald);
+    transform: rotate(90deg);
+  }
+
+  /* Additional mobile-specific adjustments */
+  .product-card {
+    padding: 0.5rem;
+  }
+
+  .product-image {
+    aspect-ratio: 3/2;
+  }
+
+  .product-info h3 {
+    font-size: 0.9rem;
+  }
+
+  .product-info .price-container .original-price {
+    font-size: 0.7rem !important;
+  }
+
+  .product-info .price-container .sale-price {
+    font-size: 0.9rem !important;
+  }
+
+  .price-container {
+    font-size: 0.8rem;
+  }
+
+  .quick-buy-button {
+    width: 35px;
+    height: 35px;
+  }
+
+  .collections-grid .product-card {
+    height: auto !important;
+    min-height: 250px !important;
+  }
+
+  .product-info .price-container {
+    display: flex;
+    flex-direction: column-reverse;
+  }
+
+  .price-container .sale-price {
+    padding-left: 0.5rem;
+  }
+
+  .collections-grid .product-image {
+    aspect-ratio: 3/2 !important;
+  }
+}
+
+/* Desktop-specific styles */
+@media (min-width: 769px) {
+  /* Hides mobile filter button */
+  .filter-button {
+    display: none;
+  }
+
+  /* Desktop filter sidebar positioning */
+  .filter-sidebar {
+    position: fixed;
+    left: -250px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 250px;
+    background: var(--color-background);
+    transition: left 0.3s ease;
+    box-shadow: var(--shadow-lg);
+    border-radius: 0 8px 8px 0;
+    z-index: 1000;
+  }
+
+  /* Filter tab styling */
+  .filter-tab {
+    position: absolute;
+    right: -40px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 40px;
+    height: 100px;
+    background: var(--color-primary-button);
+    border-radius: 0 8px 8px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.2rem;
+    color: var(--color-card-background);
+  }
+
+  /* Shows filter sidebar when open */
+  .filter-sidebar.open {
+    left: 0;
+  }
+
+  /* Removes pseudo-element */
+  .filter-sidebar::after {
+    display: none;
+  }
+
+  /* Adjusts main content layout */
+  .collections {
+    grid-template-columns: 1fr;
+    padding-left: 4rem;
+  }
+}
+
+/* Filter overlay styles */
+.filter-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease;
+}
+
+/* Shows overlay when filter is open */
+.filter-overlay.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Product image hover overlay */
+.product-image::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+/* Shows hover overlay */
+.product-card:hover .product-image::after {
+  opacity: 1;
+}
+
+/* Cart icon sizing */
+.add-to-cart-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Toast notification styles */
+.Toastify__toast {
+  border-radius: 8px;
+  padding: 16px;
+}
+
+.Toastify__toast--success {
+  background: #4caf50;
+  color: var(--color-card-background);
+}
+
+.Toastify__toast-icon svg {
+  fill: var(--color-card-background);
+}
+
+.Toastify__progress-bar {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+/* Toast close button styles */
+.Toastify__close-button {
+  color: var(--color-primary-text);
+  opacity: 0.7;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* Close icon sizing */
+.close-filter svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Filter sidebar close button */
+.filter-sidebar .close-filter {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  transition: all 0.3s ease;
+  border-radius: 50%;
+  z-index: 1002;
+}
+
+/* Close button hover effect */
+.filter-sidebar .close-filter:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  color: #333;
+  transform: rotate(90deg);
+}
+
+/* Close icon sizing and positioning */
+.filter-sidebar .close-filter svg {
+  width: 20px;
+  height: 20px;
+  display: block;
+}
+
+/* No results message styling */
+.no-results {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  border-radius: 8px;
+  color: var(--color-primary-text);
+  font-size: 1.1rem;
+  margin: 2rem 0;
+  background: var(--color-warm-beige);
+}
+
+.no-results p {
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* Price filter slider styles */
+.price-filter {
+  position: relative;
+  width: 100%;
+  height: 40px;
+  margin: 1rem 0;
+}
+
+.price-slider {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: var(--color-primary-button);
+  pointer-events: none;
+  -webkit-appearance: none;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* Slider thumb styles for webkit browsers */
+.price-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  pointer-events: auto;
+  width: 16px;
+  height: 16px;
+  background: var(--color-primary-button);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  margin-top: -7px;
+  z-index: 3;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Slider thumb styles for Firefox */
+.price-slider::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  background: var(--color-accent-gold);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: none;
+  z-index: 3;
+  box-shadow: var(--shadow-sm);
+}
+
+/* Slider track styles */
+.price-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 2px;
+  background: transparent;
+}
+
+.price-slider::-moz-range-track {
+  width: 100%;
+  height: 2px;
+  background: transparent;
+}
+
+/* Active range styling */
+.price-slider:nth-child(1) {
+  z-index: 1;
+}
+
+.price-slider:nth-child(2) {
+  z-index: 2;
+  background: var(--color-accent-gold);
+}
+
+/* Slider thumb hover effects */
+.price-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.price-slider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
+
+/* Additional slider thumb shadows */
+.price-slider::-webkit-slider-thumb {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.price-slider::-moz-range-thumb {
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Cart icon sizing */
+.add-to-cart-button svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Filter section spacing */
+.filter-sidebar h3 {
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.filter-sidebar h3:first-of-type {
+  margin-top: 0;
+}
+
+/* Checkbox styling */
+.category-item input[type="checkbox"] {
+  accent-color: var(--color-accent-gold);
+}
+
+/* Material UI slider override */
+.MuiSlider-track {
+  border: none !important;
+}
+```
