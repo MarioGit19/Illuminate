@@ -4005,3 +4005,103 @@ export default ThankYouPage;
   border: 1px solid #e4e6ef;
 }
 ```
+
+### CartContext.js
+
+```js
+// Import required dependencies from React
+import React, { createContext, useState, useContext, useEffect } from "react";
+
+// Create a new Context object for managing cart state
+const CartContext = createContext();
+
+// CartProvider component that wraps the app and provides cart functionality
+export const CartProvider = ({ children }) => {
+  // State for storing cart items array
+  const [cartItems, setCartItems] = useState([]);
+  // State for tracking if cart modal/drawer is open
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  // State for tracking total number of items in cart
+  const [cartItemsCount, setCartItemsCount] = useState(0);
+
+  // Effect hook to update cart count whenever items change
+  useEffect(() => {
+    // Calculate total quantity across all items
+    const count = cartItems.reduce((total, item) => total + item.quantity, 0);
+    setCartItemsCount(count);
+  }, [cartItems]);
+
+  // Function to add an item to the cart
+  const addToCart = (product) => {
+    setCartItems((prevItems) => {
+      // Check if item already exists in cart
+      const existingItem = prevItems.find((item) => item.id === product.id);
+      if (existingItem) {
+        // If exists, increment quantity
+        return prevItems.map((item) =>
+          item.id === product.id
+            ? { ...item, quantity: item.quantity + 1 }
+            : item
+        );
+      }
+      // If new item, add to cart with quantity 1
+      return [...prevItems, { ...product, quantity: 1 }];
+    });
+    setCartItemsCount((prev) => prev + 1);
+  };
+
+  // Function to remove an item from the cart
+  const removeFromCart = (productId) => {
+    setCartItems((prevItems) => {
+      const item = prevItems.find((item) => item.id === productId);
+      if (item.quantity > 1) {
+        // If quantity > 1, decrement quantity
+        return prevItems.map((item) =>
+          item.id === productId
+            ? { ...item, quantity: item.quantity - 1 }
+            : item
+        );
+      }
+      // If quantity = 1, remove item completely
+      return prevItems.filter((item) => item.id !== productId);
+    });
+    setCartItemsCount((prev) => prev - 1);
+  };
+
+  // Function to calculate total price of items in cart
+  const calculateTotal = () => {
+    return cartItems.reduce((total, item) => {
+      // Use sale price if available, otherwise regular price
+      const price = item.salePrice || item.price;
+      return total + price * item.quantity;
+    }, 0);
+  };
+
+  // Function to clear all items from cart
+  const clearCart = () => {
+    setCartItems([]);
+    setCartItemsCount(0);
+  };
+
+  // Provide cart context to child components
+  return (
+    <CartContext.Provider
+      value={{
+        cartItems, // Array of items in cart
+        cartItemsCount, // Total number of items
+        addToCart, // Function to add items
+        removeFromCart, // Function to remove items
+        isCartOpen, // Cart modal open state
+        setIsCartOpen, // Function to toggle cart modal
+        calculateTotal, // Function to get cart total
+        clearCart, // Function to empty cart
+      }}
+    >
+      {children}
+    </CartContext.Provider>
+  );
+};
+
+// Custom hook to easily access cart context in components
+export const useCart = () => useContext(CartContext);
+```
