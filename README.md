@@ -3024,3 +3024,391 @@ export default Footer;
   }
 }
 ```
+
+### ProductPage.js
+
+```js
+import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { FaShoppingCart } from "react-icons/fa";
+import { useCart } from "../../Context/CartContext";
+import { lampProducts } from "../../data/data";
+import "../../styles/components/productpage.css";
+import { toast } from "react-toastify";
+
+// Main ProductPage component that displays a single product's details
+const ProductPage = () => {
+  // Get the product ID from URL parameters
+  const { id } = useParams();
+  // Get addToCart function from cart context
+  const { addToCart } = useCart();
+  // State for managing the main displayed image and active thumbnail index
+  const [mainImage, setMainImage] = useState(null);
+  const [activeIndex, setActiveIndex] = useState(0);
+
+  // Find the product from lampProducts data that matches the URL ID
+  const product = lampProducts.find((p) => p.id === parseInt(id));
+
+  // When product changes, set the main image to product's primary image
+  // and reset active thumbnail index to 0
+  useEffect(() => {
+    if (product) {
+      setMainImage(product.image);
+      setActiveIndex(0);
+    }
+  }, [product]);
+
+  // Show error message if product not found
+  if (!product) {
+    return <div className="product-page">Product not found</div>;
+  }
+
+  // Combine primary image with other images for carousel
+  const allImages = [product.image, ...product.other_images];
+
+  // Handler for clicking thumbnail images
+  // Adds transition class, updates main image and active index after delay
+  const handleImageClick = (image, index) => {
+    const mainImageElement = document.querySelector(".main-image");
+    mainImageElement.classList.add("transition");
+
+    setTimeout(() => {
+      setMainImage(image);
+      setActiveIndex(index);
+      mainImageElement.classList.remove("transition");
+    }, 500);
+  };
+
+  // Handler for adding product to cart
+  // Prevents default form submission, adds to cart and shows success toast
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    addToCart(product);
+    toast.success(`${product.name} added to cart!`, {
+      position: "bottom-right",
+      autoClose: 2000,
+      hideProgressBar: false,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+    });
+  };
+
+  // Render product page layout
+  return (
+    <div className="product-page">
+      <div className="product-container">
+        {/* Left side - Product images */}
+        <div className="product-image-container">
+          {/* Main product image */}
+          <img
+            src={mainImage || product.image}
+            alt={product.name}
+            className="main-image"
+          />
+          {/* Sale badge if product is on sale */}
+          {product.onSale && <span className="sale-badge">Sale</span>}
+
+          {/* Image carousel/thumbnails */}
+          <div className="image-carousel">
+            {allImages.map((image, index) => (
+              <img
+                key={index}
+                src={image}
+                alt={`${product.name} view ${index + 1}`}
+                className={`carousel-image ${
+                  index === activeIndex ? "active" : ""
+                }`}
+                onClick={() => handleImageClick(image, index)}
+              />
+            ))}
+          </div>
+        </div>
+
+        {/* Right side - Product details */}
+        <div className="product-details">
+          {/* Product name */}
+          <h1>{product.name}</h1>
+          {/* Commented out sale subtitle */}
+          {/* <h3>
+            {product.onSale && <span className="sale-subtitle">ON SALE</span>}
+          </h3> */}
+
+          {/* Price display - shows sale price if on sale, regular price if not */}
+          <div className="price-container price-container-product">
+            {product.onSale ? (
+              <>
+                <span className="original-price">${product.price}</span>
+                <span className="sale-price">${product.salePrice}</span>
+              </>
+            ) : (
+              <span className="regular-price">${product.price}</span>
+            )}
+          </div>
+
+          {/* Product description */}
+          <p className="description">{product.description}</p>
+
+          {/* Add to cart button with cart icon */}
+          <button className="add-to-cart-button" onClick={handleAddToCart}>
+            <FaShoppingCart /> Add to Cart
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default ProductPage;
+```
+
+### ProductPage.css
+
+```css
+/* Main product page container */
+.product-page {
+  padding: 2rem; /* Add padding around the entire page */
+  max-width: 1200px; /* Limit maximum width */
+  margin: 80px auto 0; /* Center horizontally with top margin for navbar */
+  min-height: calc(
+    100vh - 80px
+  ); /* Minimum full viewport height minus navbar */
+  background-color: var(--color-background); /* Use theme background color */
+}
+
+/* Grid container for product layout */
+.product-container {
+  display: grid; /* Use CSS Grid */
+  grid-template-columns: 1fr 1fr; /* Two equal columns */
+  gap: 2rem; /* Space between columns */
+  padding: 1rem; /* Inner padding */
+}
+
+/* Container for product images */
+.product-image-container {
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  gap: 2rem; /* Space between main image and carousel */
+  max-width: 600px; /* Limit maximum width */
+}
+
+/* Product image styling */
+.product-image-container img {
+  width: 100%; /* Full width of container */
+  height: auto; /* Maintain aspect ratio */
+  border-radius: 8px; /* Rounded corners */
+}
+
+/* Commented out sale subtitle styles for future reference */
+/* .sale-subtitle {
+  color: #e53e3e;
+  font-weight: bold;
+  font-size: 1.0rem;
+  font-style: italic;
+  margin-top:0;
+} */
+
+/* Product details container */
+.product-details {
+  display: flex; /* Use flexbox */
+  flex-direction: column; /* Stack children vertically */
+  gap: 1rem; /* Space between elements */
+  min-height: 100%; /* Full height of container */
+  position: relative; /* For absolute positioning of children */
+  padding: 0 1rem; /* Horizontal padding */
+}
+
+/* Product title styling */
+.product-details h1 {
+  font-size: 2.5rem; /* Large text size */
+  margin-bottom: 1.5rem; /* Space below */
+  color: var(--color-primary-text); /* Theme text color */
+  font-family: var(--font-heading); /* Theme heading font */
+}
+
+/* Price container layout */
+.product-details .price-container {
+  margin: 1.5rem 0; /* Vertical margin */
+  display: flex; /* Use flexbox */
+  align-items: center; /* Center items vertically */
+  gap: 1rem; /* Space between prices */
+}
+
+/* Sale price styling */
+.sale-price {
+  font-size: 1.8rem; /* Large text */
+  color: var(--color-primary-button); /* Theme accent color */
+  font-weight: bold; /* Bold text */
+}
+
+/* Original price styling (crossed out) */
+.original-price {
+  text-decoration: line-through; /* Strike-through effect */
+  color: var(--color-secondary-text); /* Secondary text color */
+  font-size: 1.2rem; /* Smaller than sale price */
+}
+
+/* Regular price styling */
+.regular-price {
+  font-size: 1.8rem; /* Large text */
+  font-weight: bold; /* Bold text */
+  color: var(--color-primary-button); /* Theme accent color */
+  padding-left: 0.5rem; /* Left padding */
+}
+
+/* Override for regular price background */
+.price-container .regular-price {
+  background-color: transparent !important; /* Force transparent background */
+}
+
+/* Product description text */
+.description {
+  line-height: 1.8; /* Increased line height for readability */
+  color: var(--color-primary-text); /* Theme text color */
+  margin-bottom: 2.5rem; /* Space below */
+  font-size: 1.1rem; /* Slightly larger than normal text */
+}
+
+/* Add to cart button styling */
+.add-to-cart-button {
+  display: flex !important; /* Force flexbox */
+  align-items: center !important; /* Center items vertically */
+  justify-content: center !important; /* Center items horizontally */
+  gap: 0.75rem; /* Space between icon and text */
+  padding: 1.25rem 2.5rem; /* Vertical and horizontal padding */
+  background-color: var(--color-primary-button); /* Theme button color */
+  color: var(--color-card-background); /* Button text color */
+  border: none; /* Remove border */
+  border-radius: 8px; /* Rounded corners */
+  cursor: pointer; /* Hand cursor on hover */
+  font-size: 1.2rem; /* Large text */
+  font-weight: bold; /* Bold text */
+  width: 100%; /* Full width */
+  max-width: 300px; /* Maximum width */
+  position: relative; /* For z-index */
+  opacity: 1 !important; /* Force full opacity */
+  z-index: 1; /* Stack order */
+  transition: all 0.3s ease; /* Smooth transitions */
+  margin: 2rem auto; /* Center horizontally with vertical margin */
+  box-shadow: var(--shadow-md); /* Medium shadow */
+}
+
+/* Add to cart button hover effects */
+.add-to-cart-button:hover {
+  background-color: var(--color-primary-button-hover); /* Darker button color */
+  color: var(--color-card-background); /* Maintain text color */
+  transform: scale(1.02); /* Slight grow effect */
+  box-shadow: var(--shadow-lg); /* Larger shadow */
+}
+
+/* Mobile responsive styles */
+@media (max-width: 768px) {
+  .product-container {
+    grid-template-columns: 1fr; /* Single column layout */
+  }
+
+  .price-container-product .regular-price {
+    font-size: 1.8rem !important; /* Force larger font size */
+  }
+
+  .product-page {
+    padding: 1rem; /* Reduced padding */
+    margin-top: 60px; /* Adjusted top margin */
+  }
+
+  .product-details {
+    padding-bottom: 2rem; /* Extra bottom padding */
+  }
+}
+
+/* Main product image styling */
+.main-image {
+  width: 100%; /* Full width */
+  height: auto; /* Maintain aspect ratio */
+  object-fit: cover; /* Cover container */
+  border-radius: 8px; /* Rounded corners */
+  transition: opacity 0.5s ease-in-out; /* Fade transition */
+  opacity: 1; /* Full opacity */
+}
+
+/* Image transition states */
+.main-image.transition {
+  opacity: 0; /* Fade out */
+}
+
+.main-image.fade-out {
+  opacity: 0; /* Fade out */
+  transform: scale(0.95); /* Slight shrink */
+}
+
+.main-image.fade-in {
+  opacity: 1; /* Fade in */
+  transform: scale(1); /* Normal size */
+}
+
+/* Image carousel layout */
+.image-carousel {
+  display: grid; /* Use CSS Grid */
+  grid-template-columns: repeat(5, 1fr); /* 5 equal columns */
+  gap: 1.5rem; /* Space between images */
+  padding: 0.5rem; /* Inner padding */
+  width: 100%; /* Full width */
+  justify-items: center; /* Center items horizontally */
+  align-items: center; /* Center items vertically */
+}
+
+/* Carousel thumbnail styling */
+.carousel-image {
+  width: 100%; /* Full width */
+  aspect-ratio: 1; /* Square aspect ratio */
+  object-fit: cover; /* Cover container */
+  cursor: pointer; /* Hand cursor */
+  transition: all 0.3s ease; /* Smooth transitions */
+  border: 2px solid transparent; /* Transparent border */
+  border-radius: 4px; /* Rounded corners */
+}
+
+/* Carousel thumbnail hover effect */
+.carousel-image:hover {
+  opacity: 0.8; /* Slight transparency */
+}
+
+/* Active carousel thumbnail */
+.carousel-image.active {
+  border-color: var(--color-primary-button); /* Highlight border */
+  transform: scale(1.1); /* Enlarge slightly */
+  box-shadow: var(--shadow-sm); /* Small shadow */
+  z-index: 1; /* Stack above others */
+}
+
+/* Product card price styles */
+.product-card .product-info .price-container .sale-price {
+  font-size: 14px; /* Small text */
+  padding-left: 0.5rem; /* Left padding */
+}
+
+.product-card .product-info .price-container .original-price {
+  font-size: 10px; /* Smaller text */
+}
+
+.product-card .product-info .price-container .regular-price {
+  font-size: 14px; /* Small text */
+  padding-left: 0.5rem; /* Left padding */
+}
+
+/* Price container alignment */
+.product-card .product-info .price-container {
+  align-items: center; /* Center items vertically */
+}
+
+/* Product page border radius */
+.product-page {
+  border-top-left-radius: 8px; /* Rounded top corners */
+  border-top-right-radius: 8px;
+}
+
+/* Hide sale badge in product page */
+.product-page .product-container .product-image-container .sale-badge {
+  display: none; /* Hide element */
+}
+```
