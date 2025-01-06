@@ -2859,3 +2859,168 @@ export default Collections;
   border: none !important;
 }
 ```
+
+### Footer
+
+```js
+import React from "react";
+import { Link } from "react-router-dom";
+import "../../styles/components/footer.css";
+
+// Footer component that displays contact info, hours, and navigation links
+const Footer = () => {
+  return (
+    // Main footer container
+    <footer className="footer">
+      {/* Content wrapper for the main footer sections */}
+      <div className="footer-content">
+        {/* Contact information section */}
+        <div className="footer-section">
+          <h3>Contact Us</h3>
+          <p>Email: info@example.com</p>
+          <p>Phone: (555) 123-4567</p>
+        </div>
+
+        {/* Business hours section */}
+        <div className="footer-section">
+          <h3>Opening Hours</h3>
+          <p>Monday - Friday: 9:00 AM - 6:00 PM</p>
+          <p>Saturday: 10:00 AM - 4:00 PM</p>
+          <p>Sunday: Closed</p>
+        </div>
+
+        {/* Navigation links section */}
+        <div className="footer-section">
+          <h3>Quick Links</h3>
+          <ul>
+            {/* Each link uses React Router's Link component for client-side navigation */}
+            <li>
+              <Link to="/about">About Us</Link>
+            </li>
+            <li>
+              <Link to="/contact">Contact Us</Link>
+            </li>
+            <li>
+              <Link to="/faqs">FAQs</Link>
+            </li>
+            <li>
+              <Link to="/shipping">Shipping & Delivery</Link>
+            </li>
+            <li>
+              <Link to="/returns">Returns & Refunds</Link>
+            </li>
+            <li>
+              <Link to="/privacy">Privacy Policy</Link>
+            </li>
+            <li>
+              <Link to="/terms">Terms & Conditions</Link>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      {/* Copyright section at the bottom */}
+      <div className="footer-bottom">
+        <p>
+          {/* Dynamic copyright year that updates automatically */}
+          &copy; {new Date().getFullYear()} Illuminated. All rights reserved.
+        </p>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+```
+
+## Footer.css
+
+```css
+/* Main footer container styles */
+.footer {
+  background-color: var(
+    --color-background
+  ); /* Sets background color using CSS variable */
+  color: var(--color-primary-text); /* Sets text color using CSS variable */
+  padding: 40px 0 20px; /* Adds padding: 40px top, 0 sides, 20px bottom */
+}
+
+/* Content wrapper styles */
+.footer-content {
+  max-width: 1200px; /* Limits width of content */
+  margin: 0 auto; /* Centers content horizontally */
+  display: flex; /* Uses flexbox layout */
+  justify-content: space-between; /* Spreads out sections evenly */
+  padding: 0 20px; /* Adds horizontal padding */
+}
+
+/* Individual footer section styles */
+.footer-section {
+  flex: 1; /* Makes sections grow equally */
+  max-width: 300px; /* Limits section width */
+  margin: 0 15px; /* Adds horizontal spacing between sections */
+}
+
+/* Section heading styles */
+.footer-section h3 {
+  color: var(--color-primary-text); /* Sets heading color */
+  margin-bottom: 15px; /* Adds space below headings */
+  font-size: 1.2rem; /* Sets heading font size */
+}
+
+/* Section paragraph styles */
+.footer-section p {
+  margin-bottom: 10px; /* Adds space between paragraphs */
+  color: var(--color-secondary-text); /* Sets paragraph color */
+}
+
+/* Quick links list styles */
+.footer-section ul {
+  list-style: none; /* Removes default bullet points */
+  padding: 0; /* Removes default padding */
+}
+
+/* List item styles */
+.footer-section ul li {
+  margin-bottom: 10px; /* Adds space between list items */
+}
+
+/* Link styles */
+.footer-section ul li a {
+  color: var(--color-secondary-text); /* Sets link color */
+  text-decoration: none; /* Removes underline */
+  transition: color 0.3s ease; /* Smooth color transition on hover */
+}
+
+/* Link hover effect */
+.footer-section ul li a:hover {
+  color: var(--color-primary-button); /* Changes link color on hover */
+}
+
+/* Copyright section styles */
+.footer-bottom {
+  text-align: center; /* Centers copyright text */
+  margin-top: 40px; /* Adds space above copyright */
+  padding-top: 20px; /* Adds padding above copyright */
+  border-top: 1px solid var(--color-border); /* Adds separator line */
+}
+
+/* Copyright text styles */
+.footer-bottom p {
+  color: var(--color-secondary-text); /* Sets copyright text color */
+  font-size: 0.9rem; /* Makes copyright text slightly smaller */
+}
+
+/* Responsive design for mobile devices */
+@media (max-width: 768px) {
+  .footer-content {
+    flex-direction: column; /* Stacks sections vertically */
+    text-align: center; /* Centers all text */
+  }
+
+  .footer-section {
+    margin: 20px auto; /* Adds vertical spacing between sections */
+    max-width: 100%; /* Allows sections to fill width */
+  }
+}
+```
