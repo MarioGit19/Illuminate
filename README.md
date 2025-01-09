@@ -4105,3 +4105,766 @@ export const CartProvider = ({ children }) => {
 // Custom hook to easily access cart context in components
 export const useCart = () => useContext(CartContext);
 ```
+
+### Cart.js
+
+```js
+import React, { useState } from "react";
+import { useCart } from "../../Context/CartContext";
+import { Link, useNavigate } from "react-router-dom";
+import {
+  FaPlus,
+  FaMinus,
+  FaShoppingBag,
+  FaTruck,
+  FaUndo,
+  FaArrowLeft,
+} from "react-icons/fa";
+import "../../styles/components/cart.css";
+import CheckoutModal from "../Checkout/CheckoutModal";
+
+/**
+ * Cart Component
+ * Handles displaying and managing the shopping cart interface
+ */
+const Cart = () => {
+  // Extract cart functionality from CartContext using custom hook
+  const { cartItems, addToCart, removeFromCart, calculateTotal, clearCart } =
+    useCart();
+
+  // State for managing checkout modal visibility
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Hook for programmatic navigation
+  const navigate = useNavigate();
+
+  /**
+   * Opens the checkout modal when user clicks checkout button
+   */
+  const handleCheckoutClick = () => {
+    setIsModalOpen(true);
+  };
+
+  /**
+   * Handles successful order completion:
+   * 1. Closes checkout modal
+   * 2. Clears cart after slight delay
+   * 3. Shows success animation
+   * 4. Navigates to thank you page
+   */
+  const handleOrderSuccess = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      clearCart();
+    }, 1000);
+
+    document.body.classList.add("show-success-animation");
+
+    setTimeout(() => {
+      document.body.classList.remove("show-success-animation");
+      navigate("/thank-you");
+    }, 2000);
+  };
+
+  return (
+    <div className="cart-page">
+      <div className="cart-container" id="shopping-cart">
+        <h1>Shopping Cart</h1>
+
+        {/* Show empty cart message if no items */}
+        {cartItems.length === 0 ? (
+          <div className="empty-cart-message">
+            <FaShoppingBag size={50} />
+            <p>Your cart is empty</p>
+            <Link to="/products" className="continue-shopping">
+              <FaArrowLeft /> Continue Shopping
+            </Link>
+          </div>
+        ) : (
+          <div className="cart-content" id="cart-content">
+            {/* Cart Items Section */}
+            <div className="cart-items-section" id="cart-items-section">
+              {cartItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="cart-page-item"
+                  id="cart-page-item"
+                >
+                  {/* Product Image with Link */}
+                  <Link to={`/product/${item.id}`} className="product-link">
+                    <img src={item.image} alt={item.name} />
+                  </Link>
+
+                  {/* Product Details */}
+                  <div className="item-details" id="item-details">
+                    <Link to={`/product/${item.id}`} className="product-link">
+                      <h3>{item.name}</h3>
+                      <p className="price">
+                        ${(item.salePrice || item.price).toFixed(2)}
+                      </p>
+                    </Link>
+
+                    {/* Quantity Controls */}
+                    <div className="quantity-controls" id="quantity-controls">
+                      <button onClick={() => removeFromCart(item.id)}>
+                        <FaMinus />
+                      </button>
+                      <span>{item.quantity}</span>
+                      <button onClick={() => addToCart(item)}>
+                        <FaPlus />
+                      </button>
+                    </div>
+                  </div>
+
+                  {/* Item Total Price */}
+                  <div className="item-total" id="item-total">
+                    $
+                    {((item.salePrice || item.price) * item.quantity).toFixed(
+                      2
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Cart Sidebar */}
+            <div className="cart-sidebar">
+              {/* Order Summary Section */}
+              <div className="order-summary">
+                <h2>Order Summary</h2>
+                <div className="summary-row">
+                  <span>Subtotal</span>
+                  <span>${calculateTotal().toFixed(2)}</span>
+                </div>
+                <div className="summary-row">
+                  <div className="icon-text">
+                    <span>Shipping</span>
+                  </div>
+                  <span>Free</span>
+                </div>
+
+                <div className="summary-total">
+                  <span>Total</span>
+                  <span>${calculateTotal().toFixed(2)}</span>
+                </div>
+                <button
+                  className="checkout-button"
+                  onClick={handleCheckoutClick}
+                >
+                  Complete Purchase
+                </button>
+                <Link to="/products" className="continue-shopping">
+                  <FaArrowLeft /> Continue Shopping
+                </Link>
+              </div>
+
+              {/* Shipping Information Cards */}
+              <div className="shipping-info">
+                <div className="info-card">
+                  <FaTruck className="info-icon" />
+                  <div className="text-content">
+                    <h3>Shipping Information</h3>
+                    <p>Standard delivery within 10 working days</p>
+                    <p>Free shipping on all orders</p>
+                  </div>
+                </div>
+
+                <div className="info-card">
+                  <FaUndo className="info-icon" />
+                  <div className="text-content">
+                    <h3>Return Policy</h3>
+                    <p>30-day easy return policy</p>
+                    <p>Full refund on unused items</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      {/* Checkout Modal */}
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        cartItems={cartItems}
+        total={calculateTotal()}
+        onOrderSuccess={handleOrderSuccess}
+      />
+
+      {/* Success Animation Overlay */}
+      <div className="success-animation-overlay">
+        <div className="success-animation-container">
+          <div className="success-checkmark">
+            <div className="check-icon">
+              <span className="icon-line line-tip"></span>
+              <span className="icon-line line-long"></span>
+              <div className="icon-circle"></div>
+              <div className="icon-fix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default Cart;
+```
+
+### Cart.css
+
+```css
+/* Main cart page container */
+.cart-page {
+  padding: 2rem; /* Add padding around the entire cart page */
+  min-height: calc(
+    100vh - 60px
+  ); /* Set minimum height to viewport height minus header */
+  background-color: var(
+    --color-background
+  ); /* Set background color from CSS variables */
+  padding-top: 80px; /* Extra padding at top to account for fixed header */
+}
+
+/* Container to center and constrain cart width */
+.cart-container {
+  max-width: 1200px; /* Maximum width of cart content */
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+/* Cart page heading styles */
+.cart-container h1 {
+  margin-bottom: 2rem; /* Space below the heading */
+  color: var(--color-primary-text); /* Heading text color from CSS variables */
+}
+
+/* Grid layout for cart content and sidebar */
+.cart-content {
+  display: grid;
+  grid-template-columns: 1fr 350px; /* Two column layout - main content and 350px sidebar */
+  gap: 2rem; /* Space between columns */
+  align-items: start; /* Align items to top */
+}
+
+/* Small screen adjustments for total price */
+@media (max-width: 280px) {
+  #item-total {
+    font-size: 0.7rem; /* Smaller font size on very small screens */
+  }
+}
+
+/* Tablet and smaller screen adjustments */
+@media (max-width: 768px) {
+  /* Switch to single column layout */
+  .cart-content {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+
+  /* Adjust cart item layout */
+  .cart-page-item {
+    grid-template-columns: 1fr 1fr 1fr !important;
+    gap: 1rem !important;
+    padding: 1rem 0 !important;
+  }
+
+  /* Reduce container padding */
+  .cart-container {
+    padding: 0 0.5rem;
+  }
+
+  /* Adjust page padding */
+  .cart-page {
+    padding: 1rem;
+    padding-top: 80px;
+  }
+
+  /* Reduce section padding */
+  .cart-items-section,
+  .order-summary {
+    padding: 1rem;
+  }
+
+  /* Adjust cart item grid layout */
+  .cart-page-item {
+    grid-template-columns: 70px 1fr auto;
+    gap: 0.5rem;
+  }
+
+  /* Reduce image size */
+  .cart-page-item img {
+    width: 70px;
+    height: 70px;
+  }
+
+  /* Reduce text sizes */
+  .item-details h3,
+  .item-details .price {
+    font-size: 0.9rem;
+  }
+
+  /* Adjust button sizes */
+  .quantity-controls button {
+    padding: 0.25rem;
+    font-size: 0.8rem;
+  }
+
+  /* Adjust total price size */
+  .item-total {
+    font-size: 1rem;
+  }
+
+  /* Reduce button sizes */
+  .checkout-button,
+  .continue-shopping {
+    padding: 0.5rem;
+    font-size: 0.8rem;
+  }
+
+  /* Reduce heading sizes */
+  .order-summary h2 {
+    font-size: 1rem;
+  }
+
+  /* Adjust summary text sizes */
+  .summary-row,
+  .summary-total {
+    font-size: 0.9rem;
+  }
+
+  /* Reduce info card heading size */
+  .shipping-info .info-card h3 {
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile screen adjustments */
+@media (max-width: 426px) {
+  /* Handle horizontal overflow */
+  #shopping-cart {
+    overflow-x: hidden;
+    padding: 0 clamp(0.2rem, 1vw, 0.3rem);
+  }
+
+  /* Single column responsive layout */
+  #cart-content {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: clamp(0.1rem, 0.5vw, 0.2rem);
+    width: 100%;
+  }
+
+  /* Responsive cart item layout */
+  #cart-page-item {
+    display: grid;
+    grid-template-columns: clamp(50px, 15vw, 60px) 1fr auto;
+    gap: clamp(0.1rem, 0.5vw, 0.2rem);
+    width: 100%;
+  }
+
+  /* Responsive image sizing */
+  #cart-page-item img {
+    width: clamp(50px, 15vw, 60px);
+    height: clamp(50px, 15vw, 60px);
+  }
+
+  /* Fluid typography for various elements */
+  #item-details h3,
+  #item-details .price {
+    font-size: clamp(0.7rem, 2vw, 0.75rem);
+  }
+
+  #quantity-controls button {
+    padding: clamp(0.1rem, 0.5vw, 0.15rem);
+    font-size: clamp(0.6rem, 1.5vw, 0.65rem);
+  }
+
+  #item-total {
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
+  }
+
+  /* Responsive button styling */
+  .checkout-button,
+  .continue-shopping {
+    padding: clamp(0.2rem, 1vw, 0.3rem);
+    font-size: clamp(0.65rem, 1.5vw, 0.7rem);
+    width: 100%;
+  }
+
+  /* Full width order summary */
+  .order-summary {
+    width: 100%;
+  }
+
+  /* Responsive text sizing */
+  .order-summary h2 {
+    font-size: clamp(0.8rem, 2vw, 0.85rem);
+  }
+
+  .summary-row,
+  .summary-total,
+  .shipping-info .info-card h3 {
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+  }
+
+  /* Center empty cart message */
+  .empty-cart-message {
+    text-align: center;
+    font-size: clamp(0.7rem, 1.5vw, 0.75rem);
+  }
+
+  /* Center success animation */
+  .success-animation-overlay {
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+/* Cart items section styling */
+.cart-items-section {
+  background: var(--color-card-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #e4e6ef;
+  height: fit-content;
+}
+
+/* Individual cart item styling */
+.cart-page-item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 1.5rem;
+  padding: 1.5rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Remove border from last item */
+.cart-page-item:last-child {
+  border-bottom: none;
+}
+
+/* Product image styling */
+.cart-page-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+/* Product details text styling */
+.item-details h3 {
+  margin: 0 0 0.5rem 0;
+  color: #3f4254;
+}
+
+.item-details .price {
+  color: #a1a5be;
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+/* Quantity control buttons */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.quantity-controls button {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.quantity-controls button:hover {
+  background-color: var(--color-warm-beige);
+}
+
+/* Item total price */
+.item-total {
+  font-size: 1.2rem;
+  font-weight: bold;
+  color: var(--color-primary-text);
+}
+
+/* Cart sidebar layout */
+.cart-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Order summary section */
+.order-summary {
+  background: var(--color-background);
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: var(--shadow-md);
+  border: 1px solid #e4e6ef;
+}
+
+/* Order summary heading */
+.order-summary h2 {
+  padding-bottom: 1rem;
+  margin-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-border);
+}
+
+/* Summary row layout */
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  padding: 0.5rem 0;
+}
+
+/* Icon and text alignment */
+.summary-row .icon-text {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Summary icons */
+.summary-row svg {
+  width: 20px;
+  height: 20px;
+}
+
+/* Total amount row */
+.summary-total {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #eee;
+  font-weight: bold;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+/* Checkout button styling */
+.checkout-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--color-primary-button);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-card-background);
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.checkout-button:hover {
+  background-color: var(--color-primary-button-hover);
+}
+
+/* Continue shopping button */
+.continue-shopping {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  background-color: var(--color-background);
+  border: 2px solid var(--color-primary-text);
+  border-radius: 4px;
+  color: var(--color-primary-text);
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s ease;
+}
+
+.continue-shopping:hover {
+  background-color: var(--color-primary-text);
+  color: var(--color-background);
+}
+
+/* Shipping info section */
+.shipping-info {
+  background: white;
+  padding: 1.5rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Info card layout */
+.info-card {
+  display: grid;
+  align-items: start;
+  justify-content: start;
+  padding: 0.5rem 0;
+}
+
+/* Border between info cards */
+.info-card:not(:last-child) {
+  border-bottom: 1px solid #eee;
+}
+
+/* Info icon styling */
+.info-icon {
+  font-size: 1.5rem;
+  color: #333;
+  flex-shrink: 0;
+}
+
+/* Info card layout adjustments */
+.info-card {
+  margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+
+/* Info card text content */
+.info-card .text-content {
+  flex: 1;
+}
+
+.info-card h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.1rem;
+  color: #333;
+}
+
+.info-card p {
+  margin: 0.25rem 0;
+  color: #666;
+  font-size: 0.9rem;
+}
+
+/* Product link styling */
+.product-link {
+  text-decoration: none;
+  color: inherit;
+  cursor: pointer;
+}
+
+/* Hover effects */
+.product-link:hover h3 {
+  color: var(--color-primary-button);
+  transition: color var(--transition-normal);
+}
+
+.product-link img:hover {
+  opacity: 0.9;
+}
+
+/* Success animation overlay */
+.success-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show animation when success class is added */
+body.show-success-animation .success-animation-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Success checkmark animation */
+.success-checkmark {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  transform: scale(0);
+}
+
+body.show-success-animation .success-checkmark {
+  animation: scale-in 0.3s ease-out forwards;
+}
+
+/* Checkmark icon styling */
+.check-icon {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: content-box;
+  border: 4px solid var(--color-deep-emerald);
+}
+
+/* Checkmark before and after elements */
+.check-icon::before {
+  top: 3px;
+  left: -2px;
+  width: 30px;
+  transform-origin: 100% 50%;
+  border-radius: 100px 0 0 100px;
+}
+
+.check-icon::after {
+  top: 0;
+  left: 30px;
+  width: 60px;
+  transform-origin: 0 50%;
+  border-radius: 0 100px 100px 0;
+  animation: rotate-circle 4.25s ease-in;
+}
+
+/* Checkmark lines */
+.icon-line {
+  height: 5px;
+  background-color: var(--color-deep-emerald);
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+}
+
+/* Checkmark tip line */
+.icon-line.line-tip {
+  top: 46px;
+  left: 14px;
+  width: 25px;
+  transform: rotate(45deg);
+  animation: icon-line-tip 0.75s;
+}
+
+/* Checkmark long line */
+.icon-line.line-long {
+  top: 38px;
+  right: 8px;
+  width: 47px;
+  transform: rotate(-45deg);
+  animation: icon-line-long 0.75s;
+}
+
+/* Checkmark circle */
+.icon-circle {
+  top: -4px;
+  left: -4px;
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+}
+```
