@@ -4868,3 +4868,553 @@ body.show-success-animation .success-checkmark {
   height: 80px;
 }
 ```
+
+### CartDrawer.js
+
+```js
+/**
+ * CartDrawer Component
+ * A sliding drawer component that displays the shopping cart contents and checkout options
+ *
+ * Key Features:
+ * - Shows/hides cart drawer overlay
+ * - Displays list of cart items with images, details and quantity controls
+ * - Allows navigation to product pages
+ * - Shows cart total and checkout buttons
+ * - Handles checkout flow with success animation
+ */
+
+import React, { useState } from "react";
+import { useCart } from "../../Context/CartContext"; // Import cart context hook
+import { FaTimes, FaPlus, FaMinus } from "react-icons/fa"; // Import icons
+import { Link, useNavigate } from "react-router-dom"; // Import routing components
+import "../../styles/components/cartdrawer.css";
+import CheckoutModal from "../Checkout/CheckoutModal";
+
+const CartDrawer = () => {
+  // Extract cart state and methods from context
+  const {
+    isCartOpen, // Boolean to control drawer visibility
+    setIsCartOpen, // Function to toggle drawer
+    cartItems, // Array of items in cart
+    addToCart, // Function to increment item quantity
+    removeFromCart, // Function to decrement item quantity
+    calculateTotal, // Function to sum cart total
+    clearCart, // Function to empty cart
+  } = useCart();
+
+  // Local state for checkout modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const navigate = useNavigate();
+
+  /**
+   * Opens the checkout modal when checkout button is clicked
+   */
+  const handleCheckoutClick = () => {
+    setIsModalOpen(true);
+  };
+
+  /**
+   * Handles successful order completion
+   * 1. Closes modal and cart drawer
+   * 2. Clears cart items
+   * 3. Shows success animation
+   * 4. Redirects to thank you page
+   */
+  const handleOrderSuccess = () => {
+    setIsModalOpen(false);
+    setIsCartOpen(false);
+    clearCart();
+
+    document.body.classList.add("show-success-animation");
+
+    setTimeout(() => {
+      document.body.classList.remove("show-success-animation");
+      navigate("/thank-you");
+    }, 2000);
+  };
+
+  return (
+    <>
+      {/* Semi-transparent overlay behind drawer */}
+      <div
+        className={`cart-overlay ${isCartOpen ? "active" : ""}`}
+        onClick={() => setIsCartOpen(false)}
+      />
+
+      {/* Main cart drawer panel */}
+      <div className={`cart-drawer ${isCartOpen ? "active" : ""}`}>
+        {/* Drawer header with title and close button */}
+        <div className="cart-header">
+          <h2>Your Cart</h2>
+          <button className="close-button" onClick={() => setIsCartOpen(false)}>
+            <FaTimes />
+          </button>
+        </div>
+
+        {/* Cart items list section */}
+        <div className="cart-items">
+          {cartItems.length === 0 ? (
+            <p className="empty-cart">Your cart is empty</p>
+          ) : (
+            cartItems.map((item) => (
+              <div key={item.id} className="cart-item">
+                {/* Product image with link */}
+                <Link
+                  to={`/product/${item.id}`}
+                  className="product-link"
+                  onClick={() => setIsCartOpen(false)}
+                >
+                  <img src={item.image} alt={item.name} />
+                </Link>
+
+                {/* Product details section */}
+                <div className="item-details">
+                  <Link
+                    to={`/product/${item.id}`}
+                    className="product-link"
+                    onClick={() => setIsCartOpen(false)}
+                  >
+                    <h3>{item.name}</h3>
+                    <p className="price">${item.salePrice || item.price}</p>
+                  </Link>
+
+                  {/* Quantity adjustment controls */}
+                  <div className="quantity-controls">
+                    <button onClick={() => removeFromCart(item.id)}>
+                      <FaMinus />
+                    </button>
+                    <span>{item.quantity}</span>
+                    <button onClick={() => addToCart(item)}>
+                      <FaPlus />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))
+          )}
+        </div>
+
+        {/* Cart footer with total and action buttons */}
+        {cartItems.length > 0 && (
+          <div className="cart-footer">
+            <div className="total">
+              <span>Total:</span>
+              <span>${calculateTotal().toFixed(2)}</span>
+            </div>
+            <Link
+              to="/cart"
+              className="view-cart-button"
+              onClick={() => setIsCartOpen(false)}
+            >
+              View Cart
+            </Link>
+            <button className="checkout-button" onClick={handleCheckoutClick}>
+              Proceed to Checkout
+            </button>
+          </div>
+        )}
+      </div>
+
+      {/* Checkout modal component */}
+      <CheckoutModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        cartItems={cartItems}
+        total={calculateTotal()}
+        onOrderSuccess={handleOrderSuccess}
+      />
+
+      {/* Success animation overlay */}
+      <div className="success-animation-overlay">
+        <div className="success-animation-container">
+          <div className="success-checkmark">
+            <div className="check-icon">
+              <span className="icon-line line-tip"></span>
+              <span className="icon-line line-long"></span>
+              <div className="icon-circle"></div>
+              <div className="icon-fix"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default CartDrawer;
+```
+
+### CartDrawer.css
+
+```css
+/* Cart overlay that darkens the background when cart is open */
+.cart-overlay {
+  position: fixed; /* Fixed position covers entire viewport */
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+  opacity: 0; /* Hidden by default */
+  visibility: hidden;
+  transition: all 0.3s ease; /* Smooth transition for showing/hiding */
+  z-index: 998; /* High z-index but below cart drawer */
+}
+
+/* When cart overlay is active */
+.cart-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Main cart drawer container */
+.cart-drawer {
+  position: fixed;
+  top: 0;
+  right: -400px; /* Hidden off screen by default */
+  width: 400px;
+  height: 100%;
+  background-color: var(--color-card-background);
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1); /* Shadow on left side */
+  transition: right 0.3s ease; /* Smooth sliding animation */
+  z-index: 999; /* Above overlay */
+  display: flex;
+  flex-direction: column;
+}
+
+/* When cart drawer is active */
+.cart-drawer.active {
+  right: 0; /* Slides into view */
+}
+
+/* Header section of cart drawer */
+.cart-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--color-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Close button in header */
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+  color: var(--color-primary-text);
+}
+
+/* Scrollable container for cart items */
+.cart-items {
+  flex: 1; /* Takes up remaining space */
+  overflow-y: auto; /* Scrollable when content overflows */
+  padding: 1rem;
+}
+
+/* Individual cart item styling */
+.cart-item {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+/* Product image in cart item */
+.cart-item img {
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Container for item details */
+.item-details {
+  flex: 1; /* Takes up remaining space */
+}
+
+/* Product name styling */
+.item-details h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1rem;
+  color: var(--color-primary-text);
+}
+
+/* Quantity adjustment controls */
+.quantity-controls {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+/* Quantity adjustment buttons */
+.quantity-controls button {
+  background: none;
+  border: 1px solid var(--color-border);
+  border-radius: 4px;
+  padding: 0.25rem 0.5rem;
+  cursor: pointer;
+}
+
+/* Hover state for quantity buttons */
+.quantity-controls button:hover {
+  background-color: var(--color-secondary-button);
+}
+
+/* Footer section containing total and checkout */
+.cart-footer {
+  padding: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Total price display */
+.total {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 1rem;
+  font-weight: bold;
+}
+
+/* Checkout button styling */
+.checkout-button {
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--color-primary-button);
+  border: none;
+  border-radius: 4px;
+  color: var(--color-card-background);
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Hover state for checkout button */
+.checkout-button:hover {
+  background-color: var(--color-primary-button-hover);
+  color: var(--color-card-background);
+}
+
+/* Empty cart message */
+.empty-cart {
+  text-align: center;
+  color: var(--color-primary-text);
+  margin-top: 2rem;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 480px) {
+  .cart-drawer {
+    width: 100%; /* Full width on mobile */
+    right: -100%;
+  }
+}
+
+/* View cart button styling */
+.view-cart-button {
+  display: block;
+  width: 100%;
+  padding: 1rem;
+  background-color: var(--color-card-background);
+  border: 2px solid var(--color-primary-button);
+  border-radius: 4px;
+  color: var(--color-primary-text);
+  font-weight: 600;
+  font-size: 1rem;
+  font-family: inherit;
+  text-align: center;
+  text-decoration: none;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+/* Hover state for view cart button */
+.view-cart-button:hover {
+  background-color: var(--color-primary-button);
+  color: var(--color-card-background);
+}
+
+/* Success animation overlay */
+.success-animation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.95);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* Show success animation when body has class */
+body.show-success-animation .success-animation-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* Success checkmark container */
+.success-checkmark {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  transform: scale(0);
+}
+
+/* Animation for checkmark appearance */
+body.show-success-animation .success-checkmark {
+  animation: scale-in 0.3s ease-out forwards;
+}
+
+/* Checkmark icon styling */
+.check-icon {
+  width: 80px;
+  height: 80px;
+  position: relative;
+  border-radius: 50%;
+  box-sizing: content-box;
+  border: 4px solid var(--color-primary-button);
+}
+
+/* Before pseudo-element for checkmark */
+.check-icon::before {
+  top: 3px;
+  left: -2px;
+  width: 30px;
+  transform-origin: 100% 50%;
+  border-radius: 100px 0 0 100px;
+}
+
+/* After pseudo-element for checkmark */
+.check-icon::after {
+  top: 0;
+  left: 30px;
+  width: 60px;
+  transform-origin: 0 50%;
+  border-radius: 0 100px 100px 0;
+  animation: rotate-circle 4.25s ease-in;
+}
+
+/* Checkmark line base styling */
+.icon-line {
+  height: 5px;
+  background-color: var(--color-primary-button);
+  display: block;
+  border-radius: 2px;
+  position: absolute;
+  z-index: 10;
+}
+
+/* Tip of checkmark */
+.icon-line.line-tip {
+  top: 46px;
+  left: 14px;
+  width: 25px;
+  transform: rotate(45deg);
+  animation: icon-line-tip 0.75s;
+}
+
+/* Long part of checkmark */
+.icon-line.line-long {
+  top: 38px;
+  right: 8px;
+  width: 47px;
+  transform: rotate(-45deg);
+  animation: icon-line-long 0.75s;
+}
+
+/* Circle around checkmark */
+.icon-circle {
+  top: -4px;
+  left: -4px;
+  z-index: 10;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  position: absolute;
+  box-sizing: content-box;
+  border: 4px solid var(--color-secondary-button);
+}
+
+/* Fix for checkmark animation */
+.icon-fix {
+  top: 8px;
+  width: 5px;
+  left: 26px;
+  z-index: 1;
+  height: 85px;
+  position: absolute;
+  transform: rotate(-45deg);
+  background-color: white;
+}
+
+/* Scale in animation keyframes */
+@keyframes scale-in {
+  0% {
+    transform: scale(0);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* Animation for checkmark tip */
+@keyframes icon-line-tip {
+  0% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  54% {
+    width: 0;
+    left: 1px;
+    top: 19px;
+  }
+  70% {
+    width: 50px;
+    left: -8px;
+    top: 37px;
+  }
+  84% {
+    width: 17px;
+    left: 21px;
+    top: 48px;
+  }
+  100% {
+    width: 25px;
+    left: 14px;
+    top: 46px;
+  }
+}
+
+/* Animation for checkmark long line */
+@keyframes icon-line-long {
+  0% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  65% {
+    width: 0;
+    right: 46px;
+    top: 54px;
+  }
+  84% {
+    width: 55px;
+    right: 0px;
+    top: 35px;
+  }
+  100% {
+    width: 47px;
+    right: 8px;
+    top: 38px;
+  }
+}
+```
