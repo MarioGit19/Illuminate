@@ -5418,3 +5418,573 @@ body.show-success-animation .success-checkmark {
   }
 }
 ```
+
+### CheckoutModal.js
+
+```js
+/**
+ * CheckoutModal Component
+ *
+ * A modal component that handles the checkout process for the shopping cart.
+ * Displays order summary and collects shipping details from the user.
+ */
+
+import React, { useState } from "react";
+import { FaTimes } from "react-icons/fa";
+import "./CheckoutModal.css";
+// import { useNavigate } from "react-router-dom";
+
+const CheckoutModal = ({
+  isOpen, // Boolean to control modal visibility
+  onClose, // Function to close the modal
+  cartItems, // Array of items in cart
+  total, // Total price of items
+  onOrderSuccess, // Callback function when order completes
+}) => {
+  //   const navigate = useNavigate();
+
+  // State to manage form input values
+  const [formData, setFormData] = useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    phone: "",
+    address: "",
+    city: "",
+    zipCode: "",
+  });
+
+  // Calculate estimated delivery date (10 days from now)
+  const [estimatedDelivery] = useState(() => {
+    const date = new Date();
+    date.setDate(date.getDate() + 10);
+    return date;
+  });
+
+  /**
+   * Updates form data state when input values change
+   * @param {Event} e - Input change event
+   */
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  /**
+   * Handles form submission and order processing
+   * @param {Event} e - Form submit event
+   */
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Generate random order ID and set delivery date
+    const orderId = Math.random().toString(36).substr(2, 9).toUpperCase();
+    const estimatedDelivery = new Date();
+    estimatedDelivery.setDate(estimatedDelivery.getDate() + 10);
+
+    // Compile order details
+    const orderDetails = {
+      orderId,
+      formData,
+      cartItems,
+      total,
+      estimatedDelivery,
+    };
+
+    // Save order to localStorage
+    localStorage.setItem("lastOrder", JSON.stringify(orderDetails));
+
+    // Trigger success callback
+    onOrderSuccess();
+  };
+
+  /**
+   * Closes modal when clicking overlay
+   * @param {Event} e - Click event
+   */
+  const handleOverlayClick = (e) => {
+    if (e.target.className === "modal-overlay") {
+      onClose();
+    }
+  };
+
+  /**
+   * Formats price to 2 decimal places
+   * @param {number} price - Price to format
+   * @returns {string} Formatted price
+   */
+  const formatPrice = (price) => {
+    return Number(price).toFixed(2);
+  };
+
+  // Don't render if modal is not open
+  if (!isOpen) return null;
+
+  return (
+    <div className="modal-overlay" onClick={handleOverlayClick}>
+      <div className="modal-content">
+        {/* Close button */}
+        <button className="modal-close" onClick={onClose}>
+          <FaTimes />
+        </button>
+
+        <div className="modal-header">
+          <h2>Checkout</h2>
+        </div>
+
+        <div className="modal-body">
+          {/* Order summary section */}
+          <div className="order-summary">
+            <h3>Order Summary</h3>
+            <div className="order-items">
+              {cartItems.map((item) => (
+                <div key={item.id} className="order-item">
+                  <img src={item.image} alt={item.name} />
+                  <div className="item-details">
+                    <h4>{item.name}</h4>
+                    <p>Quantity: {item.quantity}</p>
+                    <p>${item.salePrice ? item.salePrice : item.price}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* Order totals and delivery estimate */}
+            <div className="order-totals">
+              <div className="total-row">
+                <span>Subtotal:</span>
+                <span>${formatPrice(total)}</span>
+              </div>
+              <div className="total-row">
+                <span>Shipping:</span>
+                <span>Free</span>
+              </div>
+              <div className="total-row total">
+                <span>Total:</span>
+                <span>${formatPrice(total)}</span>
+              </div>
+              <div className="delivery-estimate">
+                Estimated Delivery: {estimatedDelivery.toLocaleDateString()}
+              </div>
+            </div>
+          </div>
+
+          {/* Shipping details form */}
+          <form onSubmit={handleSubmit} className="checkout-form">
+            <h3>Shipping Details</h3>
+
+            {/* Name fields */}
+            <div className="form-row">
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="firstName"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleChange}
+                  placeholder=" "
+                  required
+                />
+                <label htmlFor="firstName">First Name</label>
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="lastName"
+                  name="lastName"
+                  value={formData.lastName}
+                  onChange={handleChange}
+                  placeholder=" "
+                  required
+                />
+                <label htmlFor="lastName">Last Name</label>
+              </div>
+            </div>
+
+            {/* Contact information */}
+            <div className="form-group">
+              <input
+                type="email"
+                id="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="email">Email</label>
+            </div>
+
+            <div className="form-group">
+              <input
+                type="tel"
+                id="phone"
+                name="phone"
+                value={formData.phone}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="phone">Phone Number</label>
+            </div>
+
+            {/* Address fields */}
+            <div className="form-group">
+              <input
+                type="text"
+                id="address"
+                name="address"
+                value={formData.address}
+                onChange={handleChange}
+                placeholder=" "
+                required
+              />
+              <label htmlFor="address">Address</label>
+            </div>
+
+            <div className="form-row">
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="city"
+                  name="city"
+                  value={formData.city}
+                  onChange={handleChange}
+                  placeholder=" "
+                  required
+                />
+                <label htmlFor="city">City</label>
+              </div>
+              <div className="form-group">
+                <input
+                  type="text"
+                  id="zipCode"
+                  name="zipCode"
+                  value={formData.zipCode}
+                  onChange={handleChange}
+                  placeholder=" "
+                  required
+                />
+                <label htmlFor="zipCode">ZIP Code</label>
+              </div>
+            </div>
+
+            <button type="submit" className="submit-button">
+              Place Order
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default CheckoutModal;
+```
+
+### CheckoutModal.css
+
+```css
+/* Modal overlay that covers the entire screen with a semi-transparent dark background */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(8px); /* Blurs the background content */
+  -webkit-backdrop-filter: blur(8px); /* Safari support */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.3s ease;
+}
+
+/* Main modal container with glass-like effect */
+.modal-content {
+  background: var(--color-card-background);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-lg);
+  width: 90%;
+  max-width: 1000px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  padding: 2rem;
+  animation: slideUp 0.3s ease;
+}
+
+/* Close button styling in top-right corner */
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: none;
+  border: none;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: var(--color-primary-text);
+  transition: all 0.3s ease;
+}
+
+/* Rotate animation on close button hover */
+.modal-close:hover {
+  color: var(--color-primary-button);
+  transform: rotate(90deg);
+}
+
+/* Modal header title styling */
+.modal-header h2 {
+  margin: 0 0 2rem 0;
+  color: var(--color-primary-text);
+}
+
+/* Two-column layout for modal content */
+.modal-body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+}
+
+/* Order summary section styling */
+.order-summary {
+  background: var(--color-background);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--color-border);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+/* Container for list of ordered items */
+.order-items {
+  margin: 1rem 0;
+}
+
+/* Individual order item card styling */
+.order-item {
+  background: var(--color-card-background);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  padding-left: 1.2rem !important;
+  border: 1px solid #e4e6ef;
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+}
+
+/* Product image styling in order item */
+.order-item img {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+/* Order totals section with top border */
+.order-totals {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--color-border);
+}
+
+/* Row layout for price breakdowns */
+.total-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+/* Highlighted total amount row */
+.total-row.total {
+  background: var(--color-card-background);
+  padding: 1rem;
+  border-radius: 8px;
+  margin-top: 1rem;
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--color-primary-text);
+}
+
+/* Delivery estimate box styling */
+.delivery-estimate {
+  background: var(--color-card-background);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+  text-align: center;
+  color: var(--color-primary-text);
+}
+
+/* Checkout form layout */
+.checkout-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+/* Two-column layout for form fields */
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin: 0.75rem 0;
+}
+
+/* Container for form input and label */
+.form-group {
+  position: relative;
+  margin: 0.5rem 0;
+}
+
+/* Form input field styling */
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  background: var(--color-card-background);
+  border: 1px solid var(--color-border);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  placeholder: " ";
+  color: var(--color-primary-text);
+}
+
+/* Floating label styling */
+.form-group label {
+  position: absolute;
+  left: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  padding: 0 5px;
+  color: var(--color-primary-text);
+  font-size: 1rem;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+/* Animation for floating label on focus/filled state */
+.form-group input:focus ~ label,
+.form-group input:not(:placeholder-shown) ~ label {
+  top: 0;
+  font-size: 0.85rem;
+  color: var(--color-primary-text);
+  background: linear-gradient(
+    180deg,
+    transparent 0%,
+    transparent 45%,
+    var(--color-card-background) 45%,
+    var(--color-card-background) 100%
+  );
+}
+
+/* Input focus and filled state styling */
+.form-group input:focus,
+.form-group input:not(:placeholder-shown) {
+  outline: none;
+  border-color: var(--color-primary-button);
+  background: var(--color-background);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+/* Submit button styling */
+.submit-button {
+  background: var(--color-primary-button);
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+  border: 1px solid var(--color-primary-button);
+  padding: 1rem;
+  border-radius: 8px;
+  color: var(--color-card-background);
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Submit button hover effects */
+.submit-button:hover {
+  background: var(--color-primary-button-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(255, 215, 0, 0.2);
+  color: var(--color-card-background);
+}
+
+/* Fade in animation for modal overlay */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide up animation for modal content */
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Custom scrollbar width and spacing */
+.modal-content::-webkit-scrollbar {
+  width: 8px;
+  margin-right: 4px;
+}
+
+/* Scrollbar track styling */
+.modal-content::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 0 4px 4px 0;
+  margin: 16px 0;
+}
+
+/* Scrollbar thumb styling */
+.modal-content::-webkit-scrollbar-thumb {
+  background: var(--color-primary-button);
+  border-radius: 0 4px 4px 0;
+  border: 2px solid var(--color-card-background);
+  background-clip: padding-box;
+}
+
+/* Scrollbar thumb hover effect */
+.modal-content::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 215, 0, 0.7);
+  background-clip: padding-box;
+}
+
+/* Responsive layout for mobile devices */
+@media (max-width: 768px) {
+  .modal-body {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-content {
+    padding: 1rem;
+    width: 95%;
+  }
+}
+
+/* Checkout form heading style */
+.checkout-form h3 {
+  margin-bottom: 1rem;
+  color: #333;
+}
+```
