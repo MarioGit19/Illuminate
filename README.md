@@ -5988,3 +5988,38 @@ export default CheckoutModal;
   color: #333;
 }
 ```
+
+### ScrollToTop.js
+
+```js
+/**
+ * ScrollToTop Component
+ *
+ * A utility component that scrolls the window to the top whenever
+ * the route pathname changes. This ensures that when navigating
+ * between pages, the new page always starts at the top.
+ *
+ * Uses:
+ * - useEffect hook to trigger scroll on pathname changes
+ * - useLocation hook to detect route changes
+ * - window.scrollTo() to programmatically scroll
+ *
+ * Returns null since this is a behavior-only component that
+ * doesn't render anything to the DOM.
+ */
+
+import { useEffect } from "react";
+import { useLocation } from "react-router-dom";
+
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
+export default ScrollToTop;
+```
